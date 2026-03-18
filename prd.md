@@ -24,6 +24,7 @@ Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zeka
 
 ### 3.2. Dinamik Sipariş Formu ve Dağıtım Algoritması
 * **Esnek Girdi:** Kullanıcı ürün tipini ve toplam adedi seçer.
+  
 * **Optimizasyon Öncelikleri:**
 1. **Adalet:** İş yükünü üreticilerin kapasite oranlarına göre dağıtmak.
 2. **Verimlilik:** Teslimat süresini minimize etmek için uygun kapasiteleri eşleştirmek.
