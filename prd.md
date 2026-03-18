@@ -3,11 +3,11 @@
 ## 1. Proje Vizyonu ve Kapsamı
 **Micro Factory AI**, evden üretim yapan kadınları ve yerel kooperatifleri tek bir sanal fabrika (Virtual Factory) çatısı altında birleştiren yapay zeka tabanlı bir yönetim sistemidir. 
 
-Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zekanın analiz yetenekleriyle optimize ederek kurumsal tedarik zincirine dahil etmektir.
+Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zekanın analiz yetenekleriyle optimize ederek kurumsal tedarik zincirine güçlü ve sürdürülebilir bir şekilde dahil etmektir.
 
 ---
 
-## 2. Hedef Kullanıcı Analizi
+## 2. Hedef Kullanıcı Analizi ve İhtiyaçlar
 
 | Kullanıcı Grubu | Temel İhtiyaç | Çözüm Yaklaşımı |
 | :--- | :--- | :--- |
@@ -16,11 +16,11 @@ Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zeka
 
 ---
 
-## 3. Fonksiyonel Gereksinimler
+## 3. Detaylı Fonksiyonel Gereksinimler
 
 ### 3.1. Akıllı Kapasite Yönetimi
-* **Veri Yapısı:** Arka planda kurgusal bir üretici havuzu (İsim, günlük kapasite, uzmanlık ve müsaitlik) tutulur.
-* **Analiz Süreci:** Yapay zeka motoru, sipariş geldiğinde tüm üretici verilerini tarar ve kapasite planlaması gerçekleştirir.
+* **Veri Yapısı:** Arka planda kurgusal bir üretici havuzu (İsim, günlük kapasite, uzmanlık seviyesi ve müsaitlik) tutulur.
+* **Analiz Süreci:** Yapay zeka motoru, sipariş geldiğinde tüm üretici verilerini saniyeler içinde tarar. Üreticilerin hızlarını ve takvimlerini dikkate alan bir kapasite planlaması gerçekleştirir.
 
 ### 3.2. Dinamik Sipariş Formu ve Dağıtım Algoritması
 * **Esnek Girdi:** Kullanıcı ürün tipini ve toplam adedi seçer.
@@ -31,13 +31,15 @@ Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zeka
 
 ---
 
-## 4. Teknik Mimari
-* **Arayüz:** HTML5, Tailwind CSS ve JavaScript.
-* **Zeka Katmanı:** Yapay Zeka API Entegrasyonu.
+## 4. Teknik Mimari (System Architecture)
+
+* **Arayüz (Frontend):** HTML5, Tailwind CSS ve JavaScript. Mobil uyumlu tasarım.
+* **Zeka Katmanı:** Yapay Zeka API Entegrasyonu. Planlama mantığı sistem talimatları ile tanımlanacaktır.
 * **Veri Yönetimi:** JSON formatında yapılandırılmış üretici veritabanı.
 
 ---
 
-## 5. Başarı Metrikleri
-* **Hız:** Siparişin saniyeler içinde tüm ağa dağıtılması.
-* **Doğruluk:** Matematiksel hataların ve kapasite aşımlarının engellenmesi.
+## 5. Başarı Metrikleri (KPIs)
+* **Hız:** Kompleks bir siparişin 10 saniyeden kısa sürede tüm ağa dağıtılması.
+* **Verimlilik:** Mevcut kapasitenin en az %90 verimlilikle planlanması.
+* **Doğruluk:** Matematiksel hataların ve kapasite aşımlarının yapay zeka tarafından %0'a indirilmesi.
