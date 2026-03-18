@@ -1,10 +1,13 @@
 Micro Factory AI - Akıllı Mikro Üretim Ağı
 
 Problem: Ne çözüyorum?
+
 Büyük markaların toplu üretim siparişleri (örn: binlerce bez çanta veya tekstil ürünü), kapasiteleri tek başına yetersiz olduğu için evden veya yerel kooperatiflerde üretim yapan kadınlara ulaşamıyor. Dağınık olan bu mikro-üretim kapasitesi senkronize edilemediği için kadın emeği büyük tedarik zincirlerinin dışında kalıyor ve ucuzlaşıyor.
 
 Kullanıcı: Bu uygulamayı kim kullanacak?
+
 Uygulamanın iki temel kullanıcısı var:
+
 1.Toplu sipariş vermek isteyen kurumsal şirketler (B2B alıcılar).
 2.Sisteme kendi üretim hızlarını (kapasitelerini) doğal ve serbest bir dille kaydeden kadın üreticiler ve yerel mikro-kooperatifler.
 
