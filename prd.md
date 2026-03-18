@@ -1,9 +1,9 @@
 # 📋 PRD: Micro Factory AI - Akıllı Üretim Dağıtım Sistemi
 
 ## 1. Proje Vizyonu ve Kapsamı
-**Micro Factory AI**; dağınık mikro ölçekli kadın üreticileri tek bir sanal fabrika çatısı altında birleştiren yapay zeka tabanlı bir üretim yönetim sistemidir. 
+**Micro Factory AI**, evden üretim yapan kadınları ve yerel kooperatifleri tek bir dijital üretim ağı çatısı altında birleştiren yapay zeka tabanlı bir yönetim sistemidir. 
 
-Sistem, geleneksel yöntemlerle yönetilmesi zor olan parçalı üretim kapasitesini, yapay zekanın analiz yetenekleriyle optimize ederek kurumsal tedarik zincirine dahil etmeyi amaçlar.
+Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zekanın analiz yetenekleriyle optimize ederek kurumsal tedarik zincirine güçlü ve sürdürülebilir bir şekilde dahil etmektir.
 
 ---
 
@@ -12,7 +12,7 @@ Sistem, geleneksel yöntemlerle yönetilmesi zor olan parçalı üretim kapasite
 | Kullanıcı Grubu | Temel İhtiyaç | Çözüm Yaklaşımı |
 | :--- | :--- | :--- |
 | **Kurumsal Alıcı (B2B)** | Hızlı termin süresi ve etik üretim. | Tek noktadan sipariş girişi ve şeffaf kapasite takibi. |
-| **Mikro Üretici (Kadınlar)** | Esnek çalışma ve adil iş dağılımı. | Kapasite bildirimi ve yetkinliğe dayalı iş ataması. |
+| **Kadın Üreticiler** | Esnek çalışma ve adil iş dağılımı. | Kapasite bildirimi ve yetkinliğe dayalı iş ataması. |
 
 ---
 
@@ -26,7 +26,7 @@ Sistem, geleneksel yöntemlerle yönetilmesi zor olan parçalı üretim kapasite
 * **Esnek Girdi:** Kullanıcı ürün tipini ve toplam adedi seçer.
 * **Optimizasyon Öncelikleri:** 1. **Adalet:** İş yükünü üreticilerin kapasite oranlarına göre dağıtmak.
     2. **Verimlilik:** Teslimat süresini minimize etmek için uygun kapasiteleri eşleştirmek.
-    3. **Denge:** Tek bir üreticiye aşırı yük binmesini engellemek.
+    3. **Denge:** Tek bir üreticiye aşırı yük binmesini (Overload) engellemek.
 
 ---
 
