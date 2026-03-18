@@ -1,7 +1,7 @@
 # 📋 PRD: Micro Factory AI - Akıllı Üretim Dağıtım Sistemi
 
 ## 1. Proje Vizyonu ve Kapsamı
-**Micro Factory AI**, coğrafi olarak dağınık, mikro ölçekli kadın üreticileri tek bir sanal fabrika (Virtual Factory) çatısı altında birleştiren yapay zeka tabanlı bir üretim yönetim sistemidir. 
+**Micro Factory AI**; coğrafi olarak dağınık, mikro ölçekli kadın üreticileri tek bir sanal fabrika (Virtual Factory) çatısı altında birleştiren yapay zeka tabanlı bir üretim yönetim sistemidir. 
 
 Projenin temel amacı; geleneksel yöntemlerle yönetilmesi imkansız olan "çok parçalı ve belirsiz" üretim kapasitesini, **Gemini AI**'ın akıl yürütme (reasoning) yetenekleriyle optimize ederek kurumsal tedarik zincirine dahil etmektir.
 
