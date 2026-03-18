@@ -1,4 +1,4 @@
-### idea.md (Micro Factory AI - Akıllı Mikro Üretim Ağı)
+### Micro Factory AI - Akıllı Mikro Üretim Ağı
 
 **Problem: Ne çözüyorum?**
 Büyük markaların toplu üretim siparişleri (örn: binlerce bez çanta veya tekstil ürünü), kapasiteleri tek başına yetersiz olduğu için evden veya yerel kooperatiflerde üretim yapan kadınlara ulaşamıyor. Dağınık olan bu mikro-üretim kapasitesi senkronize edilemediği için kadın emeği büyük tedarik zincirlerinin dışında kalıyor ve ucuzlaşıyor.
