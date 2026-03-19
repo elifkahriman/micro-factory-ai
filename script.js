@@ -184,7 +184,7 @@ const producersData = [
 const orderForm = document.getElementById("orderForm");
 const orderPreview = document.getElementById("orderPreview");
 const distributionBody = document.getElementById("distributionBody");
-const GEMINI_API_KEY = "AIzaSyCADd9XetY1uuIuDmCfEyvR4dbw4C0v4M8";
+const GEMINI_API_KEY = window.ENV_API_KEY || "";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GEMINI_SYSTEM_PROMPT =
   "Sen kadın üreticilerden ve mikro-kooperatiflerden oluşan bir üretim ağının yapay zeka yöneticisisin. Bu ağın uzmanlık alanı sadece şunlardır: Tekstil (bez çanta, tişört vb.), El Sanatları ve Yöresel/Butik Gıda (reçel, konserve, salça, tarhana, erişte vb.). Eğer kullanıcı otomotiv, elektronik, ağır sanayi gibi yetkinliğimiz dışı bir ürün isterse siparişi kibarca reddet. Eğer ürün uzmanlığımıza uygunsa, elindeki üretici verisine göre mantıklı bir dağıtım planı yap.";
