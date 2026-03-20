@@ -1,18 +1,19 @@
-# 🛤️ Kullanıcı Akışı (User Flow) - Micro Factory AI
+# 🌊 Kullanıcı Akışı (User Flow) - Micro Factory AI
 
-Bu akış, sistemin girdiden çıktıya (Input to Output) nasıl çalıştığını tanımlar.
+### Adım 1: Sipariş ve AI Filtresi
+1. Kullanıcı (Kurumsal/Bireysel) platforma girer ve ürün tipini seçer (Örn: Amigurumi, Kablo Demeti Montajı, Promosyon Kutusu).
+2. **Fizibilite Denetimi:** AI siparişin ev şartlarına (Tekstil, Hafif Montaj, Paketleme vb.) uygunluğunu denetler. Ağır sanayi ise anında reddeder.
 
-### 1. Talep Oluşturma (Input)
-* **Kullanıcı:** Kurumsal şirket temsilcisi uygulamaya giriş yapar.
-* **Aksiyon:** Ürün tipini (örn: El Yapımı Çanta) ve hedeflenen toplam üretim adedini (örn: 500) girer.
-* **Sistem:** Girdiyi doğrular ve AI motoruna iletir.
+### Adım 2: Pazarlık ve Müşteri İptal Hakkı
+3. **Kapasite Kontrolü:** İstek ağın gücünü aşıyorsa, AI "Kısmi Planlama" (ATP) teklif eder.
+4. **İptal Penceresi Başlar:** Sipariş onaylandığı an müşteri için "Kademeli İptal" süreci başlar. Üretici işi onaylayana kadar iptal ücretsizdir.
 
-### 2. Akıllı Analiz (Process)
-* **Veri Tarama:** Sistem, arka plandaki kadın üreticilerin müsaitlik ve günlük hız verilerini çeker.
-* **AI Optimizasyonu:** Yapay zeka, siparişi en kısa sürede ve en adil şekilde (üreticileri yormadan) dağıtacak matematiksel planı hazırlar.
-* **Kapasite Aşımı Uyarısı ve Yönlendirme:** Talep edilen adet ağın toplam kapasitesini aştığında sistem siparişi kırmızı uyarı ile bilgilendirir ve kullanıcıyı kapasite sınırı içinde planlamaya yönlendirir.
+### Adım 3: Üretici Onayı ve Hammadde (SLA)
+5. Seçilen üreticilere iş düşer, 30 dakika içinde onaylamaları beklenir (Onaylanmayan iş yedeğe geçer).
+6. İş onaylanırsa müşteri iptallerinde artık %30 "Emeğe Saygı" kesintisi devreye girer.
+7. Üretici, kendi bulunduğu ilçedeki Bölgesel Merkezden (Hub) hammaddeyi (kumaş, vida, kablo vb.) teslim alarak evde işe başlar.
 
-### 3. Sonuç ve Görselleştirme (Output)
-* **Ekran:** Kullanıcıya "Üretim Dağıtım Planı" tablosu sunulur.
-* **İçerik:** Hangi üreticinin kaç adet yapacağı ve projenin tahmini bitiş tarihi net bir şekilde gösterilir.
-
+### Adım 4: Teslimat ve Kalite Kontrol
+8. Üretimi/Montajı biten ürünler üretici tarafından tekrar bu yerel Hub'a teslim edilir.
+9. Son Kalite Kontrol (QC) yapılıp, tüm ürünler kurumsal markaya tek bir kargo ile gönderilir. Küçük siparişler ise 72 saatlik havuzda bekletilerek ortak kargoya verilir.
+10. Başarılı teslimat, üreticinin "Güven Puanını" artırarak ona "Usta" rozeti kazandırır.
