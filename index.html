@@ -1,162 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Micro Factory AI</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro Factory AI - Akıllı Üretim Dağıtım Ağı</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body class="min-h-screen bg-slate-50 text-slate-900">
-    <div class="background-orb background-orb-left"></div>
-    <div class="background-orb background-orb-right"></div>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Özel Cam Efekti (Glassmorphism) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        /* Tablo kaydırma çubuğu gizleme (daha şık görünüm için) */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-200 min-h-screen antialiased text-slate-800">
 
-    <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <header class="glass-card rounded-xl p-6 shadow-lg ring-1 ring-white/70">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <div class="logo-shell flex h-12 w-12 items-center justify-center rounded-xl shadow-lg">
-              <svg viewBox="0 0 48 48" class="h-7 w-7 text-white" aria-hidden="true">
-                <defs>
-                  <linearGradient id="netGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#c4b5fd" />
-                    <stop offset="100%" stop-color="#67e8f9" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M24 9 L12 16 L12 31 L24 39 L36 31 L36 16 Z"
-                  fill="none"
-                  stroke="url(#netGrad)"
-                  stroke-width="2.5"
-                />
-                <path d="M24 9 L24 39 M12 16 L36 31 M36 16 L12 31" stroke="url(#netGrad)" stroke-width="2" />
-                <circle cx="24" cy="9" r="2.8" fill="url(#netGrad)" />
-                <circle cx="12" cy="16" r="2.8" fill="url(#netGrad)" />
-                <circle cx="36" cy="16" r="2.8" fill="url(#netGrad)" />
-                <circle cx="12" cy="31" r="2.8" fill="url(#netGrad)" />
-                <circle cx="36" cy="31" r="2.8" fill="url(#netGrad)" />
-                <circle cx="24" cy="39" r="2.8" fill="url(#netGrad)" />
-                <circle cx="24" cy="24" r="3.2" fill="#ffffff" fill-opacity="0.95" />
-              </svg>
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        
+        <header class="mb-10 text-center lg:text-left">
+            <div class="flex flex-col lg:flex-row items-center gap-4 justify-between">
+                <div>
+                    <div class="flex items-center justify-center lg:justify-start gap-3 mb-2">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                            </svg>
+                        </div>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Micro Factory <span class="text-indigo-600">AI</span></h1>
+                    </div>
+                    <p class="text-slate-500 max-w-2xl text-sm lg:text-base">Dağınık kadın emeğini ve yerel kooperatifleri, yapay zeka optimizasyonu ile kurumsal tedarik zincirine bağlayan Akıllı Montaj Ağı.</p>
+                </div>
+                
+                <div class="hidden lg:flex gap-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">🌱 Düşük Karbon (Hub)</span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">🏢 B2B Uyumlu</span>
+                </div>
             </div>
-            <div>
-              <p class="brand-gradient text-xs font-semibold uppercase tracking-[0.24em]">Micro Factory AI</p>
-            </div>
-          </div>
-        </div>
+        </header>
 
-        <h1 class="mt-6 text-2xl font-bold text-slate-900 sm:text-3xl">
-          Akıllı Üretim Dağıtım Sistemi
-        </h1>
-        <p class="mt-3 max-w-3xl text-sm text-slate-700 sm:text-base">
-          Büyük kurumsal siparişleri; ev eksenli üretim yapan kadınlara ve yerel
-          mikro-kooperatiflere, kendi kapasitelerine göre en adil şekilde dağıtan yapay zeka
-          destekli planlama platformu.
-        </p>
-      </header>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-4 space-y-6">
+                <div class="glass-panel rounded-3xl p-6 lg:p-8 shadow-xl">
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Sipariş Giriş Paneli</h2>
+                    <p class="text-sm text-slate-500 mb-6">Fizibilite filtresine uygun (Tekstil, Hafif Montaj, Paketleme, Gıda) ürün detaylarını girin.</p>
+                    
+                    <form id="orderForm" class="space-y-5">
+                        <div>
+                            <label for="productName" class="block text-sm font-semibold text-slate-700 mb-1">Ürün / Montaj Adı</label>
+                            <input type="text" id="productName" name="productName" required placeholder="Örn: Bez Çanta, Kablo Demeti..." 
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-slate-700 placeholder-slate-400">
+                        </div>
 
-      <section class="grid gap-6 lg:grid-cols-5">
-        <article
-          class="glass-card rounded-xl p-6 shadow-lg ring-1 ring-white/70 lg:col-span-2"
-        >
-          <h2 class="text-lg font-semibold text-slate-900">Kurumsal Sipariş Giriş Formu</h2>
-          <p class="mt-1 text-sm text-slate-600">
-            Kadın Emeği ve Yerel Kooperatif Ağı odaklı üretim planlaması için sipariş detaylarını
-            girin.
-          </p>
+                        <div>
+                            <label for="quantity" class="block text-sm font-semibold text-slate-700 mb-1">Üretim Adedi</label>
+                            <input type="number" id="quantity" name="quantity" required min="1" placeholder="Örn: 1500" 
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-slate-700 placeholder-slate-400">
+                        </div>
 
-          <form id="orderForm" class="mt-6 space-y-4">
-            <div>
-              <label for="productName" class="mb-1 block text-sm font-medium text-slate-700">
-                Ürün Adı
-              </label>
-              <input
-                id="productName"
-                name="productName"
-                type="text"
-                placeholder="Örn: Organik Bez Çanta"
-                required
-                class="premium-input w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300/40"
-              />
-            </div>
+                        <div>
+                            <label for="complexity" class="block text-sm font-semibold text-slate-700 mb-1">İşçilik Karmaşıklığı</label>
+                            <select id="complexity" name="complexity" 
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-slate-700">
+                                <option value="dusuk">Düşük (Hızlı Montaj / Standart Dikiş)</option>
+                                <option value="orta">Orta (Detaylı Paketleme / Nakış)</option>
+                                <option value="yuksek">Yüksek (İleri Dönüşüm / Zorlu İşçilik)</option>
+                            </select>
+                        </div>
 
-            <div>
-              <label for="quantity" class="mb-1 block text-sm font-medium text-slate-700">
-                Adet
-              </label>
-              <input
-                id="quantity"
-                name="quantity"
-                type="number"
-                min="1"
-                placeholder="Örn: 1500"
-                required
-                class="premium-input w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300/40"
-              />
-            </div>
-
-            <div>
-              <label for="complexity" class="mb-1 block text-sm font-medium text-slate-700">
-                Karmaşıklık
-              </label>
-              <select
-                id="complexity"
-                name="complexity"
-                required
-                class="premium-input w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300/40"
-              >
-                <option value="" disabled selected>Seçiniz</option>
-                <option value="dusuk">Düşük</option>
-                <option value="orta">Orta</option>
-                <option value="yuksek">Yüksek</option>
-              </select>
+                        <div class="pt-2">
+                            <button type="submit" 
+                                class="w-full flex justify-center items-center gap-2 py-3.5 px-4 rounded-xl shadow-lg text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all hover:scale-[1.02] active:scale-95">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Yapay Zeka ile Planla
+                            </button>
+                        </div>
+                    </form>
+                    <div id="orderPreview" class="hidden"></div>
+                </div>
+                
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+                    <h3 class="text-xs font-bold text-indigo-800 uppercase tracking-wider mb-2">Sistem Notu</h3>
+                    <p class="text-sm text-indigo-600/80 leading-relaxed">
+                        Sistemimiz kapasiteyi aşan durumlarda otonom olarak <b>ATP (Kısmi Planlama)</b> yapar. Ağır sanayi talepleri filtrelenir.
+                    </p>
+                </div>
             </div>
 
-            <button
-              type="submit"
-              class="plan-button w-full rounded-xl bg-gradient-to-r from-indigo-700 via-violet-700 to-cyan-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-300/60 transition focus:outline-none focus:ring-2 focus:ring-indigo-300/60"
-            >
-              Siparişi Planla
-            </button>
-          </form>
-        </article>
+            <div class="lg:col-span-8">
+                <div class="glass-panel rounded-3xl shadow-xl overflow-hidden flex flex-col h-full">
+                    
+                    <div class="p-6 lg:px-8 lg:pt-8 border-b border-slate-100 flex justify-between items-center bg-white/40">
+                        <h2 class="text-xl font-bold text-slate-800">Otonom Dağıtım Planı</h2>
+                        <span class="flex items-center gap-2 text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Ağ Aktif
+                        </span>
+                    </div>
 
-        <article
-          class="glass-card rounded-xl p-6 shadow-lg ring-1 ring-white/70 lg:col-span-3"
-        >
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h2 class="text-lg font-semibold text-slate-900">Üretim Dağıtım Tablosu</h2>
+                    <div class="overflow-x-auto no-scrollbar flex-1 bg-white/30">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                                    <th class="px-6 py-4 font-semibold">Üretici / Kooperatif</th>
+                                    <th class="px-6 py-4 font-semibold">Atanan Adet</th>
+                                    <th class="px-6 py-4 font-semibold">Uzmanlık Alanı</th>
+                                    <th class="px-6 py-4 font-semibold">Müsaitlik</th>
+                                </tr>
+                            </thead>
+                            <tbody id="distributionBody" class="divide-y divide-slate-100">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-16 text-center">
+                                        <div class="flex flex-col items-center justify-center text-slate-400">
+                                            <svg class="w-12 h-12 mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                            <p class="font-medium text-sm">Sanal Fabrika göreve hazır. Sol taraftan sipariş girin.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
-          </div>
 
-          <div class="mt-5 overflow-hidden rounded-xl border border-white/80 bg-white/75 shadow-lg shadow-indigo-100/70">
-            <table class="w-full border-collapse text-left text-sm">
-              <thead class="bg-slate-100 text-slate-700">
-                <tr>
-                  <th class="px-4 py-3 font-semibold">Üretici</th>
-                  <th class="px-4 py-3 font-semibold">Atanan Adet</th>
-                  <th class="px-4 py-3 font-semibold">Uzmanlık</th>
-                  <th class="px-4 py-3 font-semibold">Durum</th>
-                </tr>
-              </thead>
-              <tbody id="distributionBody" class="bg-white text-slate-700">
-                <tr>
-                  <td colspan="4" class="px-4 py-10 text-center text-slate-500">
-                    Henüz dağıtım planı oluşturulmadı.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        </main>
+    </div>
 
-          <p id="orderPreview" class="mt-4 text-sm text-slate-600">
-            Form doldurulduğunda özet burada görünecek.
-          </p>
-        </article>
-      </section>
-    </main>
-
-    <script src="./script.js"></script>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
