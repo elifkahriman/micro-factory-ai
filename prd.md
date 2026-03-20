@@ -1,46 +1,40 @@
 # 📋 PRD: Micro Factory AI - Akıllı Üretim Dağıtım Sistemi
 
-## 1. Proje Vizyonu ve Kapsamı
-**Micro Factory AI**, evden üretim yapan kadınları ve yerel kooperatifleri tek bir sanal fabrika (Virtual Factory) çatısı altında birleştiren yapay zeka tabanlı bir yönetim sistemidir. 
-
-Projenin temel amacı; dağınık ve mikro ölçekli kadın emeğini, yapay zekanın analiz yetenekleriyle optimize ederek kurumsal tedarik zincirine güçlü ve sürdürülebilir bir şekilde dahil etmektir.
+## 1. Proje Vizyonu
+**Micro Factory AI**, evden üretim yapan kadınları ve yerel kooperatifleri tek bir sanal fabrika çatısı altında birleştiren yapay zeka tabanlı bir yönetim sistemidir. Kendi fiziksel fabrikasını kurmak yerine, mevcut atıl kapasiteyi teknolojiyle senkronize eden bir "Üst Akıl" olarak çalışır.
 
 ---
 
-## 2. Hedef Kullanıcı Analizi ve İhtiyaçlar
+## 2. Detaylı Fonksiyonel Gereksinimler (Sistem Nasıl Çalışır?)
 
-| Kullanıcı Grubu | Temel İhtiyaç | Çözüm Yaklaşımı |
-| :--- | :--- | :--- |
-| **Kurumsal Alıcı (B2B)** | Hızlı termin süresi ve etik üretim. | Tek noktadan sipariş girişi ve şeffaf kapasite takibi. |
-| **Kadın Üreticiler** | Esnek çalışma ve adil iş dağılımı. | Kapasite bildirimi ve yetkinliğe dayalı iş ataması. |
+### 2.1. Akıllı Kapasite ve Fizibilite Filtresi
+Kullanıcı evde yapılamayacak bir ağır sanayi siparişi girerse, AI bunu otomatik reddeder. Sistem sadece şu kategorileri işleme alır:
+* **Tekstil ve Örme:** Amigurumi (örgü oyuncak), bez çanta, makrome, el örgüsü ve nakış.
+* **Hafif Montaj (Light Assembly):** Otomotiv yan sanayisi için kablo demeti bantlama, elektrik prizi/soketi birleştirme, takı ve mandal montajı.
+* **Paketleme ve Tasnif:** Abonelik kutularının içine ürün dizilmesi, kurumsal promosyon/hediye paketlerinin hazırlanması, vida/somun poşetlemeleri.
+* **İleri Dönüşüm (Upcycling):** Fabrika atık kumaşlarından kırkyama (patchwork) çanta üretimi gibi ESG (Sürdürülebilirlik) odaklı işler.
+* **Butik Gıda:** Yerel kooperatif onaylı salça, reçel ve konserve üretimi.
 
----
+* **Esnek Sipariş (ATP):** Talep edilen adet ağın kapasitesini aşarsa, AI reddetmek yerine "Eldeki X adedi hemen planlayalım, kalan Y adet için süreyi uzatalım mı?" pazarlığı yapar.
 
-## 3. Detaylı Fonksiyonel Gereksinimler
+### 2.2. Hammadde ve Hub Lojistiği (Sıfır Cep Harcaması)
+* **Hammadde Tedariği:** Kadınlar malzemeyi kendi cebinden almaz. Kurumsal marka, malzemeyi üreticilerin bulunduğu ilçelerdeki "Bölgesel Toplama Merkezlerine" (Yerel kooperatifler veya belediye lokalleri - Hub) bırakır. Üretici malzemeyi buradan alır, işler ve geri getirir.
+* **Kalite Kontrol ve Sevkiyat:** Kalite kontrolü bu yerel Hub'larda yapılır ve markaya tek bir koli ile sevk edilir. Kargo evleri tek tek gezmez.
+* **72 Saat Kargo Havuzu:** Bireysel müşterilerin küçük siparişleri (1-2 adet), lojistik maliyetini düşürmek için sistemde 72 saat bekletilir ve mahalledeki diğer siparişlerle "Ortak Kargo" (Milk Run) yapılır.
 
-### 3.1. Akıllı Kapasite Yönetimi
-* **Veri Yapısı:** Arka planda kurgusal bir üretici havuzu (İsim, günlük kapasite, uzmanlık seviyesi ve müsaitlik) tutulur.
-* **Analiz Süreci:** Yapay zeka motoru, sipariş geldiğinde tüm üretici verilerini saniyeler içinde tarar. Üreticilerin hızlarını ve takvimlerini dikkate alan bir kapasite planlaması gerçekleştirir.
+### 2.3. Algoritmik Yönetişim: SLA ve Oyunlaştırma
+* **30 Dakika Onayı:** Üreticiye iş onayı için 30 dk verilir. Onaylamazsa iş saniyeler içinde yedek (backup) üreticiye geçer.
+* **Ustalık Rozeti:** İşleri hatasız teslim edenlerin "Güven Puanı" artar ve "Usta" rozeti alırlar. AI, en kârlı kurumsal işleri ilk olarak Ustalara yönlendirir.
 
-### 3.2. Dinamik Sipariş Formu ve Dağıtım Algoritması
-* **Esnek Girdi:** Kullanıcı ürün tipini ve toplam adedi seçer.
-  
-* **Optimizasyon Öncelikleri:**
-1. **Adalet:** İş yükünü üreticilerin kapasite oranlarına göre dağıtmak.
-2. **Verimlilik:** Teslimat süresini minimize etmek için uygun kapasiteleri eşleştirmek.
-3. **Denge:** Tek bir üreticiye aşırı yük binmesini (Overload) engellemek.
-
----
-
-## 4. Teknik Mimari (System Architecture)
-
-* **Arayüz (Frontend):** HTML5, Tailwind CSS ve JavaScript. Mobil uyumlu tasarım.
-* **Zeka Katmanı:** Yapay Zeka API Entegrasyonu. Planlama mantığı sistem talimatları ile tanımlanacaktır.
-* **Veri Yönetimi:** JSON formatında yapılandırılmış üretici veritabanı.
+### 2.4. Emeği Koruma Kalkanı (Kademeli İptal Politikası)
+Müşteri siparişi iptal etmek isterse sistem şu kuralları işletir:
+1. **%0 Kesinti (Tam İade):** Üretici henüz işi onaylamadıysa.
+2. **%30 Kesinti (Emeğe Saygı Payı):** Üretici işi onaylamış ve yerel merkezden malzemeyi almışsa, sipariş bedelinin %30'u markadan kesilerek üretici kadına tazminat olarak ödenir.
+3. **İptal Edilemez (%100):** Üretim %50 aşamasına geldiyse iptal butonu kapanır.
 
 ---
 
-## 5. Başarı Metrikleri (KPIs)
-* **Hız:** Kompleks bir siparişin 10 saniyeden kısa sürede tüm ağa dağıtılması.
-* **Verimlilik:** Mevcut kapasitenin en az %90 verimlilikle planlanması.
-* **Doğruluk:** Matematiksel hataların ve kapasite aşımlarının yapay zeka tarafından %0'a indirilmesi.
+## 3. Teknik Mimari ve Başarı Metrikleri
+* **Arayüz (Frontend):** HTML5, Tailwind CSS, JS (Endüstriyel SaaS Dashboard).
+* **Zeka (Backend):** Gemini API (Karar Motoru) ve `localStorage` (Veri Kalıcılığı).
+* **KPI'lar:** Kapasitenin %90 verimle planlanması, sıfır hatalı lojistik ve karbon salınımında %70 düşüş.
