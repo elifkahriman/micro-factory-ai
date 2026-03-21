@@ -258,40 +258,40 @@ function cancelFromHistory(index) {
 
 function renderHistory() {
     const tbody = document.getElementById('historyBody');
-    if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-[10px]">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
+    if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-sm">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
     
     tbody.innerHTML = orderHistory.map((o, index) => {
         let isCanceled = o.status === "İptal Edildi";
         
         let statusBadge = isCanceled 
-            ? `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
-            : `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
+            ? `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
+            : `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
         
-        // YENİ TASARIM: İptal butonu artık sağ üstte, belirgin bir kutu içinde!
+        // YENİ TASARIM: Buton metni büyütüldü (text-[10px]), padding artırıldı
         let actionBtn = !isCanceled 
-            ? `<button onclick="cancelFromHistory(${index})" class="px-3 py-1.5 bg-white text-rose-500 border border-rose-100 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all shadow-sm">Siparişi İptal Et (%30 Kesinti)</button>` 
+            ? `<button onclick="cancelFromHistory(${index})" class="px-4 py-2 bg-white text-rose-500 border-2 border-rose-100 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-md active:scale-95 mt-2">Siparişi İptal Et (%30 Kesinti)</button>` 
             : ``;
 
         let barColor = isCanceled ? "from-slate-300 to-slate-400" : "from-indigo-500 to-emerald-500 animate-pulse";
         let cardOpacity = isCanceled ? "opacity-60" : "";
 
         return `
-        <div class="glass-card p-6 sm:p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full ${cardOpacity}">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-slate-50 pb-6 gap-4">
+        <div class="glass-card p-8 sm:p-10 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full ${cardOpacity}">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 border-b border-slate-50 pb-8 gap-6">
                 <div>
-                    <h4 class="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase">${o.product}</h4>
-                    <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1.5">${o.date} • ${o.info}</p>
+                    <h4 class="text-2xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase mb-2">${o.product}</h4>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">${o.date} • ${o.info}</p>
                 </div>
-                <div class="flex flex-col items-end gap-2">
+                <div class="flex flex-col items-end gap-3 shrink-0">
                     ${statusBadge}
                     ${actionBtn}
                 </div>
             </div>
-            <div class="relative pt-2">
-                <div class="overflow-hidden h-2.5 mb-5 flex rounded-full bg-slate-100 shadow-inner w-full">
+            <div class="relative pt-4">
+                <div class="overflow-hidden h-4 mb-6 flex rounded-full bg-slate-100 shadow-inner w-full">
                     <div style="width: ${isCanceled ? "30%" : "75%"}" class="shadow-none flex flex-col bg-gradient-to-r ${barColor} rounded-full"></div>
                 </div>
-                <div class="flex justify-between text-[7px] sm:text-[9px] font-black uppercase tracking-widest opacity-50 w-full">
+                <div class="flex justify-between text-[11px] font-black uppercase tracking-widest opacity-60 w-full px-1">
                     <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
                 </div>
             </div>
