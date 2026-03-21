@@ -38,7 +38,7 @@ function openInfoModal(type) {
     const subtitle = document.getElementById('modalSubtitle');
     const content = document.getElementById('modalContent');
     if(type === 'about') {
-        title.innerText = "Sanal Üretim Katmanı"; subtitle.innerText = "Distributed Assembly Network (DAN)";
+        title.innerText = "Sanal Üretim Katmanı"; subtitle.innerText = "Yapay Zeka Destekli Hub Ağı";
         content.innerHTML = `<p><b>Merkeziyetsiz Zeka:</b> Micro Factory AI olarak, atıl ev üretim kapasitesini kurumsal B2B tedarik zincirlerine bağlayan otonom bir ağız.</p>
         <p><b>Misyonumuz:</b> Karbon ayak izini minimize ederek yerel kooperatifleri (Hub) küresel markalarla güvenle buluşturmaktır. Her ev bir mikro fabrikaya, her kadın bir girişimciye dönüşüyor.</p>`;
     } else if(type === 'b2b') {
@@ -71,10 +71,10 @@ function switchTab(tabId) {
         const btn = document.getElementById('btn-' + id);
         const target = document.getElementById(id);
         if(id === tabId) {
-            btn.className = "px-7 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-md flex items-center gap-2.5";
+            btn.className = "px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-md flex items-center gap-2 shrink-0";
             target.classList.remove('hidden-safely');
         } else {
-            btn.className = "px-7 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 hover:text-indigo-600 flex items-center gap-2.5";
+            btn.className = "px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 hover:text-indigo-600 flex items-center gap-2 shrink-0";
             target.classList.add('hidden-safely');
         }
     });
@@ -82,24 +82,18 @@ function switchTab(tabId) {
     if(tabId === 'producersTab') renderProducers();
 }
 
-// ÇÖZÜM: Yeşil Tasarruf KPI Kutusu Güncelleniyor
 function updateKPIs() {
     const active = producers.filter(p => p.status === "Aktif").length;
     const banned = producers.filter(p => p.status.includes("Askıda") || p.status.includes("İhraç")).length;
     const totalCap = producers.filter(p => p.status === "Aktif").reduce((acc, curr) => acc + curr.capacity, 0);
-    
-    // Sipariş geçmişindeki ağaç tasarruflarını topluyoruz
     const totalSavedTrees = orderHistory.reduce((acc, order) => acc + (order.savedTrees || 0), 0);
 
     document.getElementById('kpiCapacity').innerText = totalCap.toLocaleString();
     document.getElementById('kpiActiveProducers').innerText = active;
     document.getElementById('kpiBannedProducers').innerText = banned;
-    
-    // Eğer tasarruf varsa yazdır, yoksa "0 Ağaç" yazsın
     document.getElementById('kpiCo2').innerText = totalSavedTrees > 0 ? totalSavedTrees.toFixed(1) + " Ağaç" : "0 Ağaç";
 }
 
-// --- 3. AI KARAR MOTORU & SMART ROUTING ---
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
 async function checkSemanticFeasibility(productName, category) {
@@ -184,23 +178,23 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Siparişiniz mikro ölçeklidir. Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
     const treeEquivalent = (totalCo2 / 100).toFixed(1);
     
-    let html = `<table class="w-full text-left text-sm whitespace-nowrap animate-slide-up"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right rounded-r-lg">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
+    // TABLO DARALMA ÇÖZÜMÜ: w-full overflow-x-auto eklendi
+    let html = `<div class="w-full overflow-x-auto pb-4"><table class="w-full text-left text-sm min-w-[600px] animate-slide-up"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right rounded-r-lg">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
     allocations.forEach(a => {
-        let badge = a.isLocal ? `<span class="ml-2.5 text-[8px] bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner">Yerel Hub</span>` : `<span class="ml-2.5 text-[8px] bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner">Taşma / Overflow</span>`;
+        let badge = a.isLocal ? `<span class="ml-2.5 text-[8px] bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Yerel Hub</span>` : `<span class="ml-2.5 text-[8px] bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Taşma</span>`;
         html += `<tr class="hover:bg-indigo-50/50 transition-colors">
             <td class="py-5 px-4 font-bold text-slate-900 flex items-center gap-1">${a.name}${badge}</td>
             <td class="py-5 px-4 text-center font-mono font-black text-indigo-600 text-lg">${a.qty.toLocaleString()}</td>
-            <td class="py-5 px-4 text-slate-500 text-xs font-medium leading-relaxed">${a.sourceCity} ➔ ${a.targetCity}<br><span class="text-[10px] opacity-50 font-mono">${a.dist} km (Merkez)</span></td>
+            <td class="py-5 px-4 text-slate-500 text-xs font-medium leading-relaxed">${a.sourceCity} ➔ ${a.targetCity}<br><span class="text-[10px] opacity-50 font-mono">${a.dist} km</span></td>
             <td class="py-5 px-4 text-right font-mono font-bold ${isMilkRun ? 'text-emerald-500' : 'text-slate-500'}">${isMilkRun ? '0g (Havuz)' : a.co2.toLocaleString()+'g'}</td>
         </tr>`;
     });
-    html += `</tbody></table><div class="mt-8 p-6 bg-indigo-50 text-indigo-900 rounded-2xl border border-indigo-100 flex items-start gap-4 shadow-inner"><div class="text-3xl">🌱</div><p class="text-[11px] font-bold leading-relaxed uppercase tracking-wider">AI Lojistik Motorumuz siparişi öncelikle <b>${region}</b> bölgesindeki kooperatiflere dağıttı. Bu planlama ile <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağladınız.</p></div>`;
+    html += `</tbody></table></div><div class="mt-8 p-5 sm:p-6 bg-indigo-50 text-indigo-900 rounded-2xl border border-indigo-100 flex items-start gap-4 shadow-inner"><div class="text-3xl">🌱</div><p class="text-[11px] font-bold leading-relaxed uppercase tracking-wider">AI Lojistik Motorumuz siparişi öncelikle <b>${region}</b> bölgesindeki kooperatiflere dağıttı. Bu planlama ile <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağladınız.</p></div>`;
     
     tableWrapper.innerHTML = html;
     document.getElementById('actionPanel').classList.remove('hidden-safely');
     document.getElementById('etaText').innerText = isMilkRun ? "72 Saat Havuz + 2 Gün" : (qty > 1000 ? "4-7 İş Günü" : "2-4 İş Günü");
     
-    // ÇÖZÜM: treeEquivalent (Ağaç sayısı) artık siparişle beraber kaydediliyor!
     currentOrderTemp = { 
         date: new Date().toLocaleDateString(), 
         product: name, 
@@ -221,7 +215,6 @@ function confirmOrder() {
     document.getElementById('actionPanel').classList.add('hidden-safely');
     document.getElementById('tableWrapper').innerHTML = `<div class="p-16 text-center animate-slide"><div class="text-6xl mb-6">🚀</div><h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4><p class="text-sm text-slate-500 mt-2 font-medium leading-relaxed">SLA disiplini gereği Hub onay süreci başladı.<br>Tüm süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p></div>`;
     
-    // ÇÖZÜM: Sipariş onaylandıktan sonra KPI panellerini hemen güncelle!
     updateKPIs();
 }
 
@@ -239,8 +232,8 @@ function renderHistory() {
     if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-[10px]">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
     
     tbody.innerHTML = orderHistory.map(o => `
-        <div class="glass-card p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up">
-            <div class="flex justify-between items-start mb-8 border-b border-slate-50 pb-6">
+        <div class="glass-card p-6 sm:p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-slate-50 pb-6 gap-4">
                 <div>
                     <h4 class="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase">${o.product}</h4>
                     <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1.5">${o.date} • ${o.info}</p>
@@ -248,10 +241,10 @@ function renderHistory() {
                 <span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>
             </div>
             <div class="relative pt-2">
-                <div class="overflow-hidden h-2.5 mb-5 flex rounded-full bg-slate-100 shadow-inner">
+                <div class="overflow-hidden h-2.5 mb-5 flex rounded-full bg-slate-100 shadow-inner w-full">
                     <div style="width: 75%" class="shadow-none flex flex-col bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full animate-pulse"></div>
                 </div>
-                <div class="flex justify-between text-[9px] font-black uppercase tracking-widest opacity-50">
+                <div class="flex justify-between text-[7px] sm:text-[9px] font-black uppercase tracking-widest opacity-50 w-full">
                     <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
                 </div>
             </div>
@@ -261,14 +254,14 @@ function renderHistory() {
 function renderProducers() {
     const tbody = document.getElementById('producersBody');
     tbody.innerHTML = producers.map(p => `
-        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 text-center md:text-left animate-slide-up">
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 text-left animate-slide-up">
             <td class="py-6 px-6">
                 <p class="font-black text-slate-900 tracking-tight uppercase">${p.name}</p>
                 <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${p.badge}</p>
             </td>
             <td class="py-6 px-6 text-slate-500 text-[10px] font-black uppercase tracking-widest">${p.region} / ${p.city}</td>
             <td class="py-6 px-6"><span class="text-sm font-mono font-black ${p.trustScore > 8 ? 'text-emerald-600' : 'text-amber-600'}">${p.trustScore.toFixed(1)}/10</span></td>
-            <td class="py-6 px-6 font-mono text-xs font-black ${p.strikes > 0 ? 'text-rose-500' : 'text-slate-300'} flex items-center justify-center gap-1.5 md:justify-start">
+            <td class="py-6 px-6 font-mono text-xs font-black ${p.strikes > 0 ? 'text-rose-500' : 'text-slate-300'} flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 ${p.strikes} HATA
             </td>
