@@ -13,7 +13,7 @@ Micro Factory AI, hantal ve yüksek karbon emisyonlu geleneksel fabrikaların ye
 * **SLA ve Disiplin Protokolü:** 30 dakikalık iş onayı süresi, 10 üzerinden Güven Puanı ve hata yapan üreticiler için katı "3/6 İhraç Kuralı" ile sistemi korur.
 
 ## 🔗 Proje Bağlantıları
-* **Canlı Uygulama (Netlify):** [Buraya Netlify Linkini Yapıştıracaksın]
+* **Canlı Uygulama (Netlify):** https://thriving-mooncake-f00627.netlify.app/
 * **Demo Videosu (Loom):** [Buraya Loom Linkini Yapıştıracaksın]
 
 ## 🏗️ Teknoloji Yığını (Tech Stack)
