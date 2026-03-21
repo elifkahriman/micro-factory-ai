@@ -33,7 +33,6 @@ let orderHistory = JSON.parse(localStorage.getItem('mf_orders_v3'));
 
 window.onload = () => updateKPIs();
 
-// TYPO DÜZELTİLDİ ("Misyonumuz:")
 function openInfoModal(type) {
     const title = document.getElementById('modalTitle');
     const subtitle = document.getElementById('modalSubtitle');
@@ -83,13 +82,21 @@ function switchTab(tabId) {
     if(tabId === 'producersTab') renderProducers();
 }
 
+// ÇÖZÜM: Yeşil Tasarruf KPI Kutusu Güncelleniyor
 function updateKPIs() {
     const active = producers.filter(p => p.status === "Aktif").length;
     const banned = producers.filter(p => p.status.includes("Askıda") || p.status.includes("İhraç")).length;
     const totalCap = producers.filter(p => p.status === "Aktif").reduce((acc, curr) => acc + curr.capacity, 0);
+    
+    // Sipariş geçmişindeki ağaç tasarruflarını topluyoruz
+    const totalSavedTrees = orderHistory.reduce((acc, order) => acc + (order.savedTrees || 0), 0);
+
     document.getElementById('kpiCapacity').innerText = totalCap.toLocaleString();
     document.getElementById('kpiActiveProducers').innerText = active;
     document.getElementById('kpiBannedProducers').innerText = banned;
+    
+    // Eğer tasarruf varsa yazdır, yoksa "0 Ağaç" yazsın
+    document.getElementById('kpiCo2').innerText = totalSavedTrees > 0 ? totalSavedTrees.toFixed(1) + " Ağaç" : "0 Ağaç";
 }
 
 // --- 3. AI KARAR MOTORU & SMART ROUTING ---
@@ -126,8 +133,7 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     const category = document.getElementById('category').value;
     const city = document.getElementById('deliveryCity').value.trim(); 
 
-    // ÇÖZÜM: Girilen il'in hangi bölgede olduğunu otomatik bulma
-    let region = "Marmara"; // Varsayılan
+    let region = "Marmara"; 
     for (const [reg, cities] of Object.entries(regionData)) {
         if (cities.some(c => c.toLowerCase('tr-TR') === city.toLowerCase('tr-TR'))) {
             region = reg;
@@ -194,7 +200,15 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     document.getElementById('actionPanel').classList.remove('hidden-safely');
     document.getElementById('etaText').innerText = isMilkRun ? "72 Saat Havuz + 2 Gün" : (qty > 1000 ? "4-7 İş Günü" : "2-4 İş Günü");
     
-    currentOrderTemp = { date: new Date().toLocaleDateString(), product: name, info: `${qty.toLocaleString()} Adet / Teslimat: ${city}`, status: isMilkRun ? "Milk Run Havuzunda" : "Hub Onayı Bekliyor", isApproved: false };
+    // ÇÖZÜM: treeEquivalent (Ağaç sayısı) artık siparişle beraber kaydediliyor!
+    currentOrderTemp = { 
+        date: new Date().toLocaleDateString(), 
+        product: name, 
+        info: `${qty.toLocaleString()} Adet / Teslimat: ${city}`, 
+        status: isMilkRun ? "Milk Run Havuzunda" : "Hub Onayı Bekliyor", 
+        isApproved: false,
+        savedTrees: parseFloat(treeEquivalent) || 0 
+    };
 });
 
 function confirmOrder() {
@@ -206,6 +220,9 @@ function confirmOrder() {
     
     document.getElementById('actionPanel').classList.add('hidden-safely');
     document.getElementById('tableWrapper').innerHTML = `<div class="p-16 text-center animate-slide"><div class="text-6xl mb-6">🚀</div><h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4><p class="text-sm text-slate-500 mt-2 font-medium leading-relaxed">SLA disiplini gereği Hub onay süreci başladı.<br>Tüm süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p></div>`;
+    
+    // ÇÖZÜM: Sipariş onaylandıktan sonra KPI panellerini hemen güncelle!
+    updateKPIs();
 }
 
 function cancelOrder() {
