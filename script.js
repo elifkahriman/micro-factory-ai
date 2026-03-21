@@ -86,12 +86,23 @@ function updateKPIs() {
     const active = producers.filter(p => p.status === "Aktif").length;
     const banned = producers.filter(p => p.status.includes("Askıda") || p.status.includes("İhraç")).length;
     const totalCap = producers.filter(p => p.status === "Aktif").reduce((acc, curr) => acc + curr.capacity, 0);
-    const totalSavedTrees = orderHistory.reduce((acc, order) => acc + (order.savedTrees || 0), 0);
+    const totalSavedTrees = orderHistory.reduce((acc, order) => acc + (order.status === "İptal Edildi" ? 0 : (order.savedTrees || 0)), 0);
 
     document.getElementById('kpiCapacity').innerText = totalCap.toLocaleString();
     document.getElementById('kpiActiveProducers').innerText = active;
     document.getElementById('kpiBannedProducers').innerText = banned;
     document.getElementById('kpiCo2').innerText = totalSavedTrees > 0 ? totalSavedTrees.toFixed(1) + " Ağaç" : "0 Ağaç";
+}
+
+function resetOrderForm() {
+    document.getElementById('orderForm').reset();
+    document.getElementById('actionPanel').classList.add('hidden-safely');
+    document.getElementById('tableWrapper').innerHTML = `
+        <div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-40">
+            <svg class="w-20 h-20 mb-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517"></path></svg>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-center">AI Lojistik Analizi Bekleniyor...</p>
+        </div>`;
+    currentOrderTemp = null;
 }
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
@@ -107,7 +118,7 @@ async function checkSemanticFeasibility(productName, category) {
     if(!GEMINI_API_KEY) return "ONAY (Demo Modu)"; 
     
     try {
-        const prompt = `Sen Micro Factory AI baş mimarısın. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız ev/kooperatif şartlarına uygundur. Ağır sanayi, döküm, tehlikeli madde ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
+        const prompt = `Sen Micro Factory AI baş mimarısın. Kibarca analiz et. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız ev/kooperatif şartlarına uygundur. Ağır sanayi, döküm, tehlikeli madde ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
@@ -178,7 +189,6 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Siparişiniz mikro ölçeklidir. Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
     const treeEquivalent = (totalCo2 / 100).toFixed(1);
     
-    // TABLO DARALMA ÇÖZÜMÜ: w-full overflow-x-auto eklendi
     let html = `<div class="w-full overflow-x-auto pb-4"><table class="w-full text-left text-sm min-w-[600px] animate-slide-up"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right rounded-r-lg">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
     allocations.forEach(a => {
         let badge = a.isLocal ? `<span class="ml-2.5 text-[8px] bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Yerel Hub</span>` : `<span class="ml-2.5 text-[8px] bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Taşma</span>`;
@@ -213,42 +223,75 @@ function confirmOrder() {
     localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
     
     document.getElementById('actionPanel').classList.add('hidden-safely');
-    document.getElementById('tableWrapper').innerHTML = `<div class="p-16 text-center animate-slide"><div class="text-6xl mb-6">🚀</div><h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4><p class="text-sm text-slate-500 mt-2 font-medium leading-relaxed">SLA disiplini gereği Hub onay süreci başladı.<br>Tüm süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p></div>`;
+    document.getElementById('tableWrapper').innerHTML = `
+        <div class="p-10 sm:p-16 text-center animate-slide w-full">
+            <div class="text-6xl mb-6">🚀</div>
+            <h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4>
+            <p class="text-sm text-slate-500 mt-2 mb-8 font-medium leading-relaxed">SLA disiplini gereği Hub onay süreci başladı.<br>Tüm süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p>
+            <button onclick="resetOrderForm()" class="px-8 py-4 bg-indigo-50 text-indigo-700 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-100 transition-colors border border-indigo-200 shadow-sm mx-auto inline-block">YENİ SİPARİŞ OLUŞTUR</button>
+        </div>`;
     
     updateKPIs();
 }
 
 function cancelOrder() {
     if(!currentOrderTemp) return;
-    if(currentOrderTemp.isApproved && !confirm("Değerli Müşterimiz, üreticilerimiz hammaddeyi Hub'dan teslim alıp hazırlık aşamasına geçtiği için B2B cari hesabınızdan %30 'Emeğe Saygı Payı' kesilecek ve üreticiye tazminat olarak ödenecektir. İptali onaylıyor musunuz?")) return;
-    
     document.getElementById('actionPanel').classList.add('hidden-safely');
-    document.getElementById('tableWrapper').innerHTML = `<div class="p-12 text-center text-slate-400 font-black uppercase tracking-widest text-[10px] leading-loose">İşlem B2B Cari Tarafından İptal Edildi.<br>%30 Emeğe Saygı Payı işletildi.</div>`;
+    document.getElementById('tableWrapper').innerHTML = `
+        <div class="p-12 text-center text-slate-500 animate-slide">
+            <div class="text-4xl mb-4">🛑</div>
+            <p class="font-black uppercase tracking-widest text-[11px] leading-loose mb-6">İşlem B2B Cari Tarafından İptal Edildi.</p>
+            <button onclick="resetOrderForm()" class="px-8 py-4 bg-slate-100 text-slate-600 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-colors shadow-sm mx-auto inline-block">YENİ SİPARİŞ OLUŞTUR</button>
+        </div>`;
     currentOrderTemp = null;
+}
+
+// VİDEOLUK ŞOV: Süreç Takibinden %30 Kesinti Kalkanını Gösterme
+function cancelFromHistory(index) {
+    if(confirm("🛑 DİKKAT!\n\nDeğerli Müşterimiz, üreticilerimiz hammaddeyi Hub'dan teslim alıp hazırlık aşamasına geçmiştir.\n\nEğer siparişi iptal ederseniz B2B cari hesabınızdan %30 'Emeğe Saygı Payı' kesilecek ve üreticiye tazminat olarak ödenecektir. İptali onaylıyor musunuz?")) {
+        orderHistory[index].status = "İptal Edildi";
+        localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
+        renderHistory();
+        updateKPIs();
+    }
 }
 
 function renderHistory() {
     const tbody = document.getElementById('historyBody');
     if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-[10px]">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
     
-    tbody.innerHTML = orderHistory.map(o => `
-        <div class="glass-card p-6 sm:p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full">
+    tbody.innerHTML = orderHistory.map((o, index) => {
+        let statusBadge = o.status === "İptal Edildi" 
+            ? `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
+            : `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
+        
+        let actionBtn = o.status !== "İptal Edildi" 
+            ? `<button onclick="cancelFromHistory(${index})" class="text-[9px] font-black text-rose-500 hover:text-rose-700 underline uppercase tracking-widest mt-3 block transition-colors">Siparişi İptal Et (%30 Kesinti)</button>` 
+            : ``;
+
+        let barColor = o.status === "İptal Edildi" ? "from-slate-300 to-slate-400" : "from-indigo-500 to-emerald-500 animate-pulse";
+        let cardOpacity = o.status === "İptal Edildi" ? "opacity-60" : "";
+
+        return `
+        <div class="glass-card p-6 sm:p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full ${cardOpacity}">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-slate-50 pb-6 gap-4">
                 <div>
                     <h4 class="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase">${o.product}</h4>
                     <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1.5">${o.date} • ${o.info}</p>
+                    ${actionBtn}
                 </div>
-                <span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>
+                ${statusBadge}
             </div>
             <div class="relative pt-2">
                 <div class="overflow-hidden h-2.5 mb-5 flex rounded-full bg-slate-100 shadow-inner w-full">
-                    <div style="width: 75%" class="shadow-none flex flex-col bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full animate-pulse"></div>
+                    <div style="width: ${o.status === "İptal Edildi" ? "30%" : "75%"}" class="shadow-none flex flex-col bg-gradient-to-r ${barColor} rounded-full"></div>
                 </div>
                 <div class="flex justify-between text-[7px] sm:text-[9px] font-black uppercase tracking-widest opacity-50 w-full">
                     <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
                 </div>
             </div>
-        </div>`).join("");
+        </div>`;
+    }).join("");
 }
 
 function renderProducers() {
