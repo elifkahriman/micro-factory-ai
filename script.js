@@ -1,210 +1,266 @@
-const producersData = [
-  { id: "P001", name: "Ayşe Demir", dailyCapacity: 70, speedPerHour: 9, expertise: ["Tekstil", "Dikiş"], availability: "Müsait", availableToday: true },
-  { id: "P002", name: "Fatma Kaya", dailyCapacity: 55, speedPerHour: 7, expertise: ["El Sanatları", "Nakış", "Aksesuar"], availability: "Sınırlı", availableToday: true },
-  { id: "P003", name: "Emine Yıldız", dailyCapacity: 90, speedPerHour: 11, expertise: ["Tekstil", "Kalite Kontrol"], availability: "Müsait", availableToday: true },
-  { id: "P004", name: "Hatice Acar", dailyCapacity: 40, speedPerHour: 6, expertise: ["Paketleme", "Gıda", "Konserve"], availability: "İzinli", availableToday: false },
-  { id: "P005", name: "Zehra Kurt", dailyCapacity: 65, speedPerHour: 8, expertise: ["Tekstil", "Hafif Montaj"], availability: "Müsait", availableToday: true },
-  { id: "P006", name: "Meryem Çınar", dailyCapacity: 50, speedPerHour: 7, expertise: ["El Sanatları", "İleri Dönüşüm", "Paketleme"], availability: "Sınırlı", availableToday: true },
-  { id: "P007", name: "Sevgi Arslan", dailyCapacity: 80, speedPerHour: 10, expertise: ["Tekstil", "Dikiş"], availability: "Müsait", availableToday: true },
-  { id: "P008", name: "Nuran Şahin", dailyCapacity: 45, speedPerHour: 6, expertise: ["El Sanatları", "Butik Gıda"], availability: "Sınırlı", availableToday: true },
-  { id: "P009", name: "Gülcan Taş", dailyCapacity: 75, speedPerHour: 9, expertise: ["Tekstil", "Kesim"], availability: "Müsait", availableToday: true },
-  { id: "P010", name: "Sultan Koç", dailyCapacity: 52, speedPerHour: 7, expertise: ["Paketleme", "Etiketleme"], availability: "Müsait", availableToday: true },
-  { id: "P011", name: "Aylin Erdoğan", dailyCapacity: 68, speedPerHour: 8, expertise: ["Dikiş", "Hafif Montaj"], availability: "Müsait", availableToday: true },
-  { id: "P012", name: "Derya Polat", dailyCapacity: 35, speedPerHour: 5, expertise: ["İleri Dönüşüm", "Aksesuar"], availability: "İzinli", availableToday: false },
-  { id: "P013", name: "Songül Yaman", dailyCapacity: 62, speedPerHour: 8, expertise: ["Tekstil", "Kalite Kontrol"], availability: "Müsait", availableToday: true },
-  { id: "P014", name: "Elif Kantar", dailyCapacity: 58, speedPerHour: 7, expertise: ["Kesim", "Paketleme", "Butik Gıda"], availability: "Sınırlı", availableToday: true },
-  { id: "P015", name: "Nesrin Uçar", dailyCapacity: 72, speedPerHour: 9, expertise: ["Dikiş", "Hafif Montaj"], availability: "Müsait", availableToday: true },
+// --- 1. VERİ TABANI & BÖLGESEL HUB'LAR (Şahıs İsimlerinden Arındırılmış Kurumsal Yapı) ---
+const regionData = {
+  "İç Anadolu": ["Ankara", "Eskişehir", "Konya", "Kayseri", "Sivas", "Aksaray", "Nevşehir", "Niğde"],
+  "Marmara": ["İstanbul", "Bursa", "Balıkesir", "Kocaeli", "Tekirdağ", "Çanakkale", "Edirne", "Sakarya"],
+  "Ege": ["İzmir", "Manisa", "Denizli", "Aydın", "Muğla", "Afyonkarahisar", "Kütahya", "Uşak"],
+  "Doğu ve Güneydoğu": ["Gaziantep", "Mardin", "Diyarbakır", "Şanlıurfa", "Van", "Erzurum", "Malatya", "Elazığ"],
+  "Akdeniz": ["Antalya", "Adana", "Hatay", "Mersin", "Isparta", "Burdur", "Osmaniye", "Kahramanmaraş"],
+  "Karadeniz": ["Rize", "Trabzon", "Samsun", "Artvin", "Ordu", "Giresun", "Zonguldak", "Tokat"]
+};
+
+const defaultProducers = [
+  { id: "H1", name: "Sincan Kadın Kooperatifi Hub", capacity: 1200, city: "Ankara", region: "İç Anadolu", trustScore: 9.8, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H2", name: "Polatlı Üretim ve Lojistik Ağı", capacity: 850, city: "Ankara", region: "İç Anadolu", trustScore: 9.5, strikes: 0, status: "Aktif", badge: "Onaylı Hub" },
+  { id: "H3", name: "Eskişehir Hafif Montaj Üssü", capacity: 400, city: "Eskişehir", region: "İç Anadolu", trustScore: 9.1, strikes: 0, status: "Aktif", badge: "Hızlı Üretici" },
+  { id: "H7", name: "Bursa İpek ve Tekstil Hub", capacity: 2500, city: "Bursa", region: "Marmara", trustScore: 9.9, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H8", name: "Marmara Doğal Kozmetik Atölyesi", capacity: 1500, city: "İstanbul", region: "Marmara", trustScore: 9.6, strikes: 0, status: "Aktif", badge: "Hızlı Üretici" },
+  { id: "H12", name: "Ege Doğal Yaşam Kooperatifi", capacity: 1800, city: "İzmir", region: "Ege", trustScore: 9.8, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H17", name: "Gaziantep Kutnu Dokuma Merkezi", capacity: 1300, city: "Gaziantep", region: "Doğu ve Güneydoğu", trustScore: 9.7, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H18", name: "Mardin Sabun ve Koku Atölyesi", capacity: 950, city: "Mardin", region: "Doğu ve Güneydoğu", trustScore: 9.9, strikes: 0, status: "Aktif", badge: "Onaylı Hub" },
+  { id: "H22", name: "Antalya Narenciye Paketleme", capacity: 1600, city: "Antalya", region: "Akdeniz", trustScore: 9.6, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H26", name: "Rize Çay ve Gıda Kooperatifi", capacity: 1200, city: "Rize", region: "Karadeniz", trustScore: 9.7, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
+  { id: "H31", name: "Kayseri Dokuma Evi (İhlal)", capacity: 300, city: "Kayseri", region: "İç Anadolu", trustScore: 4.5, strikes: 3, status: "Askıda (6 Ay)", badge: "SLA Cezası" },
+  { id: "H32", name: "Karşıyaka Kadın Dayanışması", capacity: 350, city: "İzmir", region: "Ege", trustScore: 3.8, strikes: 6, status: "İhraç (3 Yıl)", badge: "SLA Cezası" }
 ];
 
-const orderForm = document.getElementById("orderForm");
-const orderPreview = document.getElementById("orderPreview");
-const distributionBody = document.getElementById("distributionBody");
-const GEMINI_API_KEY = window.ENV_API_KEY || "";
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-// AĞIR SANAYİ LİSTESİ
-const UNSUPPORTED_KEYWORDS = ["araba", "otomotiv", "motor", "elektronik", "çip", "sanayi", "döküm", "kaynak", "aks", "pres", "metal", "silah", "kimyasal", "plastik enjeksiyon"];
-
-const complexityMultiplierMap = { dusuk: 1, orta: 0.85, yuksek: 0.7 };
-const availabilityMultiplierMap = { "Müsait": 1, "Sınırlı": 0.65, "İzinli": 0 };
-
-let producers = [];
-let ordersHistory = []; 
-
-function formatAvailabilityLabel(value) { return value || "Bilinmiyor"; }
-
-// LOCAL STORAGE
-function initLocalStorage() {
-  const storedProducers = localStorage.getItem("mf_producers");
-  if (storedProducers) producers = JSON.parse(storedProducers);
-  else { producers = producersData; localStorage.setItem("mf_producers", JSON.stringify(producers)); }
+// LocalStorage Yapılandırması (v3 ile cache'i sıfırlıyoruz)
+if (!localStorage.getItem('mf_producers_v3')) {
+  localStorage.clear(); localStorage.setItem('mf_producers_v3', JSON.stringify(defaultProducers));
 }
+if (!localStorage.getItem('mf_orders_v3')) localStorage.setItem('mf_orders_v3', JSON.stringify([]));
 
-function escapeHtml(text) {
-  return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
-}
+let producers = JSON.parse(localStorage.getItem('mf_producers_v3'));
+let orderHistory = JSON.parse(localStorage.getItem('mf_orders_v3'));
 
-function renderEmptyTableRow(message) {
-  if (!distributionBody) return;
-  distributionBody.innerHTML = `<tr><td colspan="4" class="px-4 py-10 text-center text-slate-500">${message}</td></tr>`;
-}
+// --- 2. UI YÖNETİMİ & MODALLAR ---
+window.onload = () => updateKPIs();
 
-// FİLTRE
-function isUnsupportedProduct(productName) {
-  const normalized = productName.trim().toLowerCase();
-  return UNSUPPORTED_KEYWORDS.some(kw => normalized.includes(kw) || normalized === kw);
-}
-
-// GEMINI HIZLANDIRMA (Sadece 1 cümle)
-async function getFastAIMessage(productName, quantity) {
-  const prompt = `Müşteri ${quantity} adet '${productName}' siparişi verdi. Sen Micro Factory AI sistemisin. SADECE 1 CÜMLE ile bu siparişi onayladığımızı, kadın emeğini ve sürdürülebilirliği vurgulayan havalı bir endüstriyel mesaj yaz. Asla rapor, plan veya tablo yapma. Sadece tek cümle!`;
-  
-  const requestBody = {
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    generationConfig: { temperature: 0.3, maxOutputTokens: 100 },
-  };
-
-  try {
-    const response = await fetch(GEMINI_API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestBody) });
-    const data = await response.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "Siparişiniz otonom ağımıza başarıyla aktarıldı.";
-  } catch (error) {
-    return "Siparişiniz yapay zeka ağı tarafından güvenle planlandı.";
+// 81 İl Özgürlüğü için Şehir Listesi Otomatik Tamamlama (Opsiyonel Yardımcı)
+function updateCities() {
+  const region = document.getElementById('deliveryRegion').value;
+  const cityInput = document.getElementById('deliveryCity');
+  if (region && regionData[region]) {
+      cityInput.placeholder = `Seçilen Bölge: ${region} (İl Yazınız)`;
+      cityInput.focus();
   }
 }
 
-function getCurrentNetworkCapacity() {
-  return producers.filter(p => p.availableToday).reduce((sum, p) => sum + p.dailyCapacity, 0);
-}
-
-// MATEMATİKSEL DAĞITIM
-function buildCapacityPlan(quantity, complexity) {
-  const cm = complexityMultiplierMap[complexity] || 1;
-  const availableProducers = producers.filter(p => p.availableToday);
-  
-  let producerPlans = availableProducers.map(p => {
-    const am = availabilityMultiplierMap[p.availability] || 1;
-    return { ...p, effectiveCapacity: Math.floor(p.dailyCapacity * cm * am), assigned: 0 };
-  });
-
-  const totalEffectiveCapacity = producerPlans.reduce((sum, item) => sum + item.effectiveCapacity, 0);
-  let remaining = quantity;
-
-  producerPlans.forEach(plan => {
-    const share = Math.floor((quantity * plan.effectiveCapacity) / totalEffectiveCapacity);
-    plan.assigned = Math.min(plan.effectiveCapacity, share);
-    remaining -= plan.assigned;
-  });
-
-  const producersBySlack = producerPlans.filter(p => p.effectiveCapacity > p.assigned).sort((a, b) => b.effectiveCapacity - a.effectiveCapacity);
-  
-  let i = 0;
-  while (remaining > 0 && producersBySlack.length > 0) {
-    const target = producersBySlack[i % producersBySlack.length];
-    if (target.assigned < target.effectiveCapacity) { target.assigned++; remaining--; }
-    i++; if (i > quantity * 2) break;
+function openInfoModal(type) {
+  const title = document.getElementById('modalTitle');
+  const subtitle = document.getElementById('modalSubtitle');
+  const content = document.getElementById('modalContent');
+  if(type === 'about') {
+      title.innerText = "Sanal Üretim Katmanı"; subtitle.innerText = "Distributed Assembly Network (DAN)";
+      content.innerHTML = `<p><b>Merkeziyetsiz Zeka:</b> Micro Factory AI olarak, atıl ev üretim kapasitesini kurumsal B2B tedarik zincirlerine bağlayan otonom bir ağız.</p><p>Amacımız; karbon ayak izini minimize ederek yerel kooperatifleri (Hub) küresel markalarla güvenle buluşturmaktır.</p>`;
+  } else if(type === 'b2b') {
+      title.innerText = "B2B Lojistik Çözümleri"; subtitle.innerText = "Kurumsal Partnerlik & SLA";
+      content.innerHTML = `<p>Siparişlerinizi %30 Emeğe Saygı Payı ve katı 3/6 İhraç kurallarıyla yönetilen bölgesel Hub'lara dağıtıyoruz.</p><ul class="list-disc pl-5 space-y-2 mt-2"><li>Ağır Sanayi Filtresi (Gemini AI)</li><li>Smart Routing & 72 Saat Milk Run</li><li>Uçtan Uca B2B Cari Yönetimi</li></ul>`;
+  } else if(type === 'apply') {
+      title.innerText = "Hub (Kooperatif) Başvurusu"; subtitle.innerText = "Kapasite Durumu";
+      content.innerHTML = `<div class="bg-amber-50 p-6 rounded-2xl border border-amber-100 text-center"><p class="text-amber-800 font-bold mb-2">Başvuru Havuzumuz Doludur</p><p class="text-xs">Mevcut 7 bölge kapasitemiz dolmuştur. İlginiz için teşekkür ederiz.</p></div>`;
   }
+  document.getElementById('infoModal').classList.remove('hidden-safely');
+}
+function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden-safely'); }
 
-  const assignedTotal = producerPlans.reduce((sum, p) => sum + p.assigned, 0);
-  return { producerPlans, assignedTotal, shortfall: Math.max(0, quantity - assignedTotal) };
+function openLogin() { document.getElementById('loginScreen').classList.remove('hidden-safely'); }
+function closeLogin() { document.getElementById('loginScreen').classList.add('hidden-safely'); }
+
+document.getElementById('authForm').addEventListener('submit', (e) => {
+  e.preventDefault(); closeLogin();
+  document.getElementById('headerLoginBtn').classList.add('hidden-safely');
+  document.getElementById('userProfileMenu').classList.remove('hidden-safely');
+});
+
+function logout() {
+  document.getElementById('userProfileMenu').classList.add('hidden-safely');
+  document.getElementById('headerLoginBtn').classList.remove('hidden-safely');
 }
 
-// ANA İŞLEM
-if (orderForm) {
-  initLocalStorage();
-  renderEmptyTableRow("Sanal Fabrika göreve hazır. Sipariş bekleniyor.");
-  if (orderPreview) orderPreview.style.display = "none";
-
-  orderForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(orderForm);
-    const productName = String(formData.get("productName") || "").trim();
-    const quantity = Number(formData.get("quantity"));
-    const complexity = String(formData.get("complexity") || "dusuk");
-
-    if (!productName || quantity <= 0) return;
-
-    // 1. AĞIR SANAYİ FİLTRESİ
-    if (isUnsupportedProduct(productName)) {
-      distributionBody.innerHTML = `<tr><td colspan="4" class="px-4 py-6">
-        <div class="rounded-xl border border-red-300 bg-red-50 p-5 text-red-800 font-medium text-sm leading-6">
-          ❌ <b>FİZİBİLİTE REDDİ:</b> "${escapeHtml(productName)}" üretim ağımızın dışındadır. Tesisimiz ağır sanayi veya elektronik üretim yapmamaktadır. Sadece Tekstil, Hafif Montaj ve Gıda siparişleri kabul edilir.
-        </div></td></tr>`;
-      return;
-    }
-
-    const totalCapacity = getCurrentNetworkCapacity();
-    let finalQuantity = quantity;
-    let poolChoice = false;
-
-    // 2. KULLANICIYA SEÇENEK SUNMA (Alert/Confirm)
-    if (quantity <= 5) {
-      poolChoice = confirm(`🌱 YEŞİL LOJİSTİK UYARISI!\nBu küçük bir sipariş (${quantity} adet).\n\nKargo maliyetini ve karbon ayak izini düşürmek için siparişinizi 72 Saatlik 'Ortak Kargo Havuzu'na eklemek ister misiniz? (Ücretsiz Teslimat)\n\nTamam = Havuza Ekle\nİptal = Hemen Kargola (Ek Ücretli)`);
-    } else if (quantity > totalCapacity) {
-      const atpChoice = confirm(`⚠️ KAPASİTE AŞIMI!\nAğımızın anlık kapasitesi ${totalCapacity} adettir. \n\nEldeki kapasiteyi hemen üretime alıp, kalan ${quantity - totalCapacity} adedi sıraya (ATP) alalım mı?\n\nTamam = Kısmi Planlamayı Kabul Et\nİptal = Tüm Siparişi İptal Et`);
-      if (atpChoice) {
-        finalQuantity = totalCapacity;
+function switchTab(tabId) {
+  ['orderTab', 'historyTab', 'producersTab'].forEach(id => {
+      const btn = document.getElementById('btn-' + id);
+      const target = document.getElementById(id);
+      if(id === tabId) {
+          btn.className = "px-8 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-lg";
+          target.classList.remove('hidden-safely');
       } else {
-        renderEmptyTableRow("Kapasite yetersizliği nedeniyle sipariş kullanıcı tarafından iptal edildi.");
-        return;
+          btn.className = "px-8 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white hover:text-indigo-600";
+          target.classList.add('hidden-safely');
       }
-    }
-
-    renderEmptyTableRow("Sistem siparişi optimize ediyor, lütfen bekleyin...");
-
-    // 3. HIZLI GEMINI ÇAĞRISI
-    const aiMessage = await getFastAIMessage(productName, quantity);
-
-    // 4. TABLO OLUŞTURMA
-    const plan = buildCapacityPlan(finalQuantity, complexity);
-    const assignedRows = plan.producerPlans.filter(p => p.assigned > 0).sort((a, b) => b.assigned - a.assigned);
-    
-    let tableHtml = assignedRows.map(item => `
-      <tr class="border-t border-slate-100 hover:bg-slate-50">
-        <td class="px-4 py-3 font-medium text-slate-700">${item.name}</td>
-        <td class="px-4 py-3 text-indigo-700 font-bold">${item.assigned}</td>
-        <td class="px-4 py-3 text-slate-500 text-sm">${item.expertise.join(", ")}</td>
-        <td class="px-4 py-3 text-slate-500 text-sm">${formatAvailabilityLabel(item.availability)}</td>
-      </tr>
-    `).join("");
-
-    if (quantity > totalCapacity) {
-      tableHtml += `<tr class="bg-yellow-50"><td colspan="4" class="px-4 py-3 text-center text-yellow-800 font-bold text-sm">Kapasite gereği ${finalQuantity} adet planlandı. Kalan ${quantity - finalQuantity} adet ATP kuyruğunda bekletilmektedir.</td></tr>`;
-    }
-
-    // 5. SİPARİŞ DURUM BARI
-    const statusTrackerHtml = `
-      <tr class="bg-slate-50 border-t border-slate-200">
-        <td colspan="4" class="px-4 py-5">
-          <div class="flex items-center justify-between text-xs font-medium text-slate-500">
-            <div class="flex flex-col items-center text-indigo-600">
-              <div class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center mb-1 font-bold">1</div>
-              <span>Sipariş Alındı</span>
-            </div>
-            <div class="flex-1 h-px bg-indigo-200 mx-2"></div>
-            <div class="flex flex-col items-center ${poolChoice ? 'text-emerald-600' : 'text-slate-400'}">
-              <div class="w-6 h-6 ${poolChoice ? 'bg-emerald-100' : 'bg-slate-200'} rounded-full flex items-center justify-center mb-1 font-bold">2</div>
-              <span>${poolChoice ? '72 Saat Havuzunda' : 'SLA Bekleniyor'}</span>
-            </div>
-            <div class="flex-1 h-px bg-slate-200 mx-2"></div>
-            <div class="flex flex-col items-center text-slate-400">
-              <div class="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mb-1 font-bold">3</div>
-              <span>Hazırlanıyor</span>
-            </div>
-            <div class="flex-1 h-px bg-slate-200 mx-2"></div>
-            <div class="flex flex-col items-center text-slate-400">
-              <div class="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mb-1 font-bold">4</div>
-              <span>Kargoya Verildi</span>
-            </div>
-          </div>
-          <div class="mt-4 p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-700">
-             🤖 <b>AI Yönetim Notu:</b> ${escapeHtml(aiMessage)}
-          </div>
-        </td>
-      </tr>
-    `;
-
-    distributionBody.innerHTML = tableHtml + statusTrackerHtml;
   });
+  if(tabId === 'historyTab') renderHistory();
+  if(tabId === 'producersTab') renderProducers();
+}
+
+function updateKPIs() {
+  const active = producers.filter(p => p.status === "Aktif").length;
+  const banned = producers.filter(p => p.status.includes("Askıda") || p.status.includes("İhraç")).length;
+  const totalCap = producers.filter(p => p.status === "Aktif").reduce((acc, curr) => acc + curr.capacity, 0);
+  document.getElementById('kpiCapacity').innerText = totalCap.toLocaleString();
+  document.getElementById('kpiActiveProducers').innerText = active;
+  document.getElementById('kpiBannedProducers').innerText = banned;
+}
+
+// --- 3. AI KARAR MOTORU & SMART ROUTING ---
+const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
+
+async function checkSemanticFeasibility(productName, category) {
+  const pNameLower = productName.toLowerCase();
+  const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv parçası', 'pcb', 'devre'];
+  
+  if (forbidden.some(word => pNameLower.includes(word))) {
+      return "RED: Bu ürün (Ağır Sanayi/Elektronik/Otomotiv) kurumsal ağımızın güvenlik protokollerine ve ev/hub üretim modelimize uygun değildir.";
+  }
+  
+  if(!GEMINI_API_KEY) return "ONAY"; // MVP fallback
+  
+  try {
+      const prompt = `Sen Micro Factory AI (Distributed Assembly Network) baş mimarısın. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız sadece 5 kategoriye (Doğal Kozmetik/Kimya, Tekstil, Hafif Montaj, Paketleme, İleri Dönüşüm/Gıda) onay verir. Ağır sanayi, tehlikeli madde veya otomotiv dökümü ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
+      });
+      const data = await res.json();
+      return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY";
+  } catch (e) { return "ONAY"; }
+}
+
+let currentOrderTemp = null; 
+
+document.getElementById("orderForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('productName').value;
+  let qty = Number(document.getElementById('quantity').value);
+  const category = document.getElementById('category').value;
+  const region = document.getElementById('deliveryRegion').value;
+  const city = document.getElementById('deliveryCity').value; // 81 il özgürlüğü
+  
+  document.getElementById('alertBox').classList.add('hidden-safely');
+  const tableWrapper = document.getElementById('tableWrapper');
+  tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Semantik Filtreleme & Bölgesel Analiz Yapıyor...</p></div>`;
+  document.getElementById('actionPanel').classList.add('hidden-safely');
+
+  // Adım 1: AI Semantik Filtresi
+  const aiResponse = await checkSemanticFeasibility(name, category);
+  if(aiResponse.startsWith("RED:")) {
+      tableWrapper.innerHTML = ``;
+      document.getElementById('alertBox').classList.remove('hidden-safely');
+      document.getElementById('alertMessage').innerText = aiResponse.replace("RED:", "").trim();
+      return;
+  }
+
+  // Adım 2: Smart Routing (Bölgesel Öncelik ve Güven Puanı Optimizasyonu)
+  let activeProducers = producers.filter(p => p.status === "Aktif");
+  activeProducers.sort((a, b) => {
+      let aIsLocal = (a.region === region) ? 1 : 0;
+      let bIsLocal = (b.region === region) ? 1 : 0;
+      if (aIsLocal !== bIsLocal) return bIsLocal - aIsLocal; // Önce teslimat bölgesi (Marmara -> Marmara)
+      return b.trustScore - a.trustScore; // Sonra Güven Puanı (SLA)
+  });
+
+  let remaining = qty; 
+  let allocations = []; 
+  let totalCo2 = 0;
+
+  activeProducers.forEach(p => {
+      if(remaining <= 0) return;
+      let give = Math.min(p.capacity, remaining);
+      // Eğer yerelse 15-50km (Hub Lojistiği), değilse 200-800km uzun yol hesabı
+      let dist = (p.region === region) ? Math.floor(Math.random() * 35) + 15 : Math.floor(Math.random() * 600) + 200; 
+      let co2 = (give * dist * 0.02).toFixed(0); 
+      totalCo2 += Number(co2);
+      allocations.push({ name: p.name, sourceCity: p.city, targetCity: city, dist, isLocal: (p.region === region), qty: give, co2, score: p.trustScore });
+      remaining -= give;
+  });
+
+  // Adım 3: Kapasite Aşımı (Waitlist / ATP Pazarlığı)
+  let isWaitlist = false;
+  if(remaining > 0) {
+      if(confirm(`⚠️ Kapasite Aşımı Uyarısı! Ulusal ağımızdaki aktif kapasite doludur. Kalan ${remaining} adet siparişiniz dinamik bekleme sırasına (Waitlist) alınsın mı?`)) isWaitlist = true;
+  }
+
+  // Adım 4: Milk Run Havuzu (72 Saat Yeşil Lojistik)
+  let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Siparişiniz mikro ölçeklidir. Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
+  const treeEquivalent = (totalCo2 / 100).toFixed(1);
+  
+  // UI: Dağıtım Planını Ekrana Çizme
+  let html = `<table class="w-full text-left text-sm whitespace-nowrap"><thead class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200"><tr><th class="py-4 px-4">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100">`;
+  allocations.forEach(a => {
+      let badge = a.isLocal ? `<span class="ml-2 text-[8px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-md font-black uppercase">Yerel Hub</span>` : `<span class="ml-2 text-[8px] bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-black uppercase">Taşma / Overflow</span>`;
+      html += `<tr class="hover:bg-indigo-50/30 transition-colors">
+          <td class="py-5 px-4 font-bold text-slate-900">${a.name}${badge}</td>
+          <td class="py-5 px-4 text-center font-mono font-black text-indigo-600">${a.qty}</td>
+          <td class="py-5 px-4 text-slate-500 text-xs font-medium">${a.sourceCity} ➔ ${a.targetCity}<br><span class="text-[10px] opacity-40 font-mono">${a.dist} km (Merkez)</span></td>
+          <td class="py-5 px-4 text-right font-mono font-bold ${isMilkRun ? 'text-emerald-500' : 'text-slate-400'}">${isMilkRun ? '0g (Havuz)' : a.co2+'g'}</td>
+      </tr>`;
+  });
+  html += `</tbody></table><div class="mt-8 p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-start gap-4"><div class="text-2xl">🌱</div><p class="text-[11px] text-indigo-900 font-bold leading-relaxed uppercase tracking-wider">AI Motorumuz siparişi öncelikle <b>${region}</b> bölgesindeki kooperatiflere dağıttı. Bu planlama ile <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağladınız.</p></div>`;
+  
+  tableWrapper.innerHTML = html;
+  document.getElementById('actionPanel').classList.remove('hidden-safely');
+  document.getElementById('etaText').innerText = isMilkRun ? "72 Saat Havuz + 2 Gün" : (qty > 1000 ? "4-7 İş Günü" : "2-4 İş Günü");
+  
+  // Geçici Sipariş Kaydı (Onay Bekliyor)
+  currentOrderTemp = { date: new Date().toLocaleDateString(), product: name, info: `${qty} Adet / Teslimat: ${city}`, status: isMilkRun ? "Milk Run Havuzunda" : "Hub Onayı Bekliyor", isApproved: false };
+});
+
+function confirmOrder() {
+  if(!currentOrderTemp) return;
+  currentOrderTemp.status = "Üretimde (Hazırlık)"; 
+  currentOrderTemp.isApproved = true; // 30 Dk Kuralı Simülasyonu
+  orderHistory.unshift(currentOrderTemp); 
+  localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
+  
+  document.getElementById('actionPanel').classList.add('hidden-safely');
+  document.getElementById('tableWrapper').innerHTML = `<div class="p-16 text-center animate-slide"><div class="text-6xl mb-6">🚀</div><h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4><p class="text-sm text-slate-500 mt-2 font-medium">SLA kuralları gereği Hub onayı başladı. Süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p></div>`;
+}
+
+// EMEĞİ KORUMA KALKANI (%30 Kesinti Kuralı)
+function cancelOrder() {
+  if(!currentOrderTemp) return;
+  if(currentOrderTemp.isApproved && !confirm("Değerli Müşterimiz, üreticilerimiz hammaddeyi Hub'dan teslim alıp hazırlık aşamasına geçtiği için B2B cari hesabınızdan %30 'Emeğe Saygı Payı' kesilecek ve üreticiye tazminat olarak ödenecektir. İptali onaylıyor musunuz?")) return;
+  
+  document.getElementById('actionPanel').classList.add('hidden-safely');
+  document.getElementById('tableWrapper').innerHTML = `<div class="p-12 text-center text-slate-400 font-black uppercase tracking-widest text-[10px]">İşlem İptal Edildi. Emeğe Saygı Payı işletildi.</div>`;
+  currentOrderTemp = null;
+}
+
+function renderHistory() {
+  const tbody = document.getElementById('historyBody');
+  if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-[10px]">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
+  
+  tbody.innerHTML = orderHistory.map(o => `
+      <div class="glass-card p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group">
+          <div class="flex justify-between items-start mb-8">
+              <div>
+                  <h4 class="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase">${o.product}</h4>
+                  <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1">${o.date} • ${o.info}</p>
+              </div>
+              <span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest">Süreç Aktif</span>
+          </div>
+          <div class="relative">
+              <div class="overflow-hidden h-2 mb-4 flex rounded-full bg-slate-100">
+                  <div style="width: 75%" class="shadow-none flex flex-col bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full"></div>
+              </div>
+              <div class="flex justify-between text-[9px] font-black uppercase tracking-widest opacity-40">
+                  <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
+              </div>
+          </div>
+      </div>`).join("");
+}
+
+function renderProducers() {
+  const tbody = document.getElementById('producersBody');
+  tbody.innerHTML = producers.map(p => `
+      <tr class="hover:bg-slate-50 transition-colors border-b border-slate-50 text-center md:text-left">
+          <td class="py-6 px-6">
+              <p class="font-black text-slate-900 tracking-tight uppercase">${p.name}</p>
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${p.badge}</p>
+          </td>
+          <td class="py-6 px-6 text-slate-500 text-[10px] font-black uppercase tracking-widest">${p.region} / ${p.city}</td>
+          <td class="py-6 px-6"><span class="text-sm font-mono font-black ${p.trustScore > 8 ? 'text-emerald-600' : 'text-amber-600'}">${p.trustScore.toFixed(1)}/10</span></td>
+          <td class="py-6 px-6 font-mono text-xs font-black ${p.strikes > 0 ? 'text-rose-500' : 'text-slate-300'}">${p.strikes} HATA</td>
+          <td class="py-6 px-6 text-slate-600 font-mono text-[10px] font-bold">${p.capacity.toLocaleString()} Adet/Gün</td>
+          <td class="py-6 px-6"><span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${p.status === 'Aktif' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${p.status}</span></td>
+      </tr>`).join("");
 }
