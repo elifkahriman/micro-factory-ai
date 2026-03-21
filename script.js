@@ -33,6 +33,13 @@ let orderHistory = JSON.parse(localStorage.getItem('mf_orders_v3'));
 
 window.onload = () => updateKPIs();
 
+function resetEverything() {
+    if(confirm("Tüm sistem verileri (sipariş geçmişi, tasarruf puanları) sıfırlanacak. Emin misiniz?")) {
+        localStorage.clear();
+        window.location.reload();
+    }
+}
+
 function openInfoModal(type) {
     const title = document.getElementById('modalTitle');
     const subtitle = document.getElementById('modalSubtitle');
@@ -118,7 +125,7 @@ async function checkSemanticFeasibility(productName, category) {
     if(!GEMINI_API_KEY) return "ONAY (Demo Modu)"; 
     
     try {
-        const prompt = `Sen Micro Factory AI baş mimarısın. Kibarca analiz et. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız ev/kooperatif şartlarına uygundur. Ağır sanayi, döküm, tehlikeli madde ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
+        const prompt = `Sen Micro Factory AI baş mimarısın. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız ev/kooperatif şartlarına uygundur. Ağır sanayi, döküm, tehlikeli madde ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
@@ -148,7 +155,7 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     
     document.getElementById('alertBox').classList.add('hidden-safely');
     const tableWrapper = document.getElementById('tableWrapper');
-    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Semantik Filtreleme & Bölgesel Analiz Yapıyor...</p></div>`;
+    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">AI Analiz Yapılıyor...</p></div>`;
     document.getElementById('actionPanel').classList.add('hidden-safely');
 
     const aiResponse = await checkSemanticFeasibility(name, category);
@@ -183,12 +190,13 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
 
     let isWaitlist = false;
     if(remaining > 0) {
-        if(confirm(`⚠️ Kapasite Aşımı Uyarısı! Ulusal ağımızdaki aktif kapasite doludur. Kalan ${remaining} adet siparişiniz dinamik bekleme sırasına (Waitlist) alınsın mı?`)) isWaitlist = true;
+        if(confirm(`⚠️ Kapasite Aşımı Uyarısı! Kalan ${remaining} adet bekleme sırasına (Waitlist) alınsın mı?`)) isWaitlist = true;
     }
 
-    let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Siparişiniz mikro ölçeklidir. Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
+    let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
     const treeEquivalent = (totalCo2 / 100).toFixed(1);
     
+    // TABLO VE İADE BİLGİSİ EKLENDİ
     let html = `<div class="w-full overflow-x-auto pb-4"><table class="w-full text-left text-sm min-w-[600px] animate-slide-up"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right rounded-r-lg">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
     allocations.forEach(a => {
         let badge = a.isLocal ? `<span class="ml-2.5 text-[8px] bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Yerel Hub</span>` : `<span class="ml-2.5 text-[8px] bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Taşma</span>`;
@@ -199,7 +207,14 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
             <td class="py-5 px-4 text-right font-mono font-bold ${isMilkRun ? 'text-emerald-500' : 'text-slate-500'}">${isMilkRun ? '0g (Havuz)' : a.co2.toLocaleString()+'g'}</td>
         </tr>`;
     });
-    html += `</tbody></table></div><div class="mt-8 p-5 sm:p-6 bg-indigo-50 text-indigo-900 rounded-2xl border border-indigo-100 flex items-start gap-4 shadow-inner"><div class="text-3xl">🌱</div><p class="text-[11px] font-bold leading-relaxed uppercase tracking-wider">AI Lojistik Motorumuz siparişi öncelikle <b>${region}</b> bölgesindeki kooperatiflere dağıttı. Bu planlama ile <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağladınız.</p></div>`;
+    html += `</tbody></table></div>
+    <div class="mt-4 p-5 bg-indigo-50 text-indigo-900 rounded-2xl border border-indigo-100 flex items-start gap-4 shadow-inner">
+        <div class="text-3xl">🌱</div>
+        <div>
+            <p class="text-[11px] font-bold leading-relaxed uppercase tracking-wider">Planlama Başarıyla Tamamlandı: <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağlandı.</p>
+            <p class="text-[10px] text-indigo-600 font-bold mt-1 uppercase tracking-widest">⚠️ İade Koşulu: Onaydan sonraki iptallerde %30 'Emeğe Saygı Payı' uygulanır.</p>
+        </div>
+    </div>`;
     
     tableWrapper.innerHTML = html;
     document.getElementById('actionPanel').classList.remove('hidden-safely');
@@ -246,7 +261,6 @@ function cancelOrder() {
     currentOrderTemp = null;
 }
 
-// VİDEOLUK ŞOV: Süreç Takibinden %30 Kesinti Kalkanını Gösterme
 function cancelFromHistory(index) {
     if(confirm("🛑 DİKKAT!\n\nDeğerli Müşterimiz, üreticilerimiz hammaddeyi Hub'dan teslim alıp hazırlık aşamasına geçmiştir.\n\nEğer siparişi iptal ederseniz B2B cari hesabınızdan %30 'Emeğe Saygı Payı' kesilecek ve üreticiye tazminat olarak ödenecektir. İptali onaylıyor musunuz?")) {
         orderHistory[index].status = "İptal Edildi";
@@ -267,7 +281,6 @@ function renderHistory() {
             ? `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
             : `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
         
-        // YENİ TASARIM: Buton metni büyütüldü (text-[10px]), padding artırıldı
         let actionBtn = !isCanceled 
             ? `<button onclick="cancelFromHistory(${index})" class="px-4 py-2 bg-white text-rose-500 border-2 border-rose-100 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-md active:scale-95 mt-2">Siparişi İptal Et (%30 Kesinti)</button>` 
             : ``;
