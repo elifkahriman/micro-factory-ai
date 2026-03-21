@@ -261,16 +261,19 @@ function renderHistory() {
     if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-[10px]">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
     
     tbody.innerHTML = orderHistory.map((o, index) => {
-        let statusBadge = o.status === "İptal Edildi" 
+        let isCanceled = o.status === "İptal Edildi";
+        
+        let statusBadge = isCanceled 
             ? `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
             : `<span class="px-4 py-1.5 rounded-xl text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
         
-        let actionBtn = o.status !== "İptal Edildi" 
-            ? `<button onclick="cancelFromHistory(${index})" class="text-[9px] font-black text-rose-500 hover:text-rose-700 underline uppercase tracking-widest mt-3 block transition-colors">Siparişi İptal Et (%30 Kesinti)</button>` 
+        // YENİ TASARIM: İptal butonu artık sağ üstte, belirgin bir kutu içinde!
+        let actionBtn = !isCanceled 
+            ? `<button onclick="cancelFromHistory(${index})" class="px-3 py-1.5 bg-white text-rose-500 border border-rose-100 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all shadow-sm">Siparişi İptal Et (%30 Kesinti)</button>` 
             : ``;
 
-        let barColor = o.status === "İptal Edildi" ? "from-slate-300 to-slate-400" : "from-indigo-500 to-emerald-500 animate-pulse";
-        let cardOpacity = o.status === "İptal Edildi" ? "opacity-60" : "";
+        let barColor = isCanceled ? "from-slate-300 to-slate-400" : "from-indigo-500 to-emerald-500 animate-pulse";
+        let cardOpacity = isCanceled ? "opacity-60" : "";
 
         return `
         <div class="glass-card p-6 sm:p-8 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full ${cardOpacity}">
@@ -278,13 +281,15 @@ function renderHistory() {
                 <div>
                     <h4 class="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase">${o.product}</h4>
                     <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1.5">${o.date} • ${o.info}</p>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    ${statusBadge}
                     ${actionBtn}
                 </div>
-                ${statusBadge}
             </div>
             <div class="relative pt-2">
                 <div class="overflow-hidden h-2.5 mb-5 flex rounded-full bg-slate-100 shadow-inner w-full">
-                    <div style="width: ${o.status === "İptal Edildi" ? "30%" : "75%"}" class="shadow-none flex flex-col bg-gradient-to-r ${barColor} rounded-full"></div>
+                    <div style="width: ${isCanceled ? "30%" : "75%"}" class="shadow-none flex flex-col bg-gradient-to-r ${barColor} rounded-full"></div>
                 </div>
                 <div class="flex justify-between text-[7px] sm:text-[9px] font-black uppercase tracking-widest opacity-50 w-full">
                     <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
