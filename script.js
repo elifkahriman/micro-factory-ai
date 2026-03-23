@@ -9,7 +9,7 @@ const regionData = {
 };
 
 const categoryPrices = {
-    "kozmetik": 120.00,      
+    "kimya": 120.00,      
     "tekstil": 90.00,     
     "montaj": 65.00,      
     "paketleme": 25.00,   
@@ -17,7 +17,7 @@ const categoryPrices = {
 };
 
 const categoryNames = {
-    "kozmetik": "Doğal Kozmetik & Kimya",
+    "kimya": "Doğal Kozmetik & Kimya",
     "tekstil": "Tekstil & Örme",
     "montaj": "Hafif Montaj",
     "paketleme": "Paketleme & Tasnif",
@@ -49,62 +49,6 @@ let orderHistory = JSON.parse(localStorage.getItem('mf_orders_v3'));
 
 window.onload = () => updateKPIs();
 
-function resetEverything() {
-    if(confirm("Tüm sistem verileri (sipariş geçmişi, tasarruf puanları) sıfırlanacak. Emin misiniz?")) {
-        localStorage.clear();
-        window.location.reload();
-    }
-}
-
-function openInfoModal(type) {
-    const title = document.getElementById('modalTitle');
-    const subtitle = document.getElementById('modalSubtitle');
-    const content = document.getElementById('modalContent');
-    if(type === 'about') {
-        title.innerText = "Sanal Üretim Katmanı"; subtitle.innerText = "Yapay Zeka Destekli Hub Ağı";
-        content.innerHTML = `<p><b>Merkeziyetsiz Zeka:</b> Micro Factory AI olarak, atıl ev üretim kapasitesini kurumsal B2B tedarik zincirlerine bağlayan otonom bir ağız.</p>
-        <p><b>Misyonumuz:</b> Karbon ayak izini minimize ederek yerel kooperatifleri (Hub) küresel markalarla güvenle buluşturmaktır. Her ev bir mikro fabrikaya, her kadın bir girişimciye dönüşüyor.</p>`;
-    } else if(type === 'b2b') {
-        title.innerText = "B2B Lojistik Çözümleri"; subtitle.innerText = "Kurumsal Partnerlik & SLA";
-        content.innerHTML = `<p>Siparişlerinizi %30 Emeğe Saygı Payı ve katı 3/6 İhraç kurallarıyla yönetilen bölgesel Hub'lara dağıtıyoruz.</p><ul class="list-disc pl-5 space-y-2 mt-2"><li>Ağır Sanayi Filtresi (Gemini AI)</li><li>Smart Routing & 72 Saat Milk Run Havuzu</li><li>Uçtan Uca B2B Cari Yönetimi</li><li>Canlı ESG Raporlaması</li></ul>`;
-    } else if(type === 'apply') {
-        title.innerText = "Hub (Kooperatif) Başvurusu"; subtitle.innerText = "Kapasite Durumu";
-        content.innerHTML = `<div class="bg-amber-50 p-6 rounded-2xl border border-amber-100 text-center shadow-inner"><p class="text-amber-800 font-black mb-2 flex items-center gap-2 justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Başvuru Havuzumuz Doludur</p><p class="text-xs text-amber-700 font-medium leading-relaxed">Mevcut 7 bölgedeki pilot kooperatif kapasitemiz Buildathon süreci için dolmuştur. Yeni Hub başvuruları bir sonraki çeyrekte değerlendirilecektir. İlginiz için teşekkür ederiz.</p></div>`;
-    }
-    document.getElementById('infoModal').classList.remove('hidden-safely');
-}
-function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden-safely'); }
-
-function openLogin() { document.getElementById('loginScreen').classList.remove('hidden-safely'); }
-function closeLogin() { document.getElementById('loginScreen').classList.add('hidden-safely'); }
-
-document.getElementById('authForm').addEventListener('submit', (e) => {
-    e.preventDefault(); closeLogin();
-    document.getElementById('headerLoginBtn').classList.add('hidden-safely');
-    document.getElementById('userProfileMenu').classList.remove('hidden-safely');
-});
-
-function logout() {
-    document.getElementById('userProfileMenu').classList.add('hidden-safely');
-    document.getElementById('headerLoginBtn').classList.remove('hidden-safely');
-}
-
-function switchTab(tabId) {
-    ['orderTab', 'historyTab', 'producersTab'].forEach(id => {
-        const btn = document.getElementById('btn-' + id);
-        const target = document.getElementById(id);
-        if(id === tabId) {
-            btn.className = "px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-md flex items-center gap-2 shrink-0";
-            target.classList.remove('hidden-safely');
-        } else {
-            btn.className = "px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 hover:text-indigo-600 flex items-center gap-2 shrink-0";
-            target.classList.add('hidden-safely');
-        }
-    });
-    if(tabId === 'historyTab') renderHistory();
-    if(tabId === 'producersTab') renderProducers();
-}
-
 function updateKPIs() {
     const active = producers.filter(p => p.status === "Aktif").length;
     const banned = producers.filter(p => p.status.includes("Askıda") || p.status.includes("İhraç")).length;
@@ -120,9 +64,7 @@ function updateKPIs() {
 function resetOrderForm() {
     document.getElementById('orderForm').reset();
     document.getElementById('actionPanel').classList.add('hidden-safely');
-    
     document.getElementById('categoryDisplay').innerHTML = `<span class="opacity-80 uppercase tracking-widest">✨ AI OTOMATİK SEÇİM</span><svg class="w-4 h-4 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
-
     document.getElementById('tableWrapper').innerHTML = `
         <div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-40">
             <svg class="w-20 h-20 mb-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517"></path></svg>
@@ -133,66 +75,52 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
-// DİNAMİK DETAY DENETLEYİCİ YAPAY ZEKA
+// SİSTEM BAZLI AKILLI DENETÇİ (HER ÜRÜNÜ FİZİKSEL ÜRETİM MANTIKLARIYLA DENETLER)
 async function checkSemanticFeasibility(productName, productDetails) {
     const pNameLower = productName.toLowerCase().trim();
     const detailsLower = productDetails.toLowerCase().trim();
     
-    if (pNameLower.length < 3) {
-        return "RED: Lütfen ne üretileceğini geçerli bir şekilde belirtiniz (Örn: Sabun, Reçel, Hoodie).";
-    }
-
+    // Temel Kalkanlar
+    if (pNameLower.length < 3) return "RED: Ürün tanımı geçersiz.";
     const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv', 'pcb', 'devre', 'plastik', 'fabrikasyon', 'ayakkabı', 'muz', 'elma', 'karpuz', 'telefon', 'bilgisayar', 'kablo'];
-    if (forbidden.some(word => pNameLower.includes(word))) {
-        return "RED: Bu ürün kurumsal ağımızın güvenlik protokollerine ve kooperatif ev üretimi modelimize (sadece el işçiliği/hafif montaj) uygun değildir.";
-    }
+    if (forbidden.some(word => pNameLower.includes(word))) return "RED: Bu ürün (Ağır Sanayi/Taze Gıda) kooperatif ev üretimi modelimize uygun değildir.";
 
     if(!GEMINI_API_KEY) {
-        // DEMO MODU (Şifre Yokken) Kapsamlı Kontrol
-        if(detailsLower.length < 5) {
-            if(pNameLower.includes('hoodi') || pNameLower.includes('tişört') || pNameLower.includes('çanta') || pNameLower.includes('kıyafet')) {
-                return "RED: Üreticilerimizin siparişi hazırlayabilmesi için lütfen 'Notlar' kısmında kumaş türü ve renk gibi detayları belirtiniz.";
-            }
-            if(pNameLower.includes('reçel') || pNameLower.includes('sabun') || pNameLower.includes('koku')) {
-                return "RED: Lütfen 'Notlar' kısmında ürünün içeriğini ve gramajını/boyutunu belirtiniz.";
-            }
-        }
+        // DEMO MODU: Sayısal veya ölçü verisi yoksa reddet
+        const hasSpec = /\d/.test(detailsLower) || detailsLower.includes("beden") || detailsLower.includes("gr") || detailsLower.includes("ml") || detailsLower.includes("cm");
+        if (!hasSpec) return "RED: Üretim yapılabilmesi için ürün detayında mutlaka ölçü, gramaj, beden veya teknik bir özellik (Örn: 'S beden', '300gr') belirtilmelidir.";
         
-        if(pNameLower.includes('sabun') || pNameLower.includes('koku') || pNameLower.includes('krem') || pNameLower.includes('parfüm')) return "ONAY|kozmetik";
-        if(pNameLower.includes('reçel') || pNameLower.includes('gıda') || pNameLower.includes('meyve')) return "ONAY|gida";
-        if(pNameLower.includes('çanta') || pNameLower.includes('örgü') || pNameLower.includes('tekstil') || pNameLower.includes('hoodi') || pNameLower.includes('tişört') || pNameLower.includes('kıyafet')) return "ONAY|tekstil";
-        if(pNameLower.includes('paket') || pNameLower.includes('etiket')) return "ONAY|paketleme";
+        if(pNameLower.includes('sabun') || pNameLower.includes('koku') || pNameLower.includes('krem')) return "ONAY|kimya";
+        if(pNameLower.includes('reçel') || pNameLower.includes('gıda')) return "ONAY|gida";
+        if(pNameLower.includes('çanta') || pNameLower.includes('örgü') || pNameLower.includes('hoodi')) return "ONAY|tekstil";
         return "ONAY|montaj"; 
     }
     
     try {
-        const prompt = `Sen Micro Factory AI kalite kontrol yöneticisisin. Müşteri ürün olarak '${productName}', detay olarak '${productDetails || "Detay girilmedi"}' yazdı.
-        KURALLAR:
-        1. Ağır sanayi, taze meyve/sebze veya teknolojik ürünse KESİNLİKLE REDDET.
-        2. Üretim kooperatifte yapılabiliyorsa, müşterinin detay verip vermediğini kontrol et:
-           - Ürün tekstil/kıyafet (hoodie, çanta vs.) ise ve renk/kumaş detayı girilmemişse REDDET ve "Lütfen 'Notlar' kısmına renk ve kumaş bilgilerini giriniz" de.
-           - Ürün gıda/kozmetik (reçel, sabun vs.) ise ve gramaj/içerik eksikse REDDET ve "Lütfen gramaj ve içerik detaylarını belirtiniz" de.
-           - Ürün montaj/paketleme ise ve ölçü eksikse detay iste.
-        3. Hem ürün kooperatife uygunsa hem de detaylar yeterliyse onay ver ve kategorisini seç: [kozmetik, tekstil, montaj, paketleme, gida]. 
-
-        Eğer yeterli detay yoksa SADECE: RED|[Hangi detayın eksik olduğunu söyleyen kibar bir uyarı]
-        Eğer her şey tamamsa SADECE: ONAY|[KategoriKısaAdı]`;
+        const prompt = `Sen Micro Factory AI Baş Üretim Planlamacısısın. Müşteri ürün olarak '${productName}', detay olarak '${productDetails}' girdi.
+        
+        DENETİM PROTOKOLÜ (SİSTEM BAZLI):
+        1. Üretim İçin Gerekli Veri: Bir ürünün üretilmesi için fiziksel bir "ölçü/birim/beden/hacim" bilgisi şarttır.
+           - Tekstilse: Beden (S, M, L vb.) veya tam ölçü EKSİKSE REDDET.
+           - Gıda/Kimya: Gramaj (gr, kg vb.) veya Hacim (ml, lt vb.) EKSİKSE REDDET.
+           - Montaj/Paketleme: Boyut (en, boy, cm vb.) EKSİKSE REDDET.
+        2. Mantıksal Tutarlılık: Ürün 'Hoodie' iken detaylarda 'Çilek' yazıyorsa REDDET.
+        3. Fabrikasyon Engeli: Ağır makine gerektiren işleri REDDET.
+        
+        Gerekçe cümlesinde müşteriye hangi "fiziksel detayın" (beden mi, gramaj mı, ölçü mü) eksik olduğunu net söyle.
+        
+        Yanıtlama formatın:
+        - Detay eksikse: RED|[Kibar gerekçe]
+        - Tamamsa: ONAY|[kategori: kimya, tekstil, montaj, paketleme, gida]`;
         
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
         const data = await res.json();
         let answer = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY|montaj";
-        
-        // Eğer AI RED| formatında döndürdüyse bunu frontend'in anlayacağı RED: formatına çevir
-        if(answer.startsWith("RED|")) {
-            return "RED: " + answer.split("|")[1];
-        }
+        if(answer.startsWith("RED|")) return "RED: " + answer.split("|")[1];
         return answer;
-        
-    } catch (e) { 
-        return "ONAY|montaj"; 
-    }
+    } catch (e) { return "ONAY|montaj"; }
 }
 
 let currentOrderTemp = null; 
@@ -200,29 +128,26 @@ let currentOrderTemp = null;
 document.getElementById("orderForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById('productName').value;
-    const details = document.getElementById('productDetails').value; // DETAYLAR AI'A GÖNDERİLİYOR
+    const details = document.getElementById('productDetails').value; 
     let qty = Number(document.getElementById('quantity').value);
+    
     const city = document.getElementById('deliveryCity').value.trim(); 
-    const district = document.getElementById('deliveryDistrict').value.trim().toLowerCase(); 
+    const district = document.getElementById('deliveryDistrict').value.trim(); 
+    const neighborhood = document.getElementById('deliveryNeighborhood').value.trim(); 
+    const doorNo = document.getElementById('deliveryDoorNo').value.trim(); 
 
-    if (district.length < 10) {
-        alert("⚠️ Lütfen geçerli ve açık bir kurumsal teslimat adresi giriniz (En az 10 karakter).");
-        return;
+    if (district.length < 2 || neighborhood.length < 3 || doorNo.length < 1) {
+        alert("⚠️ Lütfen adres alanlarını eksiksiz giriniz."); return;
     }
     
-    const majorCities = ["adana", "ankara", "antalya", "bursa", "diyarbakır", "erzurum", "eskişehir", "gaziantep", "istanbul", "izmir", "kayseri", "kocaeli", "konya", "mardin", "rize", "samsun", "trabzon", "van", "bolu"];
-    let conflictCity = majorCities.find(c => district.includes(c) && c !== city.toLowerCase());
-    if (conflictCity) {
-        alert(`⚠️ Adres Uyuşmazlığı: İl olarak '${city}' seçtiniz ancak açık adreste '${conflictCity.toUpperCase()}' ili geçiyor. Lütfen teslimat adresinizi düzeltiniz.`);
-        return;
-    }
+    const cityNorm = city.toLocaleLowerCase('tr-TR');
+    const fullAddress = `${city} / ${district}, ${neighborhood}, No: ${doorNo}`;
 
     document.getElementById('alertBox').classList.add('hidden-safely');
     const tableWrapper = document.getElementById('tableWrapper');
-    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Kalite Kontrolü & Analiz Yapıyor...</p></div>`;
+    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">AI Operasyonel Denetim Yapıyor...</p></div>`;
     document.getElementById('actionPanel').classList.add('hidden-safely');
 
-    // DETAYLARI DA YAPAY ZEKAYA YOLLUYORUZ
     const aiResponse = await checkSemanticFeasibility(name, details);
     
     if(aiResponse.startsWith("RED:")) {
@@ -233,9 +158,7 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     }
 
     let detectedCategory = "montaj";
-    if (aiResponse.includes("|")) {
-        detectedCategory = aiResponse.split("|")[1].trim().toLowerCase();
-    }
+    if (aiResponse.includes("|")) detectedCategory = aiResponse.split("|")[1].trim().toLowerCase();
     
     const displayCat = categoryNames[detectedCategory] || "Hafif Montaj";
     document.getElementById('categoryDisplay').innerHTML = `<span class="text-indigo-700 font-black uppercase tracking-wider">${displayCat}</span> <span class="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-2 py-1 rounded shadow-sm ml-2">AI SEÇTİ</span>`;
@@ -245,18 +168,14 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
 
     let region = "Marmara"; 
     for (const [reg, cities] of Object.entries(regionData)) {
-        if (cities.some(c => c.toLowerCase('tr-TR') === city.toLowerCase('tr-TR'))) {
-            region = reg;
-            break;
-        }
+        if (cities.some(c => c.toLocaleLowerCase('tr-TR') === cityNorm)) { region = reg; break; }
     }
 
     let activeProducers = producers.filter(p => p.status === "Aktif");
     activeProducers.sort((a, b) => {
         let aIsLocal = (a.region === region) ? 1 : 0;
         let bIsLocal = (b.region === region) ? 1 : 0;
-        if (aIsLocal !== bIsLocal) return bIsLocal - aIsLocal;
-        return b.trustScore - a.trustScore; 
+        return (bIsLocal - aIsLocal) || (b.trustScore - a.trustScore);
     });
 
     let remaining = qty; 
@@ -267,42 +186,28 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
         if(remaining <= 0) return;
         let give = Math.min(p.capacity, remaining);
         let dist = (p.region === region) ? Math.floor(Math.random() * 35) + 15 : Math.floor(Math.random() * 600) + 200; 
-        let co2 = (give * dist * 0.02).toFixed(0); 
-        totalCo2 += Number(co2);
-        allocations.push({ name: p.name, sourceCity: p.city, targetCity: city, dist, isLocal: (p.region === region), qty: give, co2, score: p.trustScore });
+        totalCo2 += Number((give * dist * 0.02).toFixed(0));
+        allocations.push({ name: p.name, sourceCity: p.city, targetCity: city, dist, isLocal: (p.region === region), qty: give, co2: (give * dist * 0.02).toFixed(0) });
         remaining -= give;
     });
 
-    let isWaitlist = false;
-    if(remaining > 0) {
-        if(confirm(`⚠️ Kapasite Aşımı Uyarısı! Kalan ${remaining} adet bekleme sırasına (Waitlist) alınsın mı?`)) isWaitlist = true;
-    }
-
-    let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği: Siparişiniz mikro ölçeklidir. Karbon salınımını sıfırlamak için 72 saatlik bölgesel havuz kargolamasını onaylıyor musunuz?");
+    let isMilkRun = (qty <= 50) && confirm("🌱 Milk Run Lojistiği onaylıyor musunuz?");
     const treeEquivalent = (totalCo2 / 100).toFixed(1);
     
-    let html = `<div class="w-full overflow-x-auto pb-4"><table class="w-full text-left text-sm min-w-[600px] animate-slide-up"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Bölgesel Hub</th><th class="py-4 px-4 text-center">Atanan Adet</th><th class="py-4 px-4">Kargo Rotası</th><th class="py-4 px-4 text-right rounded-r-lg">CO2 Emisyonu</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
+    let html = `<div class="w-full overflow-x-auto pb-4"><table class="w-full text-left text-sm min-w-[600px]"><thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 bg-slate-50/50"><tr><th class="py-4 px-4 rounded-l-lg">Hub</th><th class="py-4 px-4 text-center">Adet</th><th class="py-4 px-4">Rota</th><th class="py-4 px-4 text-right rounded-r-lg">CO2</th></tr></thead><tbody class="divide-y divide-slate-100">`;
     allocations.forEach(a => {
-        let badge = a.isLocal ? `<span class="ml-2.5 text-[8px] bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Yerel Hub</span>` : `<span class="ml-2.5 text-[8px] bg-amber-100 text-amber-700 px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider shadow-inner hidden sm:inline-block">Taşma</span>`;
-        html += `<tr class="hover:bg-indigo-50/50 transition-colors">
-            <td class="py-5 px-4 font-bold text-slate-900 flex items-center gap-1">${a.name}${badge}</td>
+        html += `<tr class="hover:bg-indigo-50/50">
+            <td class="py-5 px-4 font-bold text-slate-900">${a.name}</td>
             <td class="py-5 px-4 text-center font-mono font-black text-indigo-600 text-lg">${a.qty.toLocaleString()}</td>
-            <td class="py-5 px-4 text-slate-500 text-xs font-medium leading-relaxed">${a.sourceCity} ➔ ${a.targetCity}<br><span class="text-[10px] opacity-50 font-mono">${a.dist} km</span></td>
-            <td class="py-5 px-4 text-right font-mono font-bold ${isMilkRun ? 'text-emerald-500' : 'text-slate-500'}">${isMilkRun ? '0g (Havuz)' : a.co2.toLocaleString()+'g'}</td>
+            <td class="py-5 px-4 text-slate-500 text-xs">${a.sourceCity} ➔ ${a.targetCity}</td>
+            <td class="py-5 px-4 text-right font-mono font-bold">${isMilkRun ? '0g' : a.co2+'g'}</td>
         </tr>`;
     });
     
     html += `</tbody></table></div>
-    <div class="mt-4 p-5 bg-indigo-50 text-indigo-900 rounded-2xl border border-indigo-100 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 shadow-inner">
-        <div class="flex items-start gap-4">
-            <div class="text-3xl">🌱</div>
-            <div>
-                <p class="text-[11px] font-bold leading-relaxed uppercase tracking-wider">Planlama Başarıyla Tamamlandı: <b>${treeEquivalent} ağacın</b> oksijen üretimine eşdeğer tasarruf sağlandı.</p>
-                <p class="text-[10px] text-indigo-600 font-bold mt-1 uppercase tracking-widest">⚠️ İade Koşulu: Onaydan sonraki iptallerde %30 'Emeğe Saygı Payı' kesilir.</p>
-            </div>
-        </div>
-        <div class="bg-white px-5 py-3 rounded-xl shadow-sm border border-indigo-100 text-center shrink-0 w-full sm:w-auto">
-            <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Tahmini B2B Maliyeti</p>
+    <div class="mt-4 p-5 bg-indigo-50 rounded-2xl border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-inner">
+        <p class="text-[10px] font-bold uppercase tracking-wider">🌱 Tasarruf: <b>${treeEquivalent} ağaç</b></p>
+        <div class="bg-white px-5 py-3 rounded-xl border border-indigo-100 text-center shrink-0 w-full sm:w-auto">
             <p class="text-xl font-black text-indigo-700 font-mono">₺${calculatedTotalCost.toLocaleString('tr-TR')}</p>
         </div>
     </div>`;
@@ -312,14 +217,10 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     document.getElementById('etaText').innerText = isMilkRun ? "72 Saat Havuz + 2 Gün" : (qty > 1000 ? "4-7 İş Günü" : "2-4 İş Günü");
     
     currentOrderTemp = { 
-        date: new Date().toLocaleDateString(), 
-        product: name, 
-        // Geçmiş panelinde ürünün detaylarını da gösteriyoruz!
-        info: `${qty.toLocaleString()} Adet / Teslimat: ${city} / Detay: ${details || 'Belirtilmedi'}`, 
+        date: new Date().toLocaleDateString(), product: name, 
+        info: `${qty.toLocaleString()} Adet / ${fullAddress} / Detay: ${details}`, 
         status: isMilkRun ? "Milk Run Havuzunda" : "Hub Onayı Bekliyor", 
-        isApproved: false,
-        savedTrees: parseFloat(treeEquivalent) || 0,
-        totalCost: calculatedTotalCost
+        isApproved: false, savedTrees: parseFloat(treeEquivalent) || 0, totalCost: calculatedTotalCost
     };
 });
 
@@ -329,91 +230,31 @@ function confirmOrder() {
     currentOrderTemp.isApproved = true; 
     orderHistory.unshift(currentOrderTemp); 
     localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
-    
-    document.getElementById('actionPanel').classList.add('hidden-safely');
-    document.getElementById('tableWrapper').innerHTML = `
-        <div class="p-10 sm:p-16 text-center animate-slide w-full">
-            <div class="text-6xl mb-6">🚀</div>
-            <h4 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Siparişiniz Hub'lara İletildi</h4>
-            <p class="text-sm text-slate-500 mt-2 mb-8 font-medium leading-relaxed">SLA disiplini gereği Hub onay süreci başladı.<br>Tüm süreci 'Süreç Takibi' sekmesinden anlık izleyebilirsiniz.</p>
-            <button onclick="resetOrderForm()" class="px-8 py-4 bg-indigo-50 text-indigo-700 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-100 transition-colors border border-indigo-200 shadow-sm mx-auto inline-block">YENİ SİPARİŞ OLUŞTUR</button>
-        </div>`;
-    
+    resetOrderForm();
+    switchTab('historyTab');
     updateKPIs();
 }
 
-function cancelOrder() {
-    if(!currentOrderTemp) return;
-    document.getElementById('actionPanel').classList.add('hidden-safely');
-    document.getElementById('tableWrapper').innerHTML = `
-        <div class="p-12 text-center text-slate-500 animate-slide">
-            <div class="text-4xl mb-4">🛑</div>
-            <p class="font-black uppercase tracking-widest text-[11px] leading-loose mb-6">İşlem B2B Cari Tarafından İptal Edildi.</p>
-            <button onclick="resetOrderForm()" class="px-8 py-4 bg-slate-100 text-slate-600 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-colors shadow-sm mx-auto inline-block">YENİ SİPARİŞ OLUŞTUR</button>
-        </div>`;
-    currentOrderTemp = null;
-}
-
-function cancelFromHistory(index) {
-    let order = orderHistory[index];
-    let penaltyAmount = (order.totalCost * 0.30).toLocaleString('tr-TR');
-    
-    if(confirm(`🛑 DİKKAT!\n\nDeğerli Müşterimiz, üreticilerimiz hammaddeyi Hub'dan teslim alıp hazırlık aşamasına geçmiştir.\n\nEğer siparişi iptal ederseniz B2B cari hesabınızdan ₺${penaltyAmount} tutarında (%30 'Emeğe Saygı Payı') kesilecek ve üreticiye tazminat olarak ödenecektir.\n\nİptali onaylıyor musunuz?`)) {
-        orderHistory[index].status = "İptal Edildi";
-        localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
-        renderHistory();
-        updateKPIs();
-    }
-}
-
-function deleteFromHistory(index) {
-    if(confirm("🗑️ DİKKAT!\n\nBu sipariş kaydı geçmişten kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
-        orderHistory.splice(index, 1);
-        localStorage.setItem('mf_orders_v3', JSON.stringify(orderHistory));
-        renderHistory();
-        updateKPIs();
-    }
-}
+function cancelOrder() { resetOrderForm(); }
 
 function renderHistory() {
     const tbody = document.getElementById('historyBody');
-    if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase tracking-widest text-sm">Henüz bir B2B sipariş kaydınız bulunmuyor.</div>`; return; }
-    
+    if(orderHistory.length === 0) { tbody.innerHTML = `<div class="py-16 text-center text-slate-300 font-black uppercase">Henüz sipariş yok.</div>`; return; }
     tbody.innerHTML = orderHistory.map((o, index) => {
         let isCanceled = o.status === "İptal Edildi";
-        
-        let statusBadge = isCanceled 
-            ? `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
-            : `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
-        
-        let actionBtn = !isCanceled 
-            ? `<button onclick="cancelFromHistory(${index})" class="px-4 py-2 bg-white text-rose-500 border-2 border-rose-100 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-md active:scale-95 mt-2">Siparişi İptal Et (%30 Kesinti)</button>` 
-            : `<button onclick="deleteFromHistory(${index})" class="px-4 py-2 bg-slate-100 text-slate-500 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-500 hover:text-white transition-all shadow-sm active:scale-95 mt-2 flex items-center justify-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Geçmişten Sil</button>`;
-
-        let barColor = isCanceled ? "from-slate-300 to-slate-400" : "from-indigo-500 to-emerald-500 animate-pulse";
-        let cardOpacity = isCanceled ? "opacity-60" : "";
-
         return `
-        <div class="glass-card p-8 sm:p-10 bg-white hover:shadow-2xl transition-all border border-slate-100 group animate-slide-up w-full ${cardOpacity}">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 border-b border-slate-50 pb-8 gap-6">
+        <div class="glass-card p-6 bg-white border border-slate-100 mb-4 ${isCanceled ? 'opacity-60' : ''}">
+            <div class="flex justify-between items-center mb-4">
                 <div>
-                    <h4 class="text-2xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase mb-2">${o.product}</h4>
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest leading-relaxed max-w-xl">${o.date} • ${o.info}</p>
+                    <h4 class="text-xl font-black text-slate-900 uppercase">${o.product}</h4>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">${o.date} • ${o.info}</p>
                 </div>
-                <div class="flex flex-col items-end gap-3 shrink-0">
-                    <span class="text-xl font-black text-indigo-700 font-mono mb-1">₺${(o.totalCost || 0).toLocaleString('tr-TR')}</span>
-                    ${statusBadge}
-                    ${actionBtn}
-                </div>
+                <span class="text-lg font-black text-indigo-700 font-mono">₺${(o.totalCost || 0).toLocaleString('tr-TR')}</span>
             </div>
-            <div class="relative pt-4">
-                <div class="overflow-hidden h-4 mb-6 flex rounded-full bg-slate-100 shadow-inner w-full">
-                    <div style="width: ${isCanceled ? "30%" : "75%"}" class="shadow-none flex flex-col bg-gradient-to-r ${barColor} rounded-full"></div>
-                </div>
-                <div class="flex justify-between text-[11px] font-black uppercase tracking-widest opacity-60 w-full px-1">
-                    <div>AI Onayı</div><div>Hub Hazırlık</div><div>Üretimde</div><div>Kargoda</div>
-                </div>
+            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div style="width: ${isCanceled ? '100%' : '75%'}" class="h-full bg-indigo-500"></div>
             </div>
+            <p class="text-[9px] font-black uppercase mt-2 text-indigo-600">${o.status}</p>
         </div>`;
     }).join("");
 }
@@ -421,18 +262,11 @@ function renderHistory() {
 function renderProducers() {
     const tbody = document.getElementById('producersBody');
     tbody.innerHTML = producers.map(p => `
-        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 text-left animate-slide-up">
-            <td class="py-6 px-6">
-                <p class="font-black text-slate-900 tracking-tight uppercase">${p.name}</p>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${p.badge}</p>
-            </td>
-            <td class="py-6 px-6 text-slate-500 text-[10px] font-black uppercase tracking-widest">${p.region} / ${p.city}</td>
-            <td class="py-6 px-6"><span class="text-sm font-mono font-black ${p.trustScore > 8 ? 'text-emerald-600' : 'text-amber-600'}">${p.trustScore.toFixed(1)}/10</span></td>
-            <td class="py-6 px-6 font-mono text-xs font-black ${p.strikes > 0 ? 'text-rose-500' : 'text-slate-300'} flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                ${p.strikes} HATA
-            </td>
-            <td class="py-6 px-6 text-slate-600 font-mono text-[10px] font-bold">${p.capacity.toLocaleString()} Adet/Gün</td>
-            <td class="py-6 px-6"><span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${p.status === 'Aktif' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'} shadow-inner border ${p.status === 'Aktif' ? 'border-emerald-100' : 'border-rose-100'}">${p.status}</span></td>
+        <tr class="hover:bg-slate-50 border-b border-slate-100">
+            <td class="py-6 px-6 font-black text-slate-900 uppercase">${p.name}</td>
+            <td class="py-6 px-6 text-[10px] font-black text-slate-500">${p.region} / ${p.city}</td>
+            <td class="py-6 px-6 font-mono font-black text-emerald-600">${p.trustScore.toFixed(1)}/10</td>
+            <td class="py-6 px-6 text-slate-600 font-mono font-bold">${p.capacity.toLocaleString()}</td>
+            <td class="py-6 px-6"><span class="px-3 py-1.5 rounded-lg text-[9px] font-black ${p.status === 'Aktif' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${p.status}</span></td>
         </tr>`).join("");
 }
