@@ -9,19 +9,20 @@ const regionData = {
 };
 
 const categoryPrices = {
-    "kimya": 45.50,      
-    "tekstil": 35.00,    
-    "montaj": 25.00,     
-    "paketleme": 10.00,  
-    "gida": 55.00        
+    "kimya": 120.00,      
+    "tekstil": 90.00,     
+    "montaj": 65.00,      
+    "paketleme": 25.00,   
+    "gida": 145.00        
 };
 
+// DOKÜMANLARLA (PRD) BİREBİR AYNI KATEGORİ İSİMLERİ
 const categoryNames = {
-    "kimya": "Doğal Kozmetik & Sabun",
-    "tekstil": "Tekstil ve Örgü",
+    "kimya": "Doğal Kozmetik & Kimya",
+    "tekstil": "Tekstil & Örme",
     "montaj": "Hafif Montaj",
     "paketleme": "Paketleme & Tasnif",
-    "gida": "İleri Dönüşüm / Gıda"
+    "gida": "İleri Dönüşüm & Butik Gıda"
 };
 
 const defaultProducers = [
@@ -121,7 +122,6 @@ function resetOrderForm() {
     document.getElementById('orderForm').reset();
     document.getElementById('actionPanel').classList.add('hidden-safely');
     
-    // Kategori alanını sıfırlama
     document.getElementById('categoryDisplay').innerHTML = `<span class="opacity-80 uppercase tracking-widest">✨ AI OTOMATİK SEÇİM</span><svg class="w-4 h-4 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
 
     document.getElementById('tableWrapper').innerHTML = `
@@ -134,7 +134,7 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
-// AI KATEGORİ OTOMATİK BULMA MOTORU
+// DOKÜMANA UYGUN AI KATEGORİLEŞTİRME
 async function checkSemanticFeasibility(productName) {
     const pNameLower = productName.toLowerCase().trim();
     
@@ -147,22 +147,30 @@ async function checkSemanticFeasibility(productName) {
         return "RED: Bu ürün kurumsal ağımızın güvenlik protokollerine ve kooperatif ev üretimi modelimize (sadece el işçiliği/hafif montaj) uygun değildir.";
     }
 
-    if(!GEMINI_API_KEY) return "ONAY|montaj"; // API key yoksa demo modunda montaj seçer
+    if(!GEMINI_API_KEY) {
+        // DEMO MODU (API Yokken) kelimeden kategori tahmin etme (Basit Zeka)
+        if(pNameLower.includes('sabun') || pNameLower.includes('koku') || pNameLower.includes('krem') || pNameLower.includes('parfüm')) return "ONAY|kimya";
+        if(pNameLower.includes('reçel') || pNameLower.includes('gıda') || pNameLower.includes('meyve')) return "ONAY|gida";
+        if(pNameLower.includes('çanta') || pNameLower.includes('örgü') || pNameLower.includes('tekstil')) return "ONAY|tekstil";
+        if(pNameLower.includes('paket') || pNameLower.includes('etiket')) return "ONAY|paketleme";
+        return "ONAY|montaj"; 
+    }
     
     try {
         const prompt = `Sen Micro Factory AI baş mimarısın. Kurumsal müşteri '${productName}' siparişini üretmemizi istiyor. Bizim ağımız evlerde ve kadın kooperatiflerinde el işçiliği ile yapılabilecek üretimleri kapsar. 
         GÖREVLERİN:
         1. Bu ürün kooperatifte/evde üretilebilir mi? (Sanayi makinesi, ağır kimyasal, teknoloji veya işlenmemiş taze meyve/sebze satışı KESİNLİKLE REDDEDİLMELİ). Uygun değilse 'RED: [Gerekçe]' yaz.
         2. Eğer uygunsa, bu ürün şu 5 kategoriden hangisine giriyor seç: [kimya, tekstil, montaj, paketleme, gida]. 
-        Doğal kozmetik ve sabunlar -> kimya
+        Doğal kozmetik, doğal sabun, koku, krem -> kimya
         Örgü, dikiş, bez çanta -> tekstil
         Kutu katlama, ahşap, kalem montajı, oyuncak birleştirme -> montaj
         Kuru meyve paketleme, etiketleme -> paketleme
-        Reçel, konserve, kuru gıda işleme -> gida
+        Reçel, konserve, kuru gıda işleme, butik gıda -> gida
 
         Eğer onaylıyorsan SADECE şu formatta yanıt ver: ONAY|[KategoriKısaAdı]
         Örnek 1: ONAY|gida 
-        Örnek 2: ONAY|tekstil`;
+        Örnek 2: ONAY|tekstil
+        Örnek 3: ONAY|kimya`;
         
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
@@ -210,13 +218,11 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
         return;
     }
 
-    // AI'ın belirlediği kategoriyi parse et
     let detectedCategory = "montaj";
     if (aiResponse.includes("|")) {
         detectedCategory = aiResponse.split("|")[1].trim().toLowerCase();
     }
     
-    // UI'ı güncelle - "Kategori (SLA)" kutusuna yapay zekanın bulduğu kategoriyi yaz!
     const displayCat = categoryNames[detectedCategory] || "Hafif Montaj";
     document.getElementById('categoryDisplay').innerHTML = `<span class="text-indigo-700 font-black uppercase tracking-wider">${displayCat}</span> <span class="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-2 py-1 rounded shadow-sm ml-2">AI SEÇTİ</span>`;
 
