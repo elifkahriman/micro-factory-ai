@@ -94,7 +94,7 @@
             </form>
             <div class="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-2">
                 <p class="text-xs text-slate-500 font-medium">Hesabınız yok mu? <a href="#" onclick="alert('Demo sürümünde kayıtlar otomatiktir.');" class="text-indigo-600 font-bold hover:underline">Kurumsal Kayıt Oluştur</a></p>
-                <button onclick="resetEverything()" class="w-full py-3 bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all">⚙️ DEMO VERİLERİNİ SIFIRLA</button>
+                <button onclick="resetEverything()" class="w-full py-3 mt-2 bg-slate-50 text-slate-500 hover:text-rose-500 hover:bg-rose-50 border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all shadow-sm">⚙️ DEMO VERİLERİNİ SIFIRLA</button>
             </div>
         </div>
     </div>
@@ -131,12 +131,12 @@
                 <span class="px-4 py-2.5 bg-emerald-100/50 text-emerald-700 text-[9px] font-black rounded-xl border border-emerald-200/50 uppercase tracking-widest flex items-center gap-2">
                     <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> ÇEVRİMİÇİ
                 </span>
-                <button id="headerLoginBtn" onclick="openLogin()" class="btn-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-wider shadow-md">👤 GİRİŞ / KAYIT</button>
+                <button id="headerLoginBtn" onclick="openLogin()" class="btn-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-wider shadow-md hover:scale-105 transition-transform">👤 GİRİŞ / KAYIT</button>
                 <div id="userProfileMenu" class="hidden-safely flex items-center gap-3">
                     <span class="text-[10px] font-black text-slate-600 bg-white px-4 py-3 rounded-xl shadow-sm uppercase tracking-widest border border-slate-100 flex items-center gap-2">
                         <span class="w-5 h-5 bg-indigo-100 text-indigo-600 rounded flex items-center justify-center text-[10px] shadow-inner">🏢</span> KURUMSAL
                     </span>
-                    <button onclick="logout()" class="px-4 py-3 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 hover:bg-rose-100 hover:scale-105 transition-all shadow-sm flex items-center gap-2 group">
+                    <button onclick="logout()" title="Güvenli Çıkış Yap" class="px-4 py-3 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 hover:bg-rose-100 hover:scale-105 transition-all shadow-sm flex items-center gap-2 group">
                         <svg class="w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         <span class="text-[9px] font-black uppercase tracking-widest">ÇIKIŞ YAP</span>
                     </button>
@@ -191,17 +191,17 @@
                     <form id="orderForm" class="space-y-5 relative z-10 w-full">
                         <div>
                             <label class="text-[9px] font-black text-indigo-500 uppercase mb-2 block tracking-widest">Ürün / Montaj Tanımı</label>
-                            <input type="text" id="productName" required class="w-full px-5 py-3 input-premium text-sm font-semibold text-slate-700" placeholder="Örn: %100 Pamuklu Promosyon Bez Çanta">
+                            <input type="text" id="productName" required class="w-full px-5 py-4 input-premium text-sm font-semibold text-slate-700" placeholder="Örn: %100 Pamuklu Promosyon Bez Çanta">
                         </div>
                         
                         <div class="grid grid-cols-2 gap-5 w-full">
                             <div>
                                 <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Sipariş Adedi</label>
-                                <input type="number" id="quantity" required min="1" class="w-full px-5 py-3 input-premium text-sm font-bold font-mono text-slate-700" placeholder="1000">
+                                <input type="number" id="quantity" required min="1" class="w-full px-5 py-4 input-premium text-sm font-bold font-mono text-slate-700" placeholder="1000">
                             </div>
                             <div>
                                 <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Kategori (SLA)</label>
-                                <select id="category" required class="w-full px-5 py-3 input-premium text-sm font-semibold text-slate-700 appearance-none bg-no-repeat bg-[right_1rem_center] bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] cursor-pointer hover:border-indigo-300">
+                                <select id="category" required class="w-full px-5 py-4 input-premium text-sm font-semibold text-slate-700 appearance-none bg-no-repeat bg-[right_1rem_center] bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] cursor-pointer hover:border-indigo-300">
                                     <option value="" disabled selected>Seçiniz...</option>
                                     <option value="kimya">Doğal Kozmetik & Sabun</option>
                                     <option value="tekstil">Tekstil ve Örgü</option>
@@ -214,11 +214,11 @@
                         
                         <div class="pt-5 border-t border-slate-100 mt-2 w-full">
                             <label class="text-[9px] font-black text-indigo-500 uppercase mb-3.5 block tracking-widest flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> 
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> 
                                 Teslimat Lokasyonu (81 İl)
                             </label>
                             <div class="space-y-3.5 w-full">
-                                <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-3 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50 border-indigo-200" placeholder="İl Yazınız (Örn: Kayseri)">
+                                <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-4 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50 border-indigo-200" placeholder="İl Yazınız (Örn: Kayseri)">
                                 <datalist id="cities">
                                     <option value="Adana"></option><option value="Ankara"></option><option value="Antalya"></option><option value="Bursa"></option>
                                     <option value="Diyarbakır"></option><option value="Erzurum"></option><option value="Eskişehir"></option><option value="Gaziantep"></option>
@@ -226,7 +226,7 @@
                                     <option value="Konya"></option><option value="Mardin"></option><option value="Rize"></option><option value="Samsun"></option>
                                     <option value="Trabzon"></option><option value="Van"></option>
                                 </datalist>
-                                <input type="text" id="deliveryDistrict" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="İlçe ve Tam Kurumsal Adres">
+                                <input type="text" id="deliveryDistrict" required class="w-full px-5 py-4 input-premium text-sm font-medium" placeholder="İlçe ve Tam Kurumsal Adres">
                             </div>
                         </div>
 
@@ -237,7 +237,7 @@
                             </p>
                         </div>
                         
-                        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl shadow-lg hover:shadow-2xl uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 mt-4 group transition-all">
+                        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl shadow-lg hover:shadow-2xl uppercase tracking-[0.25em] text-[10px] flex items-center justify-center gap-2.5 mt-5 group transition-all">
                             <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             AI FİZİBİLİTEYİ BAŞLAT
                         </button>
@@ -339,27 +339,27 @@
                     </div>
                     <span class="text-xl font-black text-white tracking-tighter">Micro Factory <span class="text-indigo-400">AI</span></span>
                 </div>
-                <p class="text-[11px] leading-relaxed max-w-sm font-medium opacity-80">Merkeziyetsiz kadın emeğini, yapay zeka destekli otonom tedarik zinciriyle kurumsal B2B pazarına entegre eden geleceğin sanal üretim katmanı.</p>
+                <p class="text-xs sm:text-sm leading-relaxed max-w-sm font-medium opacity-80">Merkeziyetsiz kadın emeğini, yapay zeka destekli otonom tedarik zinciriyle kurumsal B2B pazarına entegre eden geleceğin sanal üretim katmanı.</p>
             </div>
             <div>
-                <h4 class="text-white text-[9px] font-black uppercase tracking-[0.3em] mb-5">Kurumsal Erişim</h4>
-                <ul class="text-[10px] space-y-3 font-bold uppercase tracking-widest opacity-80">
+                <h4 class="text-white text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-5">Kurumsal Erişim</h4>
+                <ul class="text-xs space-y-3 font-bold uppercase tracking-widest opacity-80">
                     <li><a href="#" onclick="openInfoModal('about'); return false;" class="hover:text-indigo-400 transition-colors">Platform Hakkında</a></li>
                     <li><a href="#" onclick="openInfoModal('b2b'); return false;" class="hover:text-indigo-400 transition-colors">B2B Çözümleri</a></li>
                     <li><a href="#" onclick="openInfoModal('apply'); return false;" class="hover:text-indigo-400 transition-colors">Hub Başvurusu</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-white text-[9px] font-black uppercase tracking-[0.3em] mb-5">İletişim Destek</h4>
-                <div class="text-[10px] space-y-3.5 font-bold uppercase tracking-widest opacity-80">
+                <h4 class="text-white text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-5">İletişim Destek</h4>
+                <div class="text-xs space-y-3.5 font-bold uppercase tracking-widest opacity-80">
                     <p class="flex items-center gap-2.5 hover:text-white transition-colors cursor-pointer"><span class="text-indigo-400 text-sm">✉</span> enterprise@microfactory.ai</p>
                     <p class="flex items-center gap-2.5 hover:text-white transition-colors cursor-pointer"><span class="text-indigo-400 text-sm">🏢</span> Bilişim Vadisi, Hub-1 (Ankara)</p>
                 </div>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-12 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span class="text-[8px] font-black uppercase tracking-[0.3em] opacity-50 text-center sm:text-left">© 2026 Micro Factory AI | Sanal Üretim Katmanı</span>
-            <span class="text-[8px] font-black uppercase tracking-[0.2em] opacity-40">Powered by Gemini AI</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-50 text-center sm:text-left">© 2026 Micro Factory AI | Sanal Üretim Katmanı</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Powered by Gemini AI</span>
         </div>
     </footer>
 
