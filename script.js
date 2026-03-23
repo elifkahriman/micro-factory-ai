@@ -16,6 +16,14 @@ const categoryPrices = {
     "gida": 55.00        
 };
 
+const categoryNames = {
+    "kimya": "Doğal Kozmetik & Sabun",
+    "tekstil": "Tekstil ve Örgü",
+    "montaj": "Hafif Montaj",
+    "paketleme": "Paketleme & Tasnif",
+    "gida": "İleri Dönüşüm / Gıda"
+};
+
 const defaultProducers = [
     { id: "H1", name: "Sincan Kadın Kooperatifi Hub", capacity: 1200, city: "Ankara", region: "İç Anadolu", trustScore: 9.8, strikes: 0, status: "Aktif", badge: "Merkez Hub" },
     { id: "H2", name: "Polatlı Üretim ve Lojistik Ağı", capacity: 850, city: "Ankara", region: "İç Anadolu", trustScore: 9.5, strikes: 0, status: "Aktif", badge: "Onaylı Hub" },
@@ -112,6 +120,10 @@ function updateKPIs() {
 function resetOrderForm() {
     document.getElementById('orderForm').reset();
     document.getElementById('actionPanel').classList.add('hidden-safely');
+    
+    // Kategori alanını sıfırlama
+    document.getElementById('categoryDisplay').innerHTML = `<span class="opacity-80 uppercase tracking-widest">✨ AI OTOMATİK SEÇİM</span><svg class="w-4 h-4 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+
     document.getElementById('tableWrapper').innerHTML = `
         <div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-40">
             <svg class="w-20 h-20 mb-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517"></path></svg>
@@ -122,37 +134,43 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
-// EFSANEVİ DETAY FİLTRESİ VE AI GÜNCELLEMESİ (YENİ KURALLAR)
-async function checkSemanticFeasibility(productName, category) {
+// AI KATEGORİ OTOMATİK BULMA MOTORU
+async function checkSemanticFeasibility(productName) {
     const pNameLower = productName.toLowerCase().trim();
     
-    // 1. FRONTEND KONTROLÜ: Çok kısa veya detaysız (tek kelime) girişleri doğrudan engelle!
-    if (pNameLower.split(' ').length < 2 && pNameLower.length < 12) {
-        return "RED: Ürün tanımı çok yetersiz. Kooperatif ağımızda üretilebilirliğini analiz etmemiz için lütfen detay belirtiniz (Örn: 'Kalem' yerine 'Ahşap gövdeli promosyon kalem montajı', 'Muz' yerine 'Kurutulmuş muz cipsi', 'Parfüm' yerine 'Doğal esanslı katı parfüm').";
+    if (pNameLower.length < 3) {
+        return "RED: Ürün tanımı çok kısa. Lütfen ne üretileceğini net bir şekilde belirtiniz (Örn: Bez çanta, el yapımı sabun).";
     }
 
-    const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv parçası', 'pcb', 'devre', 'plastik enjeksiyon', 'cam üfleme', 'fabrikasyon', 'ayakkabı', 'taze meyve'];
-    
+    const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv', 'pcb', 'devre', 'plastik', 'fabrikasyon', 'ayakkabı', 'muz', 'elma', 'karpuz', 'telefon', 'bilgisayar', 'kablo'];
     if (forbidden.some(word => pNameLower.includes(word))) {
-        return "RED: Bu ürün (Ağır Sanayi/Elektronik/Fabrikasyon veya Taze Gıda) kurumsal ağımızın güvenlik protokollerine ve ev/kooperatif üretim modelimize uygun değildir.";
+        return "RED: Bu ürün kurumsal ağımızın güvenlik protokollerine ve kooperatif ev üretimi modelimize (sadece el işçiliği/hafif montaj) uygun değildir.";
     }
-    
-    if(!GEMINI_API_KEY) return "ONAY (Demo Modu)"; 
+
+    if(!GEMINI_API_KEY) return "ONAY|montaj"; // API key yoksa demo modunda montaj seçer
     
     try {
-        const prompt = `Sen Micro Factory AI baş mimarısın. Kibarca analiz et. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız sadece evlerde ve kadın kooperatiflerinde el işçiliği, basit aletler veya dikiş makinesi ile yapılabilecek üretimleri kapsar. 
-        KURALLAR:
-        1. Üretimi için sanayi makinesi (plastik enjeksiyon, CNC, ağır kimyasal, ayakkabı bandı, seri üretim) veya taze ürün satışı (işlenmemiş meyve, tarladan satış) gerektirenleri KESİNLİKLE REDDET.
-        2. El emeğiyle veya kooperatif atölyesinde yapılabilecek her türlü DOĞAL KOKU, PARFÜM, SABUN, AHŞAP MONTAJ, GIDA İŞLEME (reçel, konserve, kurutma), paketleme ve tekstil işine ONAY VER.
-        Reddediyorsan 'RED: [Kooperatif ev üretimine neden uygun olmadığını açıklayan gerekçe]' yaz, uygunsa sadece 'ONAY' yaz.`;
+        const prompt = `Sen Micro Factory AI baş mimarısın. Kurumsal müşteri '${productName}' siparişini üretmemizi istiyor. Bizim ağımız evlerde ve kadın kooperatiflerinde el işçiliği ile yapılabilecek üretimleri kapsar. 
+        GÖREVLERİN:
+        1. Bu ürün kooperatifte/evde üretilebilir mi? (Sanayi makinesi, ağır kimyasal, teknoloji veya işlenmemiş taze meyve/sebze satışı KESİNLİKLE REDDEDİLMELİ). Uygun değilse 'RED: [Gerekçe]' yaz.
+        2. Eğer uygunsa, bu ürün şu 5 kategoriden hangisine giriyor seç: [kimya, tekstil, montaj, paketleme, gida]. 
+        Doğal kozmetik ve sabunlar -> kimya
+        Örgü, dikiş, bez çanta -> tekstil
+        Kutu katlama, ahşap, kalem montajı, oyuncak birleştirme -> montaj
+        Kuru meyve paketleme, etiketleme -> paketleme
+        Reçel, konserve, kuru gıda işleme -> gida
+
+        Eğer onaylıyorsan SADECE şu formatta yanıt ver: ONAY|[KategoriKısaAdı]
+        Örnek 1: ONAY|gida 
+        Örnek 2: ONAY|tekstil`;
         
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
         const data = await res.json();
-        return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY";
+        return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY|montaj";
     } catch (e) { 
-        return "ONAY (Hata Sonrası Fallback)"; 
+        return "ONAY|montaj"; 
     }
 }
 
@@ -162,11 +180,13 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById('productName').value;
     let qty = Number(document.getElementById('quantity').value);
-    const category = document.getElementById('category').value;
     const city = document.getElementById('deliveryCity').value.trim(); 
+    const district = document.getElementById('deliveryDistrict').value.trim(); 
 
-    let unitPrice = categoryPrices[category] || 20.00;
-    let calculatedTotalCost = unitPrice * qty;
+    if (district.length < 10) {
+        alert("⚠️ Lütfen geçerli ve açık bir kurumsal teslimat adresi giriniz (En az 10 karakter).");
+        return;
+    }
 
     let region = "Marmara"; 
     for (const [reg, cities] of Object.entries(regionData)) {
@@ -181,13 +201,27 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Semantik Filtreleme & Bölgesel Analiz Yapıyor...</p></div>`;
     document.getElementById('actionPanel').classList.add('hidden-safely');
 
-    const aiResponse = await checkSemanticFeasibility(name, category);
+    const aiResponse = await checkSemanticFeasibility(name);
+    
     if(aiResponse.startsWith("RED:")) {
         tableWrapper.innerHTML = ``;
         document.getElementById('alertBox').classList.remove('hidden-safely');
         document.getElementById('alertMessage').innerText = aiResponse.replace("RED:", "").trim();
         return;
     }
+
+    // AI'ın belirlediği kategoriyi parse et
+    let detectedCategory = "montaj";
+    if (aiResponse.includes("|")) {
+        detectedCategory = aiResponse.split("|")[1].trim().toLowerCase();
+    }
+    
+    // UI'ı güncelle - "Kategori (SLA)" kutusuna yapay zekanın bulduğu kategoriyi yaz!
+    const displayCat = categoryNames[detectedCategory] || "Hafif Montaj";
+    document.getElementById('categoryDisplay').innerHTML = `<span class="text-indigo-700 font-black uppercase tracking-wider">${displayCat}</span> <span class="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-2 py-1 rounded shadow-sm ml-2">AI SEÇTİ</span>`;
+
+    let unitPrice = categoryPrices[detectedCategory] || 20.00;
+    let calculatedTotalCost = unitPrice * qty;
 
     let activeProducers = producers.filter(p => p.status === "Aktif");
     activeProducers.sort((a, b) => {
