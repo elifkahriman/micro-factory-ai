@@ -8,6 +8,18 @@ const regionData = {
     "Karadeniz": ["Rize", "Trabzon", "Samsun", "Artvin", "Ordu", "Giresun", "Zonguldak", "Tokat"]
 };
 
+// OTOMATİK İLÇE ÖNERİ SİSTEMİ (En Çok Sipariş Alan İlçeler)
+const districtSuggestions = {
+    "Ankara": ["Çankaya", "Keçiören", "Yenimahalle", "Sincan", "Etimesgut", "Gölbaşı"],
+    "İstanbul": ["Beşiktaş", "Kadıköy", "Şişli", "Üsküdar", "Esenyurt", "Pendik"],
+    "İzmir": ["Karşıyaka", "Bornova", "Konak", "Çiğli", "Buca", "Bayraklı"],
+    "Bursa": ["Nilüfer", "Osmangazi", "Yıldırım", "Mudanya"],
+    "Antalya": ["Muratpaşa", "Kepez", "Konyaaltı", "Alanya"],
+    "Kayseri": ["Melikgazi", "Kocasinan", "Talas"],
+    "Kocaeli": ["İzmit", "Gebze", "Kartepe"],
+    "Bolu": ["Merkez", "Gerede", "Mengen"]
+};
+
 const categoryPrices = {
     "kimya": 120.00,      
     "tekstil": 90.00,     
@@ -47,7 +59,38 @@ if (!localStorage.getItem('mf_orders_v3')) localStorage.setItem('mf_orders_v3', 
 let producers = JSON.parse(localStorage.getItem('mf_producers_v3'));
 let orderHistory = JSON.parse(localStorage.getItem('mf_orders_v3'));
 
-window.onload = () => updateKPIs();
+window.onload = () => {
+    updateKPIs();
+    setupAddressAutomation();
+};
+
+// OTOMATİK ADRES ÖNERİ MOTORU
+function setupAddressAutomation() {
+    const cityInput = document.getElementById('deliveryCity');
+    const districtInput = document.getElementById('deliveryDistrict');
+    
+    cityInput.addEventListener('input', () => {
+        const city = cityInput.value.trim();
+        const suggestions = districtSuggestions[city] || [];
+        
+        // Önceki önerileri temizle ve yenilerini ekle
+        let datalist = document.getElementById('districtsList');
+        if(!datalist) {
+            datalist = document.createElement('datalist');
+            datalist.id = 'districtsList';
+            document.body.appendChild(datalist);
+            districtInput.setAttribute('list', 'districtsList');
+        }
+        
+        datalist.innerHTML = suggestions.map(d => `<option value="${d}">`).join('');
+        
+        if(suggestions.length > 0) {
+            districtInput.placeholder = `İlçe (Örn: ${suggestions[0]})`;
+        } else {
+            districtInput.placeholder = "İlçe Yazınız";
+        }
+    });
+}
 
 function updateKPIs() {
     const active = producers.filter(p => p.status === "Aktif").length;
@@ -75,18 +118,15 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
-// SİSTEM BAZLI AKILLI DENETÇİ (HER ÜRÜNÜ FİZİKSEL ÜRETİM MANTIKLARIYLA DENETLER)
 async function checkSemanticFeasibility(productName, productDetails) {
     const pNameLower = productName.toLowerCase().trim();
     const detailsLower = productDetails.toLowerCase().trim();
     
-    // Temel Kalkanlar
     if (pNameLower.length < 3) return "RED: Ürün tanımı geçersiz.";
     const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv', 'pcb', 'devre', 'plastik', 'fabrikasyon', 'ayakkabı', 'muz', 'elma', 'karpuz', 'telefon', 'bilgisayar', 'kablo'];
     if (forbidden.some(word => pNameLower.includes(word))) return "RED: Bu ürün (Ağır Sanayi/Taze Gıda) kooperatif ev üretimi modelimize uygun değildir.";
 
     if(!GEMINI_API_KEY) {
-        // DEMO MODU: Sayısal veya ölçü verisi yoksa reddet
         const hasSpec = /\d/.test(detailsLower) || detailsLower.includes("beden") || detailsLower.includes("gr") || detailsLower.includes("ml") || detailsLower.includes("cm");
         if (!hasSpec) return "RED: Üretim yapılabilmesi için ürün detayında mutlaka ölçü, gramaj, beden veya teknik bir özellik (Örn: 'S beden', '300gr') belirtilmelidir.";
         
@@ -136,6 +176,7 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     const neighborhood = document.getElementById('deliveryNeighborhood').value.trim(); 
     const doorNo = document.getElementById('deliveryDoorNo').value.trim(); 
 
+    // GÜÇLENDİRİLMİŞ ADRES DENETİMİ
     if (district.length < 2 || neighborhood.length < 3 || doorNo.length < 1) {
         alert("⚠️ Lütfen adres alanlarını eksiksiz giriniz."); return;
     }
@@ -145,7 +186,7 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
 
     document.getElementById('alertBox').classList.add('hidden-safely');
     const tableWrapper = document.getElementById('tableWrapper');
-    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">AI Operasyonel Denetim Yapıyor...</p></div>`;
+    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">AI Kalite Denetimi & Bölgesel Analiz Yapıyor...</p></div>`;
     document.getElementById('actionPanel').classList.add('hidden-safely');
 
     const aiResponse = await checkSemanticFeasibility(name, details);
