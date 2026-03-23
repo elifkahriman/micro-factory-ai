@@ -7,130 +7,50 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        @keyframes mesh-bg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: linear-gradient(-45deg, #eef2ff, #f8fafc, #f1f5f9, #e0e7ff);
-            background-size: 400% 400%;
-            animation: mesh-bg 18s ease infinite;
-            background-attachment: fixed; 
-        }
+        @keyframes mesh-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(-45deg, #eef2ff, #f8fafc, #f1f5f9, #e0e7ff); background-size: 400% 400%; animation: mesh-bg 18s ease infinite; background-attachment: fixed; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.7); 
-            backdrop-filter: blur(14px); 
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.6); 
-            border-radius: 24px; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255,255,255,0.2) inset; 
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .btn-primary:hover { 
-            transform: translateY(-2px) scale(1.01); 
-            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.4); 
-        }
-        .input-premium { 
-            background: rgba(255, 255, 255, 0.85); 
-            border: 1.5px solid #e2e8f0; 
-            border-radius: 14px; 
-            transition: all 0.25s ease-out; 
-        }
-        .input-premium:focus { 
-            border-color: #6366f1; 
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); 
-            outline: none; 
-            background: white;
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255,255,255,0.2) inset; }
+        .btn-primary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.4); }
+        .input-premium { background: rgba(255, 255, 255, 0.85); border: 1.5px solid #e2e8f0; border-radius: 14px; transition: all 0.25s ease-out; }
+        .input-premium:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); outline: none; background: white; }
         .hidden-safely { display: none !important; }
-        .kpi-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-slide { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .node-pulse { animation: core-pulse 2.8s infinite; }
-        @keyframes core-pulse {
-            0% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.9); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
-            100% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
-        }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 antialiased flex flex-col">
-
-    <div id="infoModal" class="hidden-safely fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-        <div class="glass-card p-8 max-w-lg w-full bg-white relative animate-slide shadow-2xl">
-            <button onclick="closeInfoModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-all p-2 rounded-full">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5"></path></svg>
-            </button>
-            <div id="modalContent" class="text-sm text-slate-600 space-y-4 pt-4"></div>
-        </div>
-    </div>
+<body class="min-h-screen text-slate-800 flex flex-col">
 
     <div id="loginScreen" class="hidden-safely fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
         <div class="glass-card p-10 max-w-md w-full bg-white/95 shadow-2xl animate-slide text-center">
-            <h2 class="text-2xl font-black text-slate-900 mb-6">Sisteme Giriş Yapın</h2>
+            <h2 class="text-2xl font-black text-slate-900 mb-6 tracking-tight">Kurumsal Giriş</h2>
             <form id="authForm" class="space-y-4 text-left">
                 <input type="email" value="demo@microfactory.ai" required class="w-full px-5 py-4 input-premium text-sm" placeholder="E-posta">
                 <input type="password" value="123456" required class="w-full px-5 py-4 input-premium text-sm" placeholder="Şifre">
-                <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl uppercase tracking-widest text-[11px]">GİRİŞ YAP</button>
+                <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl uppercase tracking-widest text-[11px]">SİSTEME BAĞLAN</button>
             </form>
-            <button onclick="resetEverything()" class="mt-4 text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-rose-500 transition-colors">⚙️ VERİLERİ SIFIRLA</button>
         </div>
     </div>
 
     <div id="mainDashboard" class="flex-1 max-w-7xl mx-auto w-full py-10 px-4 sm:px-8">
-        
         <header class="mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-5">
-                <div class="relative w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <div class="w-3 h-3 bg-white rounded-full node-pulse"></div>
-                </div>
+                <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-xl text-white text-2xl font-bold">M</div>
                 <div>
                     <h1 class="text-3xl font-extrabold text-slate-900 tracking-tighter">Micro Factory <span class="text-indigo-600">AI</span></h1>
                     <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500/70">Sanal Üretim Katmanı</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <button id="headerLoginBtn" onclick="openLogin()" class="btn-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-wider">👤 GİRİŞ</button>
-                <div id="userProfileMenu" class="hidden-safely flex items-center gap-3">
-                    <span class="text-[10px] font-black text-slate-600 bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">🏢 KURUMSAL</span>
-                    <button onclick="logout()" class="px-4 py-3 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-all text-[9px] font-black uppercase">ÇIKIŞ</button>
-                </div>
+            <div id="userProfileMenu" class="hidden-safely flex items-center gap-3">
+                <span class="text-[10px] font-black text-slate-600 bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">🏢 KURUMSAL</span>
             </div>
+            <button id="headerLoginBtn" onclick="openLogin()" class="btn-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-wider">👤 GİRİŞ</button>
         </header>
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div class="glass-card p-6 border-b-4 border-b-indigo-500">
-                <div class="kpi-icon bg-indigo-50 text-indigo-600 text-2xl">⚡</div>
-                <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ağ Kapasitesi</div>
-                <div class="text-2xl font-black text-slate-900 mt-1 font-mono" id="kpiCapacity">0</div>
-            </div>
-            <div class="glass-card p-6 border-b-4 border-b-emerald-500">
-                <div class="kpi-icon bg-emerald-50 text-emerald-600 text-2xl">👩‍🏭</div>
-                <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Aktif Hub</div>
-                <div class="text-2xl font-black text-emerald-600 mt-1 font-mono" id="kpiActiveProducers">0</div>
-            </div>
-            <div class="glass-card p-6 border-b-4 border-b-sky-500">
-                <div class="kpi-icon bg-sky-50 text-sky-600 text-2xl">🌱</div>
-                <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Yeşil Tasarruf</div>
-                <div class="text-2xl font-black text-sky-600 mt-1 font-mono" id="kpiCo2">0 Ağaç</div>
-            </div>
-            <div class="glass-card p-6 border-b-4 border-b-rose-500">
-                <div class="kpi-icon bg-rose-50 text-rose-600 text-2xl">⚠️</div>
-                <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SLA İhraç</div>
-                <div class="text-2xl font-black text-rose-600 mt-1 font-mono" id="kpiBannedProducers">0</div>
-            </div>
-        </div>
-
-        <div class="flex gap-3 mb-8 bg-white/40 p-2 rounded-2xl w-fit border border-white shadow-sm overflow-x-auto">
-            <button onclick="switchTab('orderTab')" id="btn-orderTab" class="px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-md shrink-0">YENİ SİPARİŞ</button>
-            <button onclick="switchTab('historyTab')" id="btn-historyTab" class="px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 shrink-0">SÜREÇ TAKİBİ</button>
-            <button onclick="switchTab('producersTab')" id="btn-producersTab" class="px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 shrink-0">HUB AĞI</button>
+        <div class="flex gap-3 mb-8 bg-white/40 p-2 rounded-2xl w-fit border border-white shadow-sm">
+            <button onclick="switchTab('orderTab')" id="btn-orderTab" class="px-6 py-3 text-[10px] font-black uppercase rounded-xl bg-indigo-600 text-white shadow-md">YENİ SİPARİŞ</button>
+            <button onclick="switchTab('historyTab')" id="btn-historyTab" class="px-6 py-3 text-[10px] font-black uppercase rounded-xl text-slate-500 hover:bg-white/80">SÜREÇ TAKİBİ</button>
         </div>
 
         <div id="orderTab" class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full animate-slide">
@@ -138,42 +58,41 @@
                 <div class="glass-card p-8 bg-white border-t-8 border-t-indigo-500 shadow-xl">
                     <form id="orderForm" class="space-y-4">
                         <div>
-                            <label class="text-[9px] font-black text-indigo-500 uppercase mb-2 block tracking-widest">Ürün Tanımı</label>
-                            <input type="text" id="productName" required class="w-full px-5 py-3.5 input-premium text-sm font-semibold" placeholder="Örn: Çilek Reçeli, Hoodie, Sabun...">
+                            <label class="text-[9px] font-black text-indigo-500 uppercase mb-2 block tracking-widest">Ürün Adı</label>
+                            <input type="text" id="productName" required class="w-full px-5 py-3.5 input-premium text-sm font-semibold" placeholder="Örn: Reçel, Hoodie, Sabun...">
                         </div>
                         <div>
-                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Ürün Detayı (Zorunlu)</label>
-                            <textarea id="productDetails" required rows="2" class="w-full px-5 py-3.5 input-premium text-sm" placeholder="Örn: 300gr kavanoz, Siyah kumaş M beden vb."></textarea>
+                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Ürün Detayı (Tür + Ölçü Şart!)</label>
+                            <textarea id="productDetails" required rows="2" class="w-full px-5 py-3.5 input-premium text-sm" placeholder="Örn: 300gr Çilek, M beden siyah pamuklu vb."></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Sipariş Adedi</label>
-                                <input type="number" id="quantity" required min="1" class="w-full px-5 py-3.5 input-premium text-sm font-mono" placeholder="1000">
+                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Adet</label>
+                                <input type="number" id="quantity" required min="1" class="w-full px-5 py-3.5 input-premium text-sm" placeholder="100">
                             </div>
                             <div>
-                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Kategori (SLA)</label>
-                                <div id="categoryDisplay" class="w-full px-4 py-3.5 input-premium text-[11px] font-bold text-indigo-500 bg-indigo-50/50 flex items-center justify-between shadow-inner">
-                                    <span>✨ AI SEÇİMİ</span>
+                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Kategori</label>
+                                <div id="categoryDisplay" class="w-full px-4 py-3.5 input-premium text-[11px] font-bold text-indigo-500 bg-indigo-50/50 flex items-center justify-between">
+                                    <span>✨ AI ANALİZİ</span>
                                 </div>
                             </div>
                         </div>
                         <div class="pt-4 border-t border-slate-100">
                             <label class="text-[9px] font-black text-indigo-500 uppercase mb-3 block tracking-widest">Teslimat Adresi</label>
                             <div class="grid grid-cols-2 gap-4 mb-4">
-                                <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-3.5 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50" placeholder="İl (Örn: İzmir)">
+                                <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-3.5 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50" placeholder="İl Seçiniz">
                                 <datalist id="cities">
-                                    <option value="Adana"></option><option value="Ankara"></option><option value="Antalya"></option><option value="Bolu"></option>
-                                    <option value="Bursa"></option><option value="İstanbul"></option><option value="İzmir"></option><option value="Kocaeli"></option>
+                                    <option value="Adana"> <option value="Adıyaman"> <option value="Afyonkarahisar"> <option value="Ağrı"> <option value="Aksaray"> <option value="Amasya"> <option value="Ankara"> <option value="Antalya"> <option value="Ardahan"> <option value="Artvin"> <option value="Aydın"> <option value="Balıkesir"> <option value="Bartın"> <option value="Batman"> <option value="Bayburt"> <option value="Bilecik"> <option value="Bingöl"> <option value="Bitlis"> <option value="Bolu"> <option value="Burdur"> <option value="Bursa"> <option value="Çanakkale"> <option value="Çankırı"> <option value="Çorum"> <option value="Denizli"> <option value="Diyarbakır"> <option value="Düzce"> <option value="Edirne"> <option value="Elazığ"> <option value="Erzincan"> <option value="Erzurum"> <option value="Eskişehir"> <option value="Gaziantep"> <option value="Giresun"> <option value="Gümüşhane"> <option value="Hakkari"> <option value="Hatay"> <option value="Iğdır"> <option value="Isparta"> <option value="İstanbul"> <option value="İzmir"> <option value="Kahramanmaraş"> <option value="Karabük"> <option value="Karaman"> <option value="Kars"> <option value="Kastamonu"> <option value="Kayseri"> <option value="Kilis"> <option value="Kırıkkale"> <option value="Kırklareli"> <option value="Kırşehir"> <option value="Kocaeli"> <option value="Konya"> <option value="Kütahya"> <option value="Malatya"> <option value="Manisa"> <option value="Mardin"> <option value="Mersin"> <option value="Muğla"> <option value="Muş"> <option value="Nevşehir"> <option value="Niğde"> <option value="Ordu"> <option value="Osmaniye"> <option value="Rize"> <option value="Sakarya"> <option value="Samsun"> <option value="Şanlıurfa"> <option value="Siirt"> <option value="Sinop"> <option value="Sivas"> <option value="Şırnak"> <option value="Tekirdağ"> <option value="Tokat"> <option value="Trabzon"> <option value="Tunceli"> <option value="Uşak"> <option value="Van"> <option value="Yalova"> <option value="Yozgat"> <option value="Zonguldak">
                                 </datalist>
-                                <input type="text" id="deliveryDistrict" list="districtsList" required class="w-full px-5 py-3.5 input-premium text-sm" placeholder="İlçe Seçiniz">
+                                <input type="text" id="deliveryDistrict" list="districtsList" required class="w-full px-5 py-3.5 input-premium text-sm" placeholder="İlçe">
                                 <datalist id="districtsList"></datalist>
                             </div>
                             <div class="grid grid-cols-3 gap-4">
-                                <input type="text" id="deliveryNeighborhood" required class="col-span-2 w-full px-5 py-3.5 input-premium text-sm" placeholder="Mahalle / Sokak">
+                                <input type="text" id="deliveryNeighborhood" required class="col-span-2 w-full px-5 py-3.5 input-premium text-sm" placeholder="Mahalle / Cadde">
                                 <input type="text" id="deliveryDoorNo" required class="w-full px-5 py-3.5 input-premium text-sm" placeholder="No">
                             </div>
                         </div>
-                        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-xs mt-4">AI FİZİBİLİTEYİ BAŞLAT</button>
+                        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl uppercase text-xs mt-4">AI FİZİBİLİTEYİ BAŞLAT</button>
                     </form>
                 </div>
             </div>
@@ -182,37 +101,21 @@
                 <div id="alertBox" class="hidden-safely glass-card border-l-4 border-l-rose-500 bg-rose-50/95 p-6 shadow-md">
                     <p id="alertMessage" class="text-xs text-rose-800 font-bold"></p>
                 </div>
-                <div id="tableWrapper" class="glass-card min-h-[400px] p-6 bg-white shadow-xl overflow-hidden">
-                    <div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-40">
-                         <svg class="w-20 h-20 mb-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517" stroke-width="1.5"></path></svg>
-                        <p class="text-[10px] font-black uppercase tracking-widest">AI Analizi Bekleniyor...</p>
-                    </div>
+                <div id="tableWrapper" class="glass-card min-h-[400px] p-6 bg-white shadow-xl flex flex-col justify-center items-center">
+                    <p class="text-[10px] font-black text-slate-300 uppercase">AI Lojistik Analizi Bekleniyor...</p>
                 </div>
                 <div id="actionPanel" class="hidden-safely glass-card p-5 flex justify-between items-center bg-slate-900 text-white">
-                    <div class="flex flex-col"><span class="text-[8px] text-indigo-300 uppercase font-black">Teslimat</span><h4 id="etaText" class="text-lg font-black">-</h4></div>
-                    <div class="flex gap-3"><button onclick="resetOrderForm()" class="px-6 py-3 border border-white/20 text-[9px] font-black uppercase">İPTAL</button><button onclick="confirmOrder()" class="px-8 py-3 bg-emerald-500 text-emerald-950 text-[9px] font-black uppercase">ONAYLA</button></div>
+                    <div class="flex flex-col"><span class="text-[8px] text-indigo-300 font-black">TAHMİNİ TESLİMAT</span><h4 id="etaText" class="text-lg font-black">-</h4></div>
+                    <div class="flex gap-3"><button onclick="resetOrderForm()" class="px-6 py-3 border border-white/20 text-[9px] font-black uppercase">İPTAL</button><button onclick="confirmOrder()" class="px-8 py-3 bg-emerald-500 text-emerald-950 text-[9px] font-black uppercase shadow-lg shadow-emerald-500/20">ONAYLA</button></div>
                 </div>
             </div>
         </div>
 
-        <div id="historyTab" class="hidden-safely glass-card p-10 min-h-[500px] bg-white/95 animate-slide">
-            <h3 class="text-lg font-black text-slate-800 mb-8 border-b pb-4 uppercase">📜 Sipariş Geçmişi</h3>
+        <div id="historyTab" class="hidden-safely glass-card p-10 min-h-[500px] bg-white/95">
+            <h3 class="text-lg font-black text-slate-800 mb-8 border-b pb-4 uppercase tracking-tighter">📜 Sipariş Geçmişi</h3>
             <div id="historyBody" class="space-y-4"></div>
         </div>
-
-        <div id="producersTab" class="hidden-safely glass-card p-10 min-h-[500px] bg-white/95 animate-slide">
-            <h3 class="text-lg font-black text-slate-800 mb-8 border-b pb-4 uppercase">👩‍🏭 Hub Ağı</h3>
-            <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="producersBody" class="divide-y"></tbody></table></div>
-        </div>
-
     </div>
-
-    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-xs font-bold uppercase tracking-widest">© 2026 Micro Factory AI | Powered by Gemini AI</p>
-            <p class="text-[10px] opacity-50 uppercase tracking-widest">Gazi Üniversitesi Industrial Engineering Project</p>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>
