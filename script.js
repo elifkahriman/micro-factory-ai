@@ -9,11 +9,11 @@ const regionData = {
 };
 
 const categoryPrices = {
-    "kimya": 45.50,      // Doğal Kozmetik & Sabun
-    "tekstil": 35.00,    // Tekstil ve Örgü
-    "montaj": 25.00,     // Hafif Montaj
-    "paketleme": 10.00,  // Paketleme & Tasnif
-    "gida": 55.00        // İleri Dönüşüm / Gıda
+    "kimya": 45.50,      
+    "tekstil": 35.00,    
+    "montaj": 25.00,     
+    "paketleme": 10.00,  
+    "gida": 55.00        
 };
 
 const defaultProducers = [
@@ -122,18 +122,30 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
+// EFSANEVİ DETAY FİLTRESİ VE AI GÜNCELLEMESİ (YENİ KURALLAR)
 async function checkSemanticFeasibility(productName, category) {
-    const pNameLower = productName.toLowerCase();
-    const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv parçası', 'pcb', 'devre'];
+    const pNameLower = productName.toLowerCase().trim();
+    
+    // 1. FRONTEND KONTROLÜ: Çok kısa veya detaysız (tek kelime) girişleri doğrudan engelle!
+    if (pNameLower.split(' ').length < 2 && pNameLower.length < 12) {
+        return "RED: Ürün tanımı çok yetersiz. Kooperatif ağımızda üretilebilirliğini analiz etmemiz için lütfen detay belirtiniz (Örn: 'Kalem' yerine 'Ahşap gövdeli promosyon kalem montajı', 'Muz' yerine 'Kurutulmuş muz cipsi', 'Parfüm' yerine 'Doğal esanslı katı parfüm').";
+    }
+
+    const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv parçası', 'pcb', 'devre', 'plastik enjeksiyon', 'cam üfleme', 'fabrikasyon', 'ayakkabı', 'taze meyve'];
     
     if (forbidden.some(word => pNameLower.includes(word))) {
-        return "RED: Bu ürün (Ağır Sanayi/Elektronik/Otomotiv) kurumsal ağımızın güvenlik protokollerine ve ev/hub üretim modelimize uygun değildir.";
+        return "RED: Bu ürün (Ağır Sanayi/Elektronik/Fabrikasyon veya Taze Gıda) kurumsal ağımızın güvenlik protokollerine ve ev/kooperatif üretim modelimize uygun değildir.";
     }
     
     if(!GEMINI_API_KEY) return "ONAY (Demo Modu)"; 
     
     try {
-        const prompt = `Sen Micro Factory AI baş mimarısın. Kibarca analiz et. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız ev/kooperatif şartlarına uygundur. Ağır sanayi, döküm, tehlikeli madde ise RED: yazıp gerekçe belirt. Uygunsa sadece 'ONAY' yaz.`;
+        const prompt = `Sen Micro Factory AI baş mimarısın. Kibarca analiz et. Kurumsal müşteri '${productName}' (Kategori: ${category}) sipariş etmek istiyor. Bizim ağımız sadece evlerde ve kadın kooperatiflerinde el işçiliği, basit aletler veya dikiş makinesi ile yapılabilecek üretimleri kapsar. 
+        KURALLAR:
+        1. Üretimi için sanayi makinesi (plastik enjeksiyon, CNC, ağır kimyasal, ayakkabı bandı, seri üretim) veya taze ürün satışı (işlenmemiş meyve, tarladan satış) gerektirenleri KESİNLİKLE REDDET.
+        2. El emeğiyle veya kooperatif atölyesinde yapılabilecek her türlü DOĞAL KOKU, PARFÜM, SABUN, AHŞAP MONTAJ, GIDA İŞLEME (reçel, konserve, kurutma), paketleme ve tekstil işine ONAY VER.
+        Reddediyorsan 'RED: [Kooperatif ev üretimine neden uygun olmadığını açıklayan gerekçe]' yaz, uygunsa sadece 'ONAY' yaz.`;
+        
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
@@ -291,7 +303,6 @@ function cancelFromHistory(index) {
     }
 }
 
-// GEÇMİŞTEN KOMPLE SİLME FONKSİYONU EKLENDİ
 function deleteFromHistory(index) {
     if(confirm("🗑️ DİKKAT!\n\nBu sipariş kaydı geçmişten kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
         orderHistory.splice(index, 1);
@@ -312,7 +323,6 @@ function renderHistory() {
             ? `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-widest shadow-inner">İptal Edildi</span>`
             : `<span class="px-5 py-2 rounded-xl text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest shadow-inner">Süreç Aktif</span>`;
         
-        // İptal edildiyse "Geçmişten Sil", edilmediyse "%30 İptal" butonu çıksın.
         let actionBtn = !isCanceled 
             ? `<button onclick="cancelFromHistory(${index})" class="px-4 py-2 bg-white text-rose-500 border-2 border-rose-100 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-md active:scale-95 mt-2">Siparişi İptal Et (%30 Kesinti)</button>` 
             : `<button onclick="deleteFromHistory(${index})" class="px-4 py-2 bg-slate-100 text-slate-500 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-500 hover:text-white transition-all shadow-sm active:scale-95 mt-2 flex items-center justify-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Geçmişten Sil</button>`;
