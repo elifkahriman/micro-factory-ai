@@ -9,16 +9,15 @@ const regionData = {
 };
 
 const categoryPrices = {
-    "kimya": 120.00,      
+    "kozmetik": 120.00,      
     "tekstil": 90.00,     
     "montaj": 65.00,      
     "paketleme": 25.00,   
     "gida": 145.00        
 };
 
-// DOKÜMANLARLA (PRD) BİREBİR AYNI KATEGORİ İSİMLERİ
 const categoryNames = {
-    "kimya": "Doğal Kozmetik & Kimya",
+    "kozmetik": "Doğal Kozmetik & Kimya",
     "tekstil": "Tekstil & Örme",
     "montaj": "Hafif Montaj",
     "paketleme": "Paketleme & Tasnif",
@@ -134,12 +133,13 @@ function resetOrderForm() {
 
 const GEMINI_API_KEY = window.ENV_API_KEY || ""; 
 
-// DOKÜMANA UYGUN AI KATEGORİLEŞTİRME
-async function checkSemanticFeasibility(productName) {
+// DİNAMİK DETAY DENETLEYİCİ YAPAY ZEKA
+async function checkSemanticFeasibility(productName, productDetails) {
     const pNameLower = productName.toLowerCase().trim();
+    const detailsLower = productDetails.toLowerCase().trim();
     
     if (pNameLower.length < 3) {
-        return "RED: Ürün tanımı çok kısa. Lütfen ne üretileceğini net bir şekilde belirtiniz (Örn: Bez çanta, el yapımı sabun).";
+        return "RED: Lütfen ne üretileceğini geçerli bir şekilde belirtiniz (Örn: Sabun, Reçel, Hoodie).";
     }
 
     const forbidden = ['aks', 'motor', 'silah', 'beton', 'döküm', 'kaynak', 'otomotiv', 'pcb', 'devre', 'plastik', 'fabrikasyon', 'ayakkabı', 'muz', 'elma', 'karpuz', 'telefon', 'bilgisayar', 'kablo'];
@@ -148,35 +148,48 @@ async function checkSemanticFeasibility(productName) {
     }
 
     if(!GEMINI_API_KEY) {
-        // DEMO MODU (API Yokken) kelimeden kategori tahmin etme (Basit Zeka)
-        if(pNameLower.includes('sabun') || pNameLower.includes('koku') || pNameLower.includes('krem') || pNameLower.includes('parfüm')) return "ONAY|kimya";
+        // DEMO MODU (Şifre Yokken) Kapsamlı Kontrol
+        if(detailsLower.length < 5) {
+            if(pNameLower.includes('hoodi') || pNameLower.includes('tişört') || pNameLower.includes('çanta') || pNameLower.includes('kıyafet')) {
+                return "RED: Üreticilerimizin siparişi hazırlayabilmesi için lütfen 'Notlar' kısmında kumaş türü ve renk gibi detayları belirtiniz.";
+            }
+            if(pNameLower.includes('reçel') || pNameLower.includes('sabun') || pNameLower.includes('koku')) {
+                return "RED: Lütfen 'Notlar' kısmında ürünün içeriğini ve gramajını/boyutunu belirtiniz.";
+            }
+        }
+        
+        if(pNameLower.includes('sabun') || pNameLower.includes('koku') || pNameLower.includes('krem') || pNameLower.includes('parfüm')) return "ONAY|kozmetik";
         if(pNameLower.includes('reçel') || pNameLower.includes('gıda') || pNameLower.includes('meyve')) return "ONAY|gida";
-        if(pNameLower.includes('çanta') || pNameLower.includes('örgü') || pNameLower.includes('tekstil')) return "ONAY|tekstil";
+        if(pNameLower.includes('çanta') || pNameLower.includes('örgü') || pNameLower.includes('tekstil') || pNameLower.includes('hoodi') || pNameLower.includes('tişört') || pNameLower.includes('kıyafet')) return "ONAY|tekstil";
         if(pNameLower.includes('paket') || pNameLower.includes('etiket')) return "ONAY|paketleme";
         return "ONAY|montaj"; 
     }
     
     try {
-        const prompt = `Sen Micro Factory AI baş mimarısın. Kurumsal müşteri '${productName}' siparişini üretmemizi istiyor. Bizim ağımız evlerde ve kadın kooperatiflerinde el işçiliği ile yapılabilecek üretimleri kapsar. 
-        GÖREVLERİN:
-        1. Bu ürün kooperatifte/evde üretilebilir mi? (Sanayi makinesi, ağır kimyasal, teknoloji veya işlenmemiş taze meyve/sebze satışı KESİNLİKLE REDDEDİLMELİ). Uygun değilse 'RED: [Gerekçe]' yaz.
-        2. Eğer uygunsa, bu ürün şu 5 kategoriden hangisine giriyor seç: [kimya, tekstil, montaj, paketleme, gida]. 
-        Doğal kozmetik, doğal sabun, koku, krem -> kimya
-        Örgü, dikiş, bez çanta -> tekstil
-        Kutu katlama, ahşap, kalem montajı, oyuncak birleştirme -> montaj
-        Kuru meyve paketleme, etiketleme -> paketleme
-        Reçel, konserve, kuru gıda işleme, butik gıda -> gida
+        const prompt = `Sen Micro Factory AI kalite kontrol yöneticisisin. Müşteri ürün olarak '${productName}', detay olarak '${productDetails || "Detay girilmedi"}' yazdı.
+        KURALLAR:
+        1. Ağır sanayi, taze meyve/sebze veya teknolojik ürünse KESİNLİKLE REDDET.
+        2. Üretim kooperatifte yapılabiliyorsa, müşterinin detay verip vermediğini kontrol et:
+           - Ürün tekstil/kıyafet (hoodie, çanta vs.) ise ve renk/kumaş detayı girilmemişse REDDET ve "Lütfen 'Notlar' kısmına renk ve kumaş bilgilerini giriniz" de.
+           - Ürün gıda/kozmetik (reçel, sabun vs.) ise ve gramaj/içerik eksikse REDDET ve "Lütfen gramaj ve içerik detaylarını belirtiniz" de.
+           - Ürün montaj/paketleme ise ve ölçü eksikse detay iste.
+        3. Hem ürün kooperatife uygunsa hem de detaylar yeterliyse onay ver ve kategorisini seç: [kozmetik, tekstil, montaj, paketleme, gida]. 
 
-        Eğer onaylıyorsan SADECE şu formatta yanıt ver: ONAY|[KategoriKısaAdı]
-        Örnek 1: ONAY|gida 
-        Örnek 2: ONAY|tekstil
-        Örnek 3: ONAY|kimya`;
+        Eğer yeterli detay yoksa SADECE: RED|[Hangi detayın eksik olduğunu söyleyen kibar bir uyarı]
+        Eğer her şey tamamsa SADECE: ONAY|[KategoriKısaAdı]`;
         
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, { 
             method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] }) 
         });
         const data = await res.json();
-        return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY|montaj";
+        let answer = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "ONAY|montaj";
+        
+        // Eğer AI RED| formatında döndürdüyse bunu frontend'in anlayacağı RED: formatına çevir
+        if(answer.startsWith("RED|")) {
+            return "RED: " + answer.split("|")[1];
+        }
+        return answer;
+        
     } catch (e) { 
         return "ONAY|montaj"; 
     }
@@ -187,29 +200,30 @@ let currentOrderTemp = null;
 document.getElementById("orderForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById('productName').value;
+    const details = document.getElementById('productDetails').value; // DETAYLAR AI'A GÖNDERİLİYOR
     let qty = Number(document.getElementById('quantity').value);
     const city = document.getElementById('deliveryCity').value.trim(); 
-    const district = document.getElementById('deliveryDistrict').value.trim(); 
+    const district = document.getElementById('deliveryDistrict').value.trim().toLowerCase(); 
 
     if (district.length < 10) {
         alert("⚠️ Lütfen geçerli ve açık bir kurumsal teslimat adresi giriniz (En az 10 karakter).");
         return;
     }
-
-    let region = "Marmara"; 
-    for (const [reg, cities] of Object.entries(regionData)) {
-        if (cities.some(c => c.toLowerCase('tr-TR') === city.toLowerCase('tr-TR'))) {
-            region = reg;
-            break;
-        }
-    }
     
+    const majorCities = ["adana", "ankara", "antalya", "bursa", "diyarbakır", "erzurum", "eskişehir", "gaziantep", "istanbul", "izmir", "kayseri", "kocaeli", "konya", "mardin", "rize", "samsun", "trabzon", "van", "bolu"];
+    let conflictCity = majorCities.find(c => district.includes(c) && c !== city.toLowerCase());
+    if (conflictCity) {
+        alert(`⚠️ Adres Uyuşmazlığı: İl olarak '${city}' seçtiniz ancak açık adreste '${conflictCity.toUpperCase()}' ili geçiyor. Lütfen teslimat adresinizi düzeltiniz.`);
+        return;
+    }
+
     document.getElementById('alertBox').classList.add('hidden-safely');
     const tableWrapper = document.getElementById('tableWrapper');
-    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Semantik Filtreleme & Bölgesel Analiz Yapıyor...</p></div>`;
+    tableWrapper.innerHTML = `<div class="flex flex-col items-center justify-center h-48 space-y-4 animate-fade-in"><div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin shadow-lg"></div><p class="text-[10px] font-black text-indigo-600 tracking-widest animate-pulse uppercase">Gemini AI Kalite Kontrolü & Analiz Yapıyor...</p></div>`;
     document.getElementById('actionPanel').classList.add('hidden-safely');
 
-    const aiResponse = await checkSemanticFeasibility(name);
+    // DETAYLARI DA YAPAY ZEKAYA YOLLUYORUZ
+    const aiResponse = await checkSemanticFeasibility(name, details);
     
     if(aiResponse.startsWith("RED:")) {
         tableWrapper.innerHTML = ``;
@@ -228,6 +242,14 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
 
     let unitPrice = categoryPrices[detectedCategory] || 20.00;
     let calculatedTotalCost = unitPrice * qty;
+
+    let region = "Marmara"; 
+    for (const [reg, cities] of Object.entries(regionData)) {
+        if (cities.some(c => c.toLowerCase('tr-TR') === city.toLowerCase('tr-TR'))) {
+            region = reg;
+            break;
+        }
+    }
 
     let activeProducers = producers.filter(p => p.status === "Aktif");
     activeProducers.sort((a, b) => {
@@ -292,7 +314,8 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     currentOrderTemp = { 
         date: new Date().toLocaleDateString(), 
         product: name, 
-        info: `${qty.toLocaleString()} Adet / Teslimat: ${city}`, 
+        // Geçmiş panelinde ürünün detaylarını da gösteriyoruz!
+        info: `${qty.toLocaleString()} Adet / Teslimat: ${city} / Detay: ${details || 'Belirtilmedi'}`, 
         status: isMilkRun ? "Milk Run Havuzunda" : "Hub Onayı Bekliyor", 
         isApproved: false,
         savedTrees: parseFloat(treeEquivalent) || 0,
@@ -375,7 +398,7 @@ function renderHistory() {
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 border-b border-slate-50 pb-8 gap-6">
                 <div>
                     <h4 class="text-2xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors uppercase mb-2">${o.product}</h4>
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">${o.date} • ${o.info}</p>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest leading-relaxed max-w-xl">${o.date} • ${o.info}</p>
                 </div>
                 <div class="flex flex-col items-end gap-3 shrink-0">
                     <span class="text-xl font-black text-indigo-700 font-mono mb-1">₺${(o.totalCost || 0).toLocaleString('tr-TR')}</span>
