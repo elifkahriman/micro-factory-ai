@@ -21,6 +21,11 @@ Projemiz, bu atıl kapasiteyi kurumsal markalar için profesyonel, **SLA güvenc
 - **SLA & Disiplin Protokolü:** 10 üzerinden Güven Puanı ve **3/6 Kuralı** (3 ihlalde askıya alma, 6 ihlalde ihraç) ile otonom kalite yönetimi.
 - **Enterprise UI/UX:** Glassmorphism tasarımı, count-up KPI animasyonları ve modern bildirim sistemleri.
 
+## 📸 Projeden Kareler
+![Ana Ekran ve Sipariş Formu](assets/1.png)
+![Yapay Zeka Rota ve Fiyat Analizi](assets/2.png)
+![Sipariş Geçmişi ve SLA Takibi](assets/3.png)
+
 ## 🔗 Canlı Demo ve Sunum
 * **Canlı Uygulama (Netlify):** [https://thriving-mooncake-f00627.netlify.app/](https://thriving-mooncake-f00627.netlify.app/)
 * **Demo Videosu (Loom):** [Buraya Kendi Çektiğin Loom Linkini Yapıştır]
