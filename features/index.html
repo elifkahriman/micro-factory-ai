@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro Factory AI | Sanal Üretim Katmanı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col overflow-x-hidden">
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="hidden-safely fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+        <div class="glass-card p-8 sm:p-10 max-w-lg w-full bg-white relative animate-slide shadow-2xl border-0">
+            <button onclick="closeInfoModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-all p-2.5 hover:bg-slate-100 rounded-full">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center gap-5 mb-8 border-b border-slate-100 pb-6">
+                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-[18px] flex items-center justify-center text-3xl shadow-sm">💡</div>
+                <div><h3 class="text-2xl font-black text-slate-900 tracking-tighter" id="modalTitle">-</h3><p class="text-[10px] text-indigo-500 font-black uppercase tracking-[0.2em] mt-1" id="modalSubtitle">-</p></div>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginScreen" class="hidden-safely fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md text-center">
+        <div class="glass-card p-10 max-w-md w-full animate-slide relative bg-white/95 shadow-2xl">
+            <div class="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl mx-auto flex items-center justify-center shadow-lg shadow-indigo-100 mb-6 relative">
+                <svg class="w-10 h-10 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Sisteme Giriş Yapın</h2>
+            <p class="text-[10px] text-indigo-500 font-black uppercase tracking-[0.2em] mt-1">B2B SaaS Portal</p>
+            <form id="authForm" class="mt-8 space-y-4 text-left">
+                <input type="email" id="authEmail" value="enterprise@microfactory.ai" required class="w-full px-5 py-4 input-premium text-sm font-medium" placeholder="Kurumsal E-posta">
+                <input type="password" id="authPass" value="123456" required class="w-full px-5 py-4 input-premium text-sm font-medium" placeholder="Şifreniz">
+                <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl shadow-xl uppercase tracking-widest text-[11px]">GİRİŞ YAP</button>
+            </form>
+            <button onclick="resetEverything()" type="button" class="w-full py-3 mt-6 bg-slate-50 text-slate-500 hover:text-rose-500 hover:bg-rose-50 border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all shadow-sm">⚙️ SİSTEMİ SIFIRLA</button>
+        </div>
+    </div>
+
+    <div id="mainDashboard" class="flex-1 max-w-7xl mx-auto w-full py-10 px-4 sm:px-8 lg:px-12 relative z-10">
+        
+        <header class="mb-12 flex flex-col md:flex-row justify-between items-center gap-6 animate-slide">
+            <div class="flex items-center gap-5">
+                <div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-xl -rotate-6 transition-transform group-hover:rotate-0"></div>
+                    <div class="relative z-10 w-full h-full flex items-center justify-center p-2 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div class="absolute w-4 h-4 bg-white rounded-full node-pulse shadow-[0_0_15px_rgba(255,255,255,0.8)]"></div>
+                        <svg class="w-full h-full text-white/40" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <circle cx="50" cy="50" r="10" stroke="none" fill="currentColor"></circle>
+                            <path d="M50 10 L50 40 M50 60 L50 90 M10 50 L40 50 M60 50 L90 50 M20 20 L40 40 M60 60 L80 80 M20 80 L40 60 M60 40 L80 20" opacity="0.4"></path>
+                            <circle cx="50" cy="10" r="5" fill="currentColor"></circle><circle cx="50" cy="90" r="5" fill="currentColor"></circle>
+                            <circle cx="10" cy="50" r="5" fill="currentColor"></circle><circle cx="90" cy="50" r="5" fill="currentColor"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tighter">Micro Factory <span class="text-indigo-600">AI</span></h1>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="h-px w-6 bg-indigo-300"></span>
+                        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-600/70">Sanal Üretim Katmanı</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 bg-white/40 backdrop-blur-md p-2.5 rounded-2xl border border-white shadow-sm flex-wrap justify-center">
+                <span class="px-4 py-2.5 bg-emerald-100/50 text-emerald-700 text-[9px] font-black rounded-xl border border-emerald-200/50 uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> ÇEVRİMİÇİ
+                </span>
+                <button id="headerLoginBtn" onclick="openLogin()" class="btn-primary text-white text-[10px] font-black px-6 py-3 rounded-xl uppercase tracking-wider shadow-md">👤 GİRİŞ YAP</button>
+                <div id="userProfileMenu" class="hidden-safely flex items-center gap-3">
+                    <span class="text-[10px] font-black text-slate-600 bg-white px-4 py-3 rounded-xl shadow-sm uppercase tracking-widest border border-slate-100 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-indigo-100 text-indigo-600 rounded flex items-center justify-center text-[10px] shadow-inner">🏢</span> KURUMSAL
+                    </span>
+                    <button onclick="logout()" title="Güvenli Çıkış Yap" class="px-4 py-3 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 hover:bg-rose-100 transition-all shadow-sm flex items-center gap-2">
+                        <span class="text-[9px] font-black uppercase tracking-widest">ÇIKIŞ YAP</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 animate-slide" style="animation-delay: 0.1s">
+            <div class="glass-card p-5 sm:p-6 border-b-4 border-b-indigo-500 relative group transition-all hover:-translate-y-1.5 hover:shadow-2xl">
+                <div class="kpi-icon bg-indigo-50 text-indigo-600 group-hover:scale-110"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                <div class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Ağ Kapasitesi</div>
+                <div class="text-2xl sm:text-3xl font-black text-slate-900 mt-1 font-mono tracking-tight" id="kpiCapacity">0</div>
+            </div>
+            <div class="glass-card p-5 sm:p-6 border-b-4 border-b-emerald-500 group transition-all hover:-translate-y-1.5 hover:shadow-2xl">
+                <div class="kpi-icon bg-emerald-50 text-emerald-600 group-hover:scale-110"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857"></path></svg></div>
+                <div class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Aktif Üretici Hub</div>
+                <div class="text-2xl sm:text-3xl font-black text-emerald-600 mt-1 font-mono tracking-tight" id="kpiActiveProducers">0</div>
+            </div>
+            <div class="glass-card p-5 sm:p-6 border-b-4 border-b-sky-500 group transition-all hover:-translate-y-1.5 hover:shadow-2xl">
+                <div class="kpi-icon bg-sky-50 text-sky-600 group-hover:scale-110"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2"></path></svg></div>
+                <div class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Yeşil Tasarruf</div>
+                <div class="text-2xl sm:text-3xl font-black text-sky-600 mt-1 font-mono tracking-tight" id="kpiCo2">0 Ağaç</div>
+            </div>
+            <div class="glass-card p-5 sm:p-6 border-b-4 border-b-rose-500 group transition-all hover:-translate-y-1.5 hover:shadow-2xl">
+                <div class="kpi-icon bg-rose-50 text-rose-600 group-hover:scale-110"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"></path></svg></div>
+                <div class="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">SLA İhlali & İhraç</div>
+                <div class="text-2xl sm:text-3xl font-black text-rose-600 mt-1 font-mono tracking-tight" id="kpiBannedProducers">0</div>
+            </div>
+        </div>
+
+        <div class="flex gap-2 sm:gap-3 mb-8 bg-white/40 p-2 rounded-2xl w-full sm:w-fit animate-slide border border-white shadow-sm overflow-x-auto" style="animation-delay: 0.2s">
+            <button onclick="switchTab('orderTab')" id="btn-orderTab" class="px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl bg-indigo-600 text-white shadow-md flex items-center gap-2 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg> YENİ SİPARİŞ
+            </button>
+            <button onclick="switchTab('historyTab')" id="btn-historyTab" class="px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 hover:text-indigo-600 flex items-center gap-2 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 012-2h2a2 2 0 012 2"></path></svg> SÜREÇ TAKİBİ
+            </button>
+            <button onclick="switchTab('producersTab')" id="btn-producersTab" class="px-5 sm:px-7 py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all rounded-xl text-slate-500 hover:bg-white/80 hover:text-indigo-600 flex items-center gap-2 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> HUB AĞI
+            </button>
+        </div>
+
+        <div id="orderTab" class="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-slide w-full">
+            <div class="lg:col-span-8 w-full">
+                <div class="glass-card p-6 sm:p-8 bg-white border-t-8 border-t-indigo-500 shadow-xl relative overflow-hidden w-full">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-3 relative z-10">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center shadow-inner text-[10px]">1</span> SİPARİŞ GİRİŞ FORMU
+                    </h3>
+                    
+                    <form id="orderForm" class="space-y-4 relative z-10 w-full">
+                        <div>
+                            <label class="text-[9px] font-black text-indigo-500 uppercase mb-2 block tracking-widest">Ürün Adı</label>
+                            <input type="text" id="productName" required class="w-full px-5 py-3 input-premium text-sm font-semibold text-slate-700" placeholder="Örn: Reçel, Çanta, Sabun...">
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Üretici Kooperatif İçin Notlar</label>
+                            <textarea id="productDetails" required rows="2" class="w-full px-5 py-3 input-premium text-sm font-medium text-slate-700" placeholder="Örn: 300gr Çilek, M beden vb. (Ambalaj adı yazmanıza gerek yoktur)"></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-5 w-full mt-4">
+                            <div>
+                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Sipariş Adedi (Min: 50)</label>
+                                <input type="number" id="quantity" required min="50" class="w-full px-5 py-3 input-premium text-sm font-bold font-mono text-slate-700" placeholder="1000">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Kategori (SLA)</label>
+                                <div class="w-full px-4 py-3 input-premium text-[11px] font-bold text-indigo-500 bg-indigo-50/50 border-indigo-100 flex items-center justify-between cursor-not-allowed shadow-inner" id="categoryDisplay">
+                                    <span class="opacity-80 uppercase tracking-widest">✨ AI SEÇİMİ</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-slate-100 mt-2 w-full">
+                            <label class="text-[9px] font-black text-indigo-500 uppercase mb-3.5 block tracking-widest flex items-center gap-2">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> 
+                                Kurumsal Teslimat Adresi
+                            </label>
+                            
+                            <div class="grid grid-cols-2 gap-4 w-full mb-4">
+                                <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-3 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50 border-indigo-200" placeholder="İl Seçiniz">
+                                <datalist id="cities"></datalist>
+                                
+                                <input type="text" id="deliveryDistrict" list="districtsList" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="İlçe">
+                                <datalist id="districtsList"></datalist>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-4 w-full">
+                                <input type="text" id="deliveryNeighborhood" required class="col-span-2 w-full px-5 py-3 input-premium text-sm font-medium" placeholder="Mahalle / Cadde (Örn: Atatürk Cad.)">
+                                <input type="text" id="deliveryDoorNo" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="Bina No">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl shadow-lg hover:shadow-2xl uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-2 mt-5 group transition-all">
+                            <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            AI FİZİBİLİTEYİ BAŞLAT
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6 w-full">
+                <div id="alertBox" class="hidden-safely glass-card border-l-4 border-l-rose-500 bg-rose-50/95 p-6 shadow-md transition-all hover:shadow-rose-100">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white text-xl shrink-0 shadow-md">⚠️</div>
+                        <div>
+                            <h3 class="text-sm font-black text-rose-800 uppercase tracking-widest">Kapsam Dışı Talep</h3>
+                            <p id="alertMessage" class="text-[11px] text-rose-700 font-semibold mt-1.5 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tableWrapper" class="glass-card min-h-[220px] p-6 bg-white shadow-xl flex flex-col justify-center items-center relative overflow-hidden">
+                    <svg class="w-16 h-16 mb-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517"></path></svg>
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">AI Lojistik Analizi<br>Bekleniyor...</p>
+                </div>
+
+                <div id="actionPanel" class="hidden-safely glass-card p-5 flex flex-col justify-between items-center gap-4 bg-slate-900 text-white shadow-2xl w-full">
+                    <div class="w-full text-center pb-4 border-b border-white/10">
+                        <p class="text-[8px] font-black uppercase tracking-widest text-indigo-300">Tahmini Teslimat</p>
+                        <h4 class="text-lg font-black text-white mt-1" id="etaText">-</h4>
+                    </div>
+                    <div class="flex gap-2 w-full">
+                        <button onclick="cancelOrder()" class="flex-1 py-3 rounded-xl border border-white/20 text-[8px] font-black uppercase tracking-widest hover:bg-white/10 transition-colors">İPTAL</button>
+                        <button onclick="confirmOrder()" class="flex-[2] py-3 rounded-xl bg-emerald-500 text-emerald-950 text-[9px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all">ONAYLA</button>
+                    </div>
+                </div>
+
+                <div class="glass-card bg-white/60 p-5 h-[300px] overflow-hidden flex flex-col">
+                    <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-3 mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span> CANLI AĞ AKIŞI
+                    </h3>
+                    <div class="overflow-y-auto live-feed-scroll pr-2 space-y-3 flex-1 text-[10px] text-slate-600 font-medium" id="liveFeedContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="historyTab" class="hidden-safely glass-card p-6 sm:p-10 min-h-[500px] bg-white/95 w-full">
+            <h3 class="text-lg font-black text-slate-800 mb-8 border-b border-slate-100 pb-4 uppercase tracking-widest">📜 Sipariş Geçmişi</h3>
+            <div id="historyBody" class="space-y-4"></div>
+        </div>
+
+        <div id="producersTab" class="hidden-safely glass-card p-6 sm:p-10 min-h-[500px] bg-white/95 w-full">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8 border-b border-slate-100 pb-5">
+                <h3 class="text-lg font-black text-slate-800 uppercase tracking-widest">👩‍🏭 Kooperatif Hub Ağı</h3>
+                <span class="text-[9px] bg-rose-50 text-rose-600 px-3 py-1.5 rounded-lg font-black border border-rose-100 uppercase tracking-[0.2em] w-fit">SLA: 3 HATA = İHRAÇ</span>
+            </div>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] bg-slate-50/50">
+                        <tr><th class="py-4 px-6 rounded-tl-xl">Bölgesel Hub</th><th class="py-4 px-6">Lokasyon</th><th class="py-4 px-6">Güven Skoru</th><th class="py-4 px-6">Kapasite</th><th class="py-4 px-6 rounded-tr-xl">Durum</th></tr>
+                    </thead>
+                    <tbody id="producersBody" class="divide-y divide-slate-100 text-slate-600"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800 relative z-10 w-full">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div class="md:col-span-2">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-400 border border-indigo-500/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 002 2h1a2 2 0 110 4h-1a2 2 0 00-2 2v1a2 2 0 11-4 0v-1a2 2 0 00-2-2H7a2 2 0 110-4h1a2 2 0 002-2V4z"></path></svg>
+                    </div>
+                    <span class="text-xl font-black text-white tracking-tighter">Micro Factory <span class="text-indigo-400">AI</span></span>
+                </div>
+                <p class="text-xs leading-relaxed max-w-sm font-medium opacity-80">Merkeziyetsiz kadın emeğini, yapay zeka destekli otonom tedarik zinciriyle kurumsal B2B pazarına entegre eden geleceğin sanal üretim katmanı.</p>
+            </div>
+            <div>
+                <h4 class="text-white text-[10px] font-black uppercase tracking-[0.3em] mb-5">Kurumsal Erişim</h4>
+                <ul class="text-xs space-y-3 font-bold uppercase tracking-widest opacity-80">
+                    <li><a href="#" onclick="openInfoModal('about'); return false;" class="hover:text-indigo-400 transition-colors">Platform Hakkında</a></li>
+                    <li><a href="#" onclick="openInfoModal('b2b'); return false;" class="hover:text-indigo-400 transition-colors">B2B Lojistik Ağ</a></li>
+                    <li><a href="#" onclick="openInfoModal('sla'); return false;" class="hover:text-indigo-400 transition-colors">Kalite & SLA Politikası</a></li>
+                    <li><a href="#" onclick="openInfoModal('esg'); return false;" class="hover:text-indigo-400 transition-colors">Sürdürülebilirlik (ESG)</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-[10px] font-black uppercase tracking-[0.3em] mb-5">Destek & İletişim</h4>
+                <div class="text-xs space-y-3.5 font-bold uppercase tracking-widest opacity-80">
+                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400">✉</span> enterprise@microfactory.ai</p>
+                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400">🏢</span> Bilişim Vadisi, Ankara</p>
+                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors mt-2 text-[10px]"><a href="#" onclick="openInfoModal('faq'); return false;">Sıkça Sorulan Sorular</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-12 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-50">© 2026 Micro Factory AI</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Powered by Gemini AI</span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
