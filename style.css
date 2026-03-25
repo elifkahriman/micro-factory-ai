@@ -1,1 +1,96 @@
+/* Micro Factory AI - Main Styles */
+@keyframes mesh-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: linear-gradient(-45deg, #eef2ff, #f8fafc, #f1f5f9, #e0e7ff);
+  background-size: 400% 400%;
+  animation: mesh-bg 18s ease infinite;
+  background-attachment: fixed;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255,255,255,0.2) inset;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.4);
+}
+
+.input-premium {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  transition: all 0.25s ease-out;
+}
+.input-premium:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  outline: none;
+  background: white;
+}
+
+.hidden-safely {
+  display: none !important;
+}
+
+.kpi-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slide-up {
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes core-pulse {
+  0% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.9); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+  100% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+}
+.node-pulse {
+  animation: core-pulse 2.8s infinite;
+}
+
+.live-feed-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.live-feed-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-toast {
+  animation: slideUp 0.3s ease forwards;
+}
