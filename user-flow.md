@@ -1,33 +1,47 @@
 # 🌊 Kullanıcı Akışı (User Flow) - Micro Factory AI (DAN)
 
-Bu belge, kurumsal bir B2B müşterisinin ve bölgesel bir kooperatif üreticisinin Micro Factory AI platformundaki uçtan uca etkileşim haritasını (User Journey) tanımlar.
+Bu belge, kurumsal bir B2B müşterisinin ve merkeziyetsiz kooperatif ağının Micro Factory AI platformundaki uçtan uca etkileşim haritasını (User Journey) tanımlar.
 
-### 🏢 Adım 1: Kurumsal Giriş ve Talep Oluşturma
-1. **B2B Portal Erişimi:** Kullanıcı, kurumsal hesabıyla sisteme şifreli giriş yapar. Sistem kredi kartı sormaz, "B2B Cari Hesap" ve faturalandırma mantığıyla çalışır.
-2. **Sipariş Girişi:** Ürün tanımını, adedini, onaylı 5 kategoriden birini (Örn: Doğal Kozmetik, Hafif Montaj) ve teslimat rotasını (Türkiye'nin 81 ilinden herhangi biri özgürce girilebilir) sisteme işler.
+---
 
-### 🤖 Adım 2: Semantik AI Fizibilite Filtresi
-3. **Güvenlik Ağı (Gemini 2.5 Flash):** AI, siparişin ev/kooperatif şartlarına uygunluğunu milisaniyeler içinde denetler.
-   - **Kapsam Dışı Reddi:** Sipariş ağır sanayi, otomotiv parçası, döküm veya kaynak (Örn: Aks, Motor, Beton) içeriyorsa anında otonom olarak reddedilir.
-   - **Onay:** Sistem sadece Doğal Kozmetik, Tekstil, Hafif Montaj, Paketleme ve İleri Dönüşüm/Gıda kategorilerine geçiş izni verir.
+### 🏢 Adım 1: Kurumsal Giriş ve Akıllı Talep Oluşturma
+1.  **B2B Portal Erişimi:** Kullanıcı, kurumsal kimliği ile sisteme giriş yapar. Sistem, "B2B Cari Hesap" ve kurumsal faturalandırma mantığıyla çalışır.
+2.  **Sipariş Girişi:** Ürün adını, miktarını ve 81 il/ilçeyi kapsayan dinamik teslimat rotasını belirler.
+3.  **Zorunlu Reçete Girişi:** AI denetiminden geçmek için ürünün **Renk, Beden/Ölçü, Gramaj veya Teknik Ölçü** (Örn: 35x45cm) gibi detaylarını girmek zorundadır. Eksik bilgi durumunda sistem "Eksik Veri" uyarısı vererek süreci durdurur.
 
-### 🧠 Adım 3: Smart Routing ve Lojistik Planlama
-4. **Bölgesel Lojistik Önceliği:** Sipariş onaylandıktan sonra AI, karbon ayak izini minimize etmek için işi **öncelikle teslimat bölgesindeki** (Örn: Müşteri Ankara'daysa İç Anadolu Hub'larındaki) üreticilere atar.
-5. **Yeşil Havuz (Milk Run):** Sipariş 50 adet ve altındaysa, karbon emisyonunu sıfırlamak için otomatik olarak "72 Saatlik Ortak Kargo Havuzu"na dahil edilir.
-6. **Kapasite Kontrolü (ATP):** İstek, bölgesel ağın gücünü aşıyorsa, AI kapasite taşması (overflow) yapar veya müşteriye esnek teslimat için "Waitlist" (Bekleme Sırası) pazarlığı teklif eder.
+---
 
-### 👩‍🏭 Adım 4: Üretici Onayı ve Hub Lojistiği (SLA)
-7. **30 Dakika Onay Kuralı:** Otonom plan müşteriye sunulup onaylandığında, iş seçilen üreticilere düşer. Üreticiye işi onaylaması için 30 dakika süre tanınır (Onaylanmayan iş anında yedek üreticiye geçer).
-8. **Hammadde Döngüsü:** Üretici, hammaddeyi kurumsal markanın bıraktığı kendi ilçesindeki "Bölgesel Hub"dan (Kooperatif Merkezi) teslim alarak üretime başlar. Kargo şahısların evine tek tek gitmez.
+### 🤖 Adım 2: Semantik AI Fizibilite Filtresi (Gemini 2.5 Flash)
+4.  **Güvenlik ve Kapsam Denetimi:** AI, siparişi milisaniyeler içinde semantik analize tabi tutur:
+    * **Kapsam Dışı Reddi:** Sipariş ağır sanayi, otomotiv (Aks, Motor), döküm veya **Metal İşçiliği/Hırdavat (Vida, Somun, Çivi)** içeriyorsa otonom olarak reddedilir. Kullanıcıya "Üretim Ağı Kapsamı Dışı" gerekçesi sunulur.
+    * **Onay Protokolü:** Sistem sadece ev/kooperatif üretimine uygun 5 ana kategoriye (Doğal Kozmetik, Tekstil, Hafif Montaj, Paketleme, İleri Dönüşüm/Gıda) geçiş izni verir.
 
-### 🛡️ Adım 5: Emeği Koruma Kalkanı (İptal Senaryoları)
-9. Sipariş B2B tarafında iptal edilmek istenirse, kademeli koruma kalkanı devreye girer:
-   - **%100 İade:** Üretici henüz işi onaylamadıysa iptal ücretsizdir.
-   - **%30 Kesinti:** Üretici işi onaylamış ve Hub'dan malzemeyi almışsa, B2B cari hesaptan **%30 "Emeğe Saygı Payı"** kesilerek üreticiye tazminat olarak aktarılır.
-   - **İptal Edilemez:** Üretim %50 aşamasını geçtiyse iptal butonu otonom olarak kapanır.
+---
 
-### 📦 Adım 6: Kalite Kontrol ve Performans Yönetimi
-10. Üretimi/Montajı biten ürünler üretici tarafından tekrar yerel Hub'a teslim edilir. Son Kalite Kontrol (QC) burada yapılıp, tüm ürünler kurumsal markaya tek bir koli olarak sevk edilir.
-11. **Oyunlaştırma ve Disiplin (3/6 Kuralı):**
-    - Başarılı teslimat, üreticinin "Güven Puanını" 10 üzerinden artırır ve ona "Usta" rozeti kazandırır.
-    - Hata veya gecikme durumunda: **3 ihlal yapan üretici 6 ay, 6 ihlal yapan üretici 3 yıl sistemden ihraç edilir.**
+### 🧠 Adım 3: Smart Routing ve Yeşil Lojistik Planlama
+5.  **Bölgesel Lojistik Önceliği:** AI, karbon emisyonunu düşürmek için siparişi öncelikle teslimat bölgesindeki en uygun **Kooperatif Hub'larına** atar.
+6.  **Yeşil Havuz (Milk-Run):** Sipariş 50 adet altındaysa, karbon emisyonunu minimize etmek için **24 Saat Günlük Milk-Run Havuzu** onayı istenir. Bu modda lojistik rotası otonom olarak konsolide edilir.
+7.  **ATP (Kapasite Kontrolü):** Talep bölgesel kapasiteyi aşarsa, AI sistemi kilitlemez; fazla miktarı otomatik olarak **"⏳ Kapasite Aşımı (Sıraya Alındı)"** statüsüyle kuyruğa alır.
+
+---
+
+### 📱 Adım 4: WhatsApp Bot Bildirimi ve Üretici Onayı (SLA)
+8.  **WhatsApp Anlık Bildirimi:** Sistem tarafından seçilen uygun üreticinin telefonuna Twilio/WhatsApp API üzerinden anlık mesaj gider:
+    > *"Yeni İş Ataması! 📦 Ürün: Bez Çanta | Adet: 100 | Kazanç: ₺9.000 | Teslim: 3 Gün. Onaylıyor musunuz? (EVET / HAYIR)"*
+9.  **30 Dakika Onay Kuralı:** Üretici telefonundan **"EVET"** yazarak işi onaylar. Eğer 30 dakika içinde yanıt gelmezse, AI işi otomatik olarak "Yedek Üretici"nin WhatsApp'ına yönlendirir.
+10. **Hammadde Döngüsü:** Onay sonrası üreticiye Hub lokasyonu gönderilir. Üretici malzemeyi Hub'dan aldığında bot üzerinden **"Malzemeyi Teslim Aldım"** onayı verir. Bu onay, finansal koruma kalkanını (SLA) tetikler.
+
+---
+
+### 🛡️ Adım 5: Emeği Koruma Kalkanı (İptal Yönetimi)
+11. Sipariş B2B tarafında iptal edilmek istenirse, V16 finansal algoritması devreye girer:
+    * **%100 İade:** Üretici henüz WhatsApp üzerinden işi onaylamadıysa iptal tamamen ücretsizdir.
+    * **%30 Emeğe Saygı Payı:** Üretici işi onaylamış ve malzemeyi teslim almışsa (WhatsApp onayı referans alınır), B2B cari hesaptan **%30 kesinti** yapılarak üretici kadına tazminat olarak aktarılır.
+    * **İptal Kilidi:** Üretim süreci %50 aşamasını geçtiyse iptal butonu otonom olarak devre dışı bırakılır.
+
+---
+
+### 📦 Adım 6: Kalite Kontrol, Red ve Performans Denetimi
+12. **Final QC (Kalite Kontrol):** Üretimi biten ürünler yerel Hub'a getirilir. Kalite kontrol Hub yöneticileri (Kooperatif sorumluları) tarafından yapılır.
+13. **Red ve Yeniden Üretim:** Ürün standart dışıysa (Defolu, hatalı ölçü vb.) Hub'da reddedilir. Üreticiye WhatsApp üzerinden düzeltme emri gider. Bu durum üreticinin **Güven Puanı**'ndan düşülür.
+14. **Sevk ve Disiplin (3/6 Kuralı):** Onaylanan ürünler markaya tek koli olarak sevk edilir. Hata veya gecikme durumunda **3 ihlalde 6 ay, 6 ihlalde 3 yıl sistemden ihraç** protokolü otonom işletilir.

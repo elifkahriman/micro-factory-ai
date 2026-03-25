@@ -7,14 +7,16 @@ Micro Factory AI - Distributed Assembly Network (DAN) projesinin hızlı prototi
 * **Tailwind CSS (via CDN):** Modern bir "Enterprise B2B SaaS Dashboard" görünümü elde etmek (Glassmorphism cam efekti, dinamik uyarı renkleri, modern KPI tabloları) ve "Mobile-First" yaklaşımıyla geliştirme sürecini hızlandırmak için kullanılmıştır.
 * **Tipografi:** Kurumsal ve okunabilir bir yazılım hissi yaratmak amacıyla Google Fonts üzerinden `Plus Jakarta Sans` ve `JetBrains Mono` entegre edilmiştir.
 
-### 🧠 2. Intelligence & Data (Yapay Zeka ve Veri Mimarisi)
-* **AI Engine (Google Gemini 2.5 Flash API):** Kurumsal siparişlerin "Semantik Fizibilite Filtresi" (Ağır sanayinin reddedilip; Doğal Kozmetik, Tekstil, Hafif Montaj, Paketleme, İleri Dönüşüm dikeyine onay verilmesi) algoritmasını doğal dil işleme yeteneğiyle milisaniyeler içinde çözmek için seçilmiştir.
-* **Algoritmik Lojistik Motoru (Smart Routing & Milk Run):** Bölgesel teslimat önceliği (81 il ve ilçe tabanlı), kapasite aşımında Waitlist (ATP) pazarlığı ve 50 adet altı siparişlerde 72 Saatlik Ortak Kargo havuzunu hesaplayan karar ağaçları Vanilla JS ile kodlanmıştır.
-* **JSON Data Management & LocalStorage:** "Bölgesel Kooperatif Hub" veritabanı (Üretici, bölge, kapasite, SLA güven puanı, ihraç durumu) JSON formatında yapılandırılmıştır. MVP (Minimum Viable Product) aşamasında sunucu maliyeti yaratmamak ve verilerin sayfada kalıcı olmasını sağlamak (Sipariş geçmişi, Timeline) adına tarayıcının `localStorage` teknolojisi entegre edilmiştir.
+### 🧠 2. Intelligence, Data & Communication (Yapay Zeka, Veri ve İletişim Mimarisi)
+* **AI Engine (Google Gemini 2.5 Flash API):** Kurumsal siparişlerin "Semantik Fizibilite Filtresi" (Ağır sanayinin reddedilip; 5 ana kategoriye onay verilmesi) algoritmasını doğal dil işleme yeteneğiyle milisaniyeler içinde çözmek için seçilmiştir.
+* **Zırhlı Güvenlik Filtresi:** Sadece anahtar kelime değil, üretim mantığını da denetleyen bir katman eklenmiştir. Metal işçiliği (Vida, somun vb.), ağır sanayi (Motor, aks vb.) ve hırdavat taleplerini otonom olarak engelleyen bir güvenlik duvarı (Security Guard) inşa edilmiştir.
+* **Omni-Channel İletişim (WhatsApp Business API / Twilio):** Sahadaki üretici kadınların teknolojik bariyerini yıkmak için iletişim katmanı olarak sisteme entegre edilmiştir. Dashboard bağımlılığını ortadan kaldırarak; anlık iş atamaları, 30 dakikalık interaktif ONAY/RED akışı ve saha veri girişleri doğrudan WhatsApp mesajlaşma arayüzü üzerinden sağlanmıştır.
+* **V16 Kalıcı Veri Yönetimi (Data Persistence):** `localStorage` üzerinde "Strict Null Logic" uygulanmıştır. Bu mimari karar; Karbon/Ağaç tasarruf sayacı gibi kritik verilerin sıfırlandığında "falsy value" hatalarına düşmesini engeller ve tam veri senkronizasyonu sağlar.
+* **Smart Routing & Milk Run:** 81 il ve 922 ilçe tabanlı bölgesel öncelik algoritması ile 50 adet altı siparişlerde **"Bölgesel Dağıtım Havuzu"** konsolidasyonu JS karar ağaçları ile otonom hale getirilmiştir.
 
 ### 🛠️ 3. Development & Workflow (Geliştirme Araçları)
-* **IDE (Cursor AI):** Gelişmiş AI destekli kodlama ile hata ayıklama (debugging) sürecini minimize etmek, PRD dokümanlarındaki karmaşık algoritmaları (%30 Emeğe Saygı Payı, 30 Dk Onay Kuralı) koda hızlıca dönüştürmek için tercih edilmiştir.
-* **Source Control (GitHub):** Versiyon kontrolü, kodun yedeklenmesi ve projenin açık kaynak Buildathon standartlarına uygunluğu için kullanılmıştır.
+* **IDE (Cursor AI):** Gelişmiş AI destekli kodlama ile hata ayıklama (debugging) sürecini minimize etmek ve karmaşık lojistik algoritmaları (%30 Emeğe Saygı Payı, Kapasite Kuyruğu, WhatsApp 30 Dk Zaman Aşımı) koda hızlıca dönüştürmek için tercih edilmiştir.
+* **Source Control (GitHub):** Versiyon kontrolü ve Buildathon açık kaynak standartlarına uyumluluk için kullanılmıştır.
 
 ### 🌐 4. Deployment (Yayınlama Hattı)
-* **Hosting & CI/CD (Netlify):** Statik web uygulamalarının sürekli entegrasyon (CI/CD) prensibiyle saniyeler içinde internete yayılması, canlı testlerin güvenli bir ortamda yapılabilmesi ve `ENV_API_KEY` gibi çevresel değişkenlerin güvenle saklanabilmesi için en verimli çözüm olarak seçilmiştir.
+* **Hosting & CI/CD (Netlify):** Statik web uygulamalarının sürekli entegrasyon prensibiyle saniyeler içinde yayına alınması ve `ENV_API_KEY` gibi çevresel değişkenlerin güvenli yönetimi için seçilmiştir.

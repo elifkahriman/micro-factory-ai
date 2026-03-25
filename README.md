@@ -1,32 +1,42 @@
-# 🧩 Micro Factory AI: Sanal Üretim Katmanı 🚀
+# 🧩 Micro Factory AI: Sanal Üretim Katmanı (DAN) 🚀
 **"Decentralized Craft, Centralized Intelligence."**
 
-## 🌍 Proje Vizyonu (Problem ve Çözüm)
-Micro Factory AI, hantal ve yüksek karbon emisyonlu geleneksel fabrikaların yerini alan; dezavantajlı kadın emeğini ve yerel kooperatifleri yapay zeka ile senkronize eden **otonom bir sanal üretim ağıdır**. Atıl ev kapasitesini B2B kurumsal tedarik zincirlerine profesyonel, SLA güvenceli ve sürdürülebilir bir şekilde bağlar.
+Micro Factory AI; hantal ve yüksek karbon emisyonlu geleneksel fabrikaların yerini alan, kadın emeğini ve yerel kooperatifleri **Gemini AI + WhatsApp Bot** teknolojisiyle kurumsal tedarik zincirlerine bağlayan otonom bir **"Sanal Üretim İşletim Sistemi"**dir.
 
-## 🤖 Öne Çıkan AI ve Lojistik Özellikleri
-* **Semantik AI Fizibilite Filtresi (Gemini 2.5 Flash):** Kurumsal talepleri analiz eder. Ağır sanayi (motor, aks, döküm) taleplerini otonom olarak reddederken; sadece ağa uygun 5 ana kategoriye (Doğal Kozmetik, Tekstil, Hafif Montaj, Paketleme, İleri Dönüşüm/Gıda) onay verir.
-* **Smart Routing (Akıllı Bölgesel Yönlendirme):** 81 ilden girilen siparişleri, karbon ayak izini düşürmek için öncelikle müşterinin teslimat bölgesindeki "Kooperatif Hub'larına" dağıtır.
-* **72 Saat Milk Run (Yeşil Havuz):** 50 adet altındaki mikro siparişleri, lojistik emisyonunu sıfırlamak için bölgesel havuzda konsolide eder.
-* **Emeği Koruma Kalkanı:** Müşteri iptallerinde, kooperatifin hazırlık emeğini korumak adına B2B cari hesabından **%30 Emeğe Saygı Payı** keserek üreticiye tazminat olarak aktarır.
+## 📖 Projenin Hikayesi ve Vizyonu (Portfolyo)
+Küresel tedarik zincirlerinde kadın emeği genellikle kayıt dışı, dağınık ve görünmezdir. Diğer yanda ise Türkiye'nin 81 ilinde, yetenekli ama teknolojik ve lojistik bariyerler yüzünden kurumsal B2B ağına dahil olamayan devasa bir atıl kapasite var. Bir endüstri mühendisi adayı olarak, bu kapasiteyi yapay zeka ile senkronize etmeye karar verdim.
+
+Projemiz, bu atıl kapasiteyi kurumsal markalar için profesyonel, **SLA güvenceli** ve **ESG (Çevresel, Sosyal, Yönetişim)** odaklı bir üretim katmanı olarak dijital ekonomiye kazandırır. Karmaşık paneller yerine, üretici kadınların doğrudan WhatsApp üzerinden iş alıp 30 dakikada onaylayabildiği bir saha iletişim kurgusu tasarladım. Micro Factory AI ile görünmez olan emeği görünür kılıyor ve geleceğin sanal fabrikasını bugünden inşa ediyoruz.
+
+## 🤖 Öne Çıkan AI ve Operasyonel Özellikler
+* **Semantik AI Denetçi (Gemini 2.5 Flash):** Siparişleri sadece isimle değil, reçete bazlı analiz eder. Beden, gramaj veya ölçü içermeyen eksik talepleri durdurur. Ağır sanayi (motor, aks) ve metal hırdavat (**Vida, somun, çivi**) taleplerini otonom olarak reddeder.
+* **📱 WhatsApp Entegre Saha Gücü:** Üretici kadınlar dashboard takibi yerine süreci WhatsApp üzerinden yönetir. Twilio/WhatsApp API entegrasyonu ile iş atamaları anlık mesajla gider, **30 dakikalık interaktif onay** süreci işletilir.
+* **📍 Smart Routing & 81 İl Desteği:** 922 ilçe tanımlı lojistik motoru, siparişi en yakın **Kooperatif Hub'ına** atayarak karbon ayak izini %70 oranında azaltır.
+* **🌱 Yeşil Lojistik & Milk-Run:** 50 adet altındaki mikro siparişleri **"Günlük Bölgesel Dağıtım Havuzu"** ile konsolide ederek kargo maliyetini ve emisyonu sıfırlar.
+* **🛡️ Emeği Koruma Kalkanı:** Onaylanan işlerin iptalinde üretici kadını koruyan **%30 Emeğe Saygı Payı** algoritmasını otonom işletir.
+
+## 🌟 Teknik Başarılar ve Mimari
+- **V16 Data Persistence:** Karbon/Ağaç tasarruf sayacı sıfırlandığında "falsy value" (sıfırın hata algılanması) hatalarına düşmeyen, zırhlı veri yönetimi mimarisi.
+- **Canlı Ağ Akışı (Live Feed):** Hub hareketlerinin ve AI kararlarının gerçek zamanlı izlendiği dinamik panel.
+- **SLA & Disiplin Protokolü:** 10 üzerinden Güven Puanı ve **3/6 Kuralı** (3 ihlalde askıya alma, 6 ihlalde ihraç) ile otonom kalite yönetimi.
+- **Enterprise UI/UX:** Glassmorphism tasarımı, count-up KPI animasyonları ve modern bildirim sistemleri.
 
 ## 🔗 Canlı Demo ve Sunum
 * **Canlı Uygulama (Netlify):** [https://thriving-mooncake-f00627.netlify.app/](https://thriving-mooncake-f00627.netlify.app/)
 * **Demo Videosu (Loom):** [Buraya Kendi Çektiğin Loom Linkini Yapıştır]
 
 ## 🏗️ Kullanılan Teknolojiler (Tech Stack)
-* **Frontend:** HTML5, Tailwind CSS (Glassmorphism UI), Vanilla JS
-* **Yapay Zeka (AI Core):** Google Gemini 2.5 Flash API
-* **Veri Yönetimi:** `localStorage` (MVP düzeyinde anlık durum yönetimi)
-* **Deployment:** GitHub & Netlify CI/CD
+* **Frontend:** HTML5, Tailwind CSS, Vanilla JS (Hızlı render ve düşük gecikme).
+* **AI Core:** Google Gemini 2.5 Flash API.
+* **İletişim:** WhatsApp Business API (Twilio Simülasyonu).
+* **State Management:** `localStorage` tabanlı V16 kalıcı veri mimarisi.
+* **Deployment:** GitHub & Netlify CI/CD.
 
-## 💻 Nasıl Çalıştırılır? (Kurulum Adımları)
-Bu proje, hızlı render ve doğrudan API iletişimi için Vanilla JS ve statik HTML ile geliştirilmiştir. Çalıştırmak için ekstra bir sunucu kurulumuna gerek yoktur:
-1. Bu repoyu bilgisayarınıza klonlayın veya `.zip` olarak indirin.
-2. Klasörün içindeki `index.html` dosyasını herhangi bir modern tarayıcıda (Chrome, Edge, Safari) çift tıklayarak açın.
-3. Proje, Gemini API limitlerine takılmamak adına **Otomatik Demo Modu (Fallback)** ile entegre edilmiştir. Kendi API anahtarınızı kullanmak isterseniz tarayıcı konsoluna `window.ENV_API_KEY = "SİZİN_KEYİNİZ"` yazabilirsiniz.
+## 💻 Kurulum ve Çalıştırma
+Proje, doğrudan API iletişimi için Vanilla JS ile geliştirilmiştir. Ekstra sunucu kurulumuna gerek yoktur:
+1. Repoyu klonlayın veya `.zip` olarak indirin.
+2. `index.html` dosyasını modern bir tarayıcıda (Chrome, Edge, Safari) açın.
+3. Kendi Gemini API anahtarınızı kullanmak isterseniz konsola `window.ENV_API_KEY = "SİZİN_KEYİNİZ"` yazarak sistemi tam otonom moda geçirebilirsiniz.
 
-## 🏆 Buildathon Değerlendirme Kriterleri Uyumu
-* **Problem Anlamlılığı:** Dağınık kadın emeğini %100 kayıtlı, B2B SLA güvenceli ve düşük karbonlu bir ekonomiye dahil etme.
-* **AI Entegrasyonu:** Gemini API ile uçtan uca otonom fizibilite denetimi ve lojistik karar motoru.
-* **Çalışan Prototip:** 81 il entegrasyonlu, %30 İptal/İade kurgusuyla çalışan, otonom sipariş dağıtan B2B Enterprise Dashboard.
+---
+*Bu proje bir AI Buildathon maratonu kapsamında; sürdürülebilirlik, sosyal etki ve operasyonel verimlilik odaklı olarak geliştirilmiştir.*

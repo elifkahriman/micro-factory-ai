@@ -10,7 +10,6 @@
 </head>
 <body class="min-h-screen text-slate-800 flex flex-col overflow-x-hidden">
 
-    <!-- Info Modal -->
     <div id="infoModal" class="hidden-safely fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
         <div class="glass-card p-8 sm:p-10 max-w-lg w-full bg-white relative animate-slide shadow-2xl border-0">
             <button onclick="closeInfoModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-all p-2.5 hover:bg-slate-100 rounded-full">
@@ -24,7 +23,6 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
     <div id="loginScreen" class="hidden-safely fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md text-center">
         <div class="glass-card p-10 max-w-md w-full animate-slide relative bg-white/95 shadow-2xl">
             <div class="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl mx-auto flex items-center justify-center shadow-lg shadow-indigo-100 mb-6 relative">
@@ -53,7 +51,6 @@
                             <circle cx="50" cy="50" r="10" stroke="none" fill="currentColor"></circle>
                             <path d="M50 10 L50 40 M50 60 L50 90 M10 50 L40 50 M60 50 L90 50 M20 20 L40 40 M60 60 L80 80 M20 80 L40 60 M60 40 L80 20" opacity="0.4"></path>
                             <circle cx="50" cy="10" r="5" fill="currentColor"></circle><circle cx="50" cy="90" r="5" fill="currentColor"></circle>
-                            <circle cx="10" cy="50" r="5" fill="currentColor"></circle><circle cx="90" cy="50" r="5" fill="currentColor"></circle>
                         </svg>
                     </div>
                 </div>
@@ -117,9 +114,9 @@
             </button>
         </div>
 
-        <div id="orderTab" class="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-slide w-full">
-            <div class="lg:col-span-8 w-full">
-                <div class="glass-card p-6 sm:p-8 bg-white border-t-8 border-t-indigo-500 shadow-xl relative overflow-hidden w-full">
+        <div id="orderTab" class="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-slide w-full items-start">
+            <div class="lg:col-span-7 w-full flex flex-col">
+                <div class="glass-card p-6 sm:p-8 bg-white border-t-8 border-t-indigo-500 shadow-xl relative overflow-hidden w-full flex-1">
                     <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-3 relative z-10">
                         <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center shadow-inner text-[10px]">1</span> SİPARİŞ GİRİŞ FORMU
                     </h3>
@@ -127,18 +124,18 @@
                     <form id="orderForm" class="space-y-4 relative z-10 w-full">
                         <div>
                             <label class="text-[9px] font-black text-indigo-500 uppercase mb-2 block tracking-widest">Ürün Adı</label>
-                            <input type="text" id="productName" required class="w-full px-5 py-3 input-premium text-sm font-semibold text-slate-700" placeholder="Örn: Reçel, Çanta, Sabun...">
+                            <input type="text" id="productName" required class="w-full px-5 py-3 input-premium text-sm font-semibold text-slate-700" placeholder="Örn: Kapüşonlu Sweatshirt, Bez Çanta, Sabun...">
                         </div>
 
                         <div class="mt-4">
-                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Üretici Kooperatif İçin Notlar</label>
-                            <textarea id="productDetails" required rows="2" class="w-full px-5 py-3 input-premium text-sm font-medium text-slate-700" placeholder="Örn: 300gr Çilek, M beden vb. (Ambalaj adı yazmanıza gerek yoktur)"></textarea>
+                            <label class="text-[9px] font-black text-rose-500 uppercase mb-2 block tracking-widest">Üretim Reçetesi (ZORUNLU)</label>
+                            <textarea id="productDetails" required rows="6" class="w-full px-5 py-3 input-premium text-sm font-medium text-slate-700 border-rose-200 focus:border-rose-500" placeholder="Üretime göre detay giriniz (ZORUNLU):&#10;👕 Tekstil & Örme: Renk, Beden/Ölçü (Örn: Siyah L Beden veya 35x45cm Çanta)&#10;🍯 İleri Dönüşüm & Butik Gıda: Gramaj, İçerik (Örn: 300gr çilek)&#10;🧴 Doğal Kozmetik & Kimya: Hacim, Koku (Örn: 50ml, Lavanta)&#10;🪑 Hafif Montaj: Ebat, Tür (Örn: 50x70cm ahşap)&#10;📦 Paketleme & Tasnif: Kutu Tipi ve Adet (Örn: 10'lu karton)"></textarea>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-5 w-full mt-4">
                             <div>
-                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Sipariş Adedi (Min: 50)</label>
-                                <input type="number" id="quantity" required min="50" class="w-full px-5 py-3 input-premium text-sm font-bold font-mono text-slate-700" placeholder="1000">
+                                <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Sipariş Adedi</label>
+                                <input type="number" id="quantity" required min="1" class="w-full px-5 py-3 input-premium text-sm font-bold font-mono text-slate-700" placeholder="100">
                             </div>
                             <div>
                                 <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Kategori (SLA)</label>
@@ -158,12 +155,11 @@
                                 <input type="text" id="deliveryCity" list="cities" required class="w-full px-5 py-3 input-premium text-sm font-bold text-indigo-700 bg-indigo-50/50 border-indigo-200" placeholder="İl Seçiniz">
                                 <datalist id="cities"></datalist>
                                 
-                                <input type="text" id="deliveryDistrict" list="districtsList" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="İlçe">
-                                <datalist id="districtsList"></datalist>
+                                <input type="text" id="deliveryDistrict" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="İlçe">
                             </div>
 
                             <div class="grid grid-cols-3 gap-4 w-full">
-                                <input type="text" id="deliveryNeighborhood" required class="col-span-2 w-full px-5 py-3 input-premium text-sm font-medium" placeholder="Mahalle / Cadde (Örn: Atatürk Cad.)">
+                                <input type="text" id="deliveryNeighborhood" required class="col-span-2 w-full px-5 py-3 input-premium text-sm font-medium" placeholder="Mahalle / Cadde">
                                 <input type="text" id="deliveryDoorNo" required class="w-full px-5 py-3 input-premium text-sm font-medium" placeholder="Bina No">
                             </div>
                         </div>
@@ -176,8 +172,9 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-4 space-y-6 w-full">
-                <div id="alertBox" class="hidden-safely glass-card border-l-4 border-l-rose-500 bg-rose-50/95 p-6 shadow-md transition-all hover:shadow-rose-100">
+            <div class="lg:col-span-5 flex flex-col gap-6 w-full h-full">
+                
+                <div id="alertBox" class="hidden-safely glass-card border-l-4 border-l-rose-500 bg-rose-50/95 p-6 shadow-md transition-all hover:shadow-rose-100 flex-none">
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white text-xl shrink-0 shadow-md">⚠️</div>
                         <div>
@@ -187,24 +184,25 @@
                     </div>
                 </div>
 
-                <div id="tableWrapper" class="glass-card min-h-[220px] p-6 bg-white shadow-xl flex flex-col justify-center items-center relative overflow-hidden">
+                <div id="tableWrapper" class="glass-card min-h-[180px] p-6 bg-white shadow-xl flex flex-col justify-center items-center relative overflow-hidden flex-none">
                     <svg class="w-16 h-16 mb-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517"></path></svg>
                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">AI Lojistik Analizi<br>Bekleniyor...</p>
                 </div>
 
-                <div id="actionPanel" class="hidden-safely glass-card p-5 flex flex-col justify-between items-center gap-4 bg-slate-900 text-white shadow-2xl w-full">
-                    <div class="w-full text-center pb-4 border-b border-white/10">
-                        <p class="text-[8px] font-black uppercase tracking-widest text-indigo-300">Tahmini Teslimat</p>
-                        <h4 class="text-lg font-black text-white mt-1" id="etaText">-</h4>
+                <div id="actionPanel" class="hidden-safely glass-card p-6 flex flex-col justify-between items-center gap-5 bg-slate-900 text-white shadow-2xl w-full flex-none">
+                    <div id="confirmMessage" class="w-full"></div>
+                    <div class="w-full text-center pb-5 border-b border-white/10">
+                        <p class="text-[8px] font-black uppercase tracking-widest text-indigo-300">Tahmini Teslimat Süresi</p>
+                        <h4 class="text-xl font-black text-white mt-1.5" id="etaText">-</h4>
                     </div>
-                    <div class="flex gap-2 w-full">
-                        <button onclick="cancelOrder()" class="flex-1 py-3 rounded-xl border border-white/20 text-[8px] font-black uppercase tracking-widest hover:bg-white/10 transition-colors">İPTAL</button>
-                        <button onclick="confirmOrder()" class="flex-[2] py-3 rounded-xl bg-emerald-500 text-emerald-950 text-[9px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all">ONAYLA</button>
+                    <div class="flex flex-row justify-center items-center gap-4 w-full">
+                        <button onclick="cancelOrder()" class="px-8 py-3.5 rounded-xl border border-white/20 text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-colors">İPTAL ET</button>
+                        <button onclick="confirmOrder()" class="px-8 py-3.5 rounded-xl bg-emerald-500 text-emerald-950 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg">ONAYLA VE AĞA İLET</button>
                     </div>
                 </div>
 
-                <div class="glass-card bg-white/60 p-5 h-[300px] overflow-hidden flex flex-col">
-                    <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-3 mb-3 flex items-center gap-2">
+                <div class="glass-card bg-white/60 p-6 overflow-hidden flex flex-col flex-1 min-h-[250px]">
+                    <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-3 mb-4 flex items-center gap-2">
                         <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span> CANLI AĞ AKIŞI
                     </h3>
                     <div class="overflow-y-auto live-feed-scroll pr-2 space-y-3 flex-1 text-[10px] text-slate-600 font-medium" id="liveFeedContainer"></div>
@@ -231,40 +229,41 @@
                 </table>
             </div>
         </div>
+
     </div>
 
-    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800 relative z-10 w-full">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer class="bg-slate-900 text-slate-300 py-16 mt-auto border-t border-slate-800 relative z-10 w-full leading-loose">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="md:col-span-2">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center text-indigo-400 border border-indigo-500/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 002 2h1a2 2 0 110 4h-1a2 2 0 00-2 2v1a2 2 0 11-4 0v-1a2 2 0 00-2-2H7a2 2 0 110-4h1a2 2 0 002-2V4z"></path></svg>
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 002 2h1a2 2 0 110 4h-1a2 2 0 00-2 2v1a2 2 0 11-4 0v-1a2 2 0 00-2-2H7a2 2 0 110-4h1a2 2 0 002-2V4z"></path></svg>
                     </div>
-                    <span class="text-xl font-black text-white tracking-tighter">Micro Factory <span class="text-indigo-400">AI</span></span>
+                    <span class="text-2xl font-black text-white tracking-tighter">Micro Factory <span class="text-indigo-400">AI</span></span>
                 </div>
-                <p class="text-xs leading-relaxed max-w-sm font-medium opacity-80">Merkeziyetsiz kadın emeğini, yapay zeka destekli otonom tedarik zinciriyle kurumsal B2B pazarına entegre eden geleceğin sanal üretim katmanı.</p>
+                <p class="text-sm leading-relaxed max-w-md font-medium opacity-80 text-slate-400">Merkeziyetsiz kadın emeğini, yapay zeka destekli otonom tedarik zinciriyle kurumsal B2B pazarına entegre eden, yeşil lojistik (ESG) odaklı geleceğin sanal üretim katmanı.</p>
             </div>
             <div>
-                <h4 class="text-white text-[10px] font-black uppercase tracking-[0.3em] mb-5">Kurumsal Erişim</h4>
-                <ul class="text-xs space-y-3 font-bold uppercase tracking-widest opacity-80">
+                <h4 class="text-white text-[11px] font-black uppercase tracking-[0.3em] mb-6">Kurumsal Erişim</h4>
+                <ul class="text-xs space-y-4 font-bold uppercase tracking-widest opacity-80">
                     <li><a href="#" onclick="openInfoModal('about'); return false;" class="hover:text-indigo-400 transition-colors">Platform Hakkında</a></li>
                     <li><a href="#" onclick="openInfoModal('b2b'); return false;" class="hover:text-indigo-400 transition-colors">B2B Lojistik Ağ</a></li>
-                    <li><a href="#" onclick="openInfoModal('sla'); return false;" class="hover:text-indigo-400 transition-colors">Kalite & SLA Politikası</a></li>
+                    <li><a href="#" onclick="openInfoModal('sla'); return false;" class="hover:text-indigo-400 transition-colors">Kalite & İptal Politikası</a></li>
                     <li><a href="#" onclick="openInfoModal('esg'); return false;" class="hover:text-indigo-400 transition-colors">Sürdürülebilirlik (ESG)</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-white text-[10px] font-black uppercase tracking-[0.3em] mb-5">Destek & İletişim</h4>
-                <div class="text-xs space-y-3.5 font-bold uppercase tracking-widest opacity-80">
-                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400">✉</span> enterprise@microfactory.ai</p>
-                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400">🏢</span> Bilişim Vadisi, Ankara</p>
-                    <p class="flex items-center gap-2.5 hover:text-white cursor-pointer transition-colors mt-2 text-[10px]"><a href="#" onclick="openInfoModal('faq'); return false;">Sıkça Sorulan Sorular</a></p>
+                <h4 class="text-white text-[11px] font-black uppercase tracking-[0.3em] mb-6">Destek & İletişim</h4>
+                <div class="text-xs space-y-4 font-bold uppercase tracking-widest opacity-80">
+                    <p class="flex items-center gap-3 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400 text-lg">✉</span> enterprise@microfactory.ai</p>
+                    <p class="flex items-center gap-3 hover:text-white cursor-pointer transition-colors"><span class="text-indigo-400 text-lg">🏢</span> Bilişim Vadisi, Ankara</p>
+                    <p class="flex items-center gap-3 hover:text-white cursor-pointer transition-colors mt-4 text-[11px] text-indigo-300"><a href="#" onclick="openInfoModal('faq'); return false;">Sıkça Sorulan Sorular →</a></p>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-12 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-50">© 2026 Micro Factory AI</span>
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Powered by Gemini AI</span>
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-16 pt-8 border-t border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">© 2026 Micro Factory AI Platformu</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Decentralized Supply Chain</span>
         </div>
     </footer>
 
