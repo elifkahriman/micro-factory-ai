@@ -28,7 +28,7 @@ Projemiz, bu atıl kapasiteyi kurumsal markalar için profesyonel, **SLA güvenc
 
 ## 🔗 Canlı Demo ve Sunum
 * **Canlı Uygulama (Netlify):** [https://thriving-mooncake-f00627.netlify.app/](https://thriving-mooncake-f00627.netlify.app/)
-* **Demo Videosu (Loom):** [Buraya Kendi Çektiğin Loom Linkini Yapıştır]
+* **Demo Videosu (Loom):** https://www.loom.com/share/eeaa7e8bd4d84e2ab59b9e4356810aa6
 
 ## 🏗️ Kullanılan Teknolojiler (Tech Stack)
 * **Frontend:** HTML5, Tailwind CSS, Vanilla JS (Hızlı render ve düşük gecikme).

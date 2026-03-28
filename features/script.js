@@ -146,7 +146,8 @@ function showToast(message, type = 'error') {
     }, 5000);
 }
 
-function animateCount(elementId, targetValue, duration = 1200) {
+// ✅ DÜZELTİLDİ: suffix parametresi eklendi — "Ağaç" etiketi animasyon sonrası kaybolmuyordu
+function animateCount(elementId, targetValue, duration = 1200, suffix = '') {
     const el = document.getElementById(elementId);
     if (!el) return;
     const startTime = performance.now();
@@ -155,12 +156,12 @@ function animateCount(elementId, targetValue, duration = 1200) {
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         if (targetValue === 0) {
-            el.innerText = "0";
+            el.innerText = "0" + suffix;
             return;
         }
-        el.innerText = Math.floor(eased * targetValue).toLocaleString('tr-TR');
+        el.innerText = Math.floor(eased * targetValue).toLocaleString('tr-TR') + suffix;
         if (progress < 1) requestAnimationFrame(update);
-        else el.innerText = targetValue.toLocaleString('tr-TR');
+        else el.innerText = targetValue.toLocaleString('tr-TR') + suffix;
     }
     requestAnimationFrame(update);
 }
@@ -174,7 +175,8 @@ function updateKPIs() {
     animateCount('kpiActiveProducers', active, 800);
     animateCount('kpiBannedProducers', banned, 800);
     const treeEquivalent = (totalCo2Savings / 100).toFixed(1);
-    animateCount('kpiCo2', parseFloat(treeEquivalent), 1000);
+    // ✅ DÜZELTİLDİ: " Ağaç" suffix'i artık animasyon boyunca korunuyor
+    animateCount('kpiCo2', parseFloat(treeEquivalent), 1000, ' Ağaç');
 }
 
 function startDynamicLiveFeed() {
@@ -396,13 +398,7 @@ Hatalıysa: RED|[Açıklayıcı hata sebebi ve Doğru örnek: ...]`;
 // GÖREV 1: KURŞUN GEÇİRMEZ ADRES VALIDASYONU
 // ============================================================
 
-/**
- * Bir adres mahalle/cadde girişinin yalnızca jenerik
- * kelimelerden oluşup oluşmadığını kontrol eder.
- * Döndürür: true → jenerik/geçersiz, false → geçerli
- */
 function isGenericNeighborhood(input) {
-    // Jenerik kelime havuzu (Türkçe adres şablonları ve test kelimeleri)
     const genericPool = new Set([
         'mahalle', 'mah', 'cadde', 'cad', 'sokak', 'sok',
         'bulvar', 'blv', 'ilçe', 'semt', 'bölge', 'merkez',
@@ -413,13 +409,10 @@ function isGenericNeighborhood(input) {
     ]);
 
     const normalized = input.toLocaleLowerCase('tr-TR').trim();
-
-    // Tüm kelimeleri noktalama temizleyerek al
     const words = normalized.split(/[\s,.\-/]+/).filter(w => w.length > 0);
 
     if (words.length === 0) return true;
 
-    // Anlamlı kelime: jenerik havuzda YOK, uzunluğu > 2, sadece rakam DEĞİL
     const meaningfulWords = words.filter(w =>
         !genericPool.has(w) &&
         w.length > 2 &&
@@ -439,15 +432,12 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
     const neighborhood = document.getElementById('deliveryNeighborhood').value.trim();
     const doorNo = document.getElementById('deliveryDoorNo').value.trim();
 
-    // --- TEMEL KONTROLLER ---
     if (doorNo === "") { showToast("Lütfen Bina/Kapı numarasını belirtiniz.", "error"); return; }
     if (districtInput.length < 2) { showToast("Lütfen geçerli bir ilçe giriniz.", "error"); return; }
 
-    // --- İL GEÇERLİLİK KONTROLÜ ---
     const foundCityKey = Object.keys(turkeyData).find(c => c.toLocaleLowerCase('tr-TR') === cityInput.toLocaleLowerCase('tr-TR'));
     if(!foundCityKey) { showToast(`Geçersiz İl Seçimi! Lütfen listeden geçerli bir il seçin.`, "error"); return; }
 
-    // --- GÖREV 1A: İLÇE DOĞRULAMA (turkeyData ile birebir eşleşme) ---
     const cityDistricts = turkeyData[foundCityKey] || [];
     const foundDistrict = cityDistricts.find(
         d => d.toLocaleLowerCase('tr-TR') === districtInput.toLocaleLowerCase('tr-TR')
@@ -461,7 +451,6 @@ document.getElementById("orderForm").addEventListener("submit", async (e) => {
         return;
     }
 
-    // --- GÖREV 1B: MAHALLE / CADDE JENERİK KELİME KONTROLÜ ---
     if (neighborhood.length < 3 || /^\d+$/.test(neighborhood)) {
         showToast("Lütfen geçerli bir Mahalle veya Cadde adı giriniz.", "error");
         return;
@@ -650,13 +639,11 @@ function logout() { document.getElementById('userProfileMenu').classList.add('hi
 window.cancelHistoryOrder = function(index) {
     let order = orderHistory[index];
     
-    // KARGOYA VERİLMİŞSE İPTAL EDİLEMEZ
     if (order.status.includes("Kargo") || order.status.includes("Tamamlandı")) {
         alert("Bu sipariş kargoya verilmiş veya tamamlanmıştır. İptal işlemi yapılamaz!");
         return;
     }
 
-    // WHATSAPP ONAY KONTROLÜ İLE %100 VEYA %30 KESİNTİ (DÜZELTİLMİŞ MANTIK)
     if (order.status.includes("Sırasına Alındı") || order.status.includes("WhatsApp Onayı Bekliyor")) {
         if(!confirm(`Sipariş henüz üretici tarafından WhatsApp üzerinden onaylanıp üretime geçmediği için ₺${order.totalCost.toLocaleString('tr-TR')} tutarının TAMAMI (%100) kesintisiz iade edilecektir. İptal etmek istiyor musunuz?`)) return;
         showToast(`₺${order.totalCost.toLocaleString('tr-TR')} kesintisiz iade edildi.`, "success");
@@ -763,7 +750,7 @@ function startDemoVideoSimulation() {
                 renderHistory(); 
             }
         }
-    }, 8000); // HER 8 SANİYEDE BİR DURUMLAR BİR SONRAKİ AŞAMAYA GEÇER
+    }, 8000);
 }
 
 window.onload = () => { 
@@ -772,5 +759,7 @@ window.onload = () => {
     startDynamicLiveFeed();
     renderHistory();
     renderProducers();
-    startDemoVideoSimulation(); // VİDEO İÇİN EKLENDİ
+    startDemoVideoSimulation();
 };
+
+
